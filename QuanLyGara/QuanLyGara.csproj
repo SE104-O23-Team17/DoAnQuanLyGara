@@ -10,9 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Helper\" />
-    <Folder Include="Services\" />
-    <Folder Include="Resources\" />
+    <Compile Remove="Helper\**" />
+    <Compile Remove="Resources\**" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Helper\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Helper\**" />
+    <None Remove="Resources\**" />
+    <None Remove="Services\**" />
+    <Page Remove="Helper\**" />
+    <Page Remove="Resources\**" />
+    <Page Remove="Services\**" />
   </ItemGroup>
 
   <ItemGroup>
