@@ -14,7 +14,7 @@
 
     <ScrollViewer Style="{StaticResource customScrollViewer}">
         <Border Background="Aqua">
-            <Button Margin="0 1500 0 0" Content="Test" Style="{StaticResource darkButtonStyle}"/>
+            <Button Margin="0 1500 0 0" Content="Test" Style="{StaticResource redButtonStyle}"/>
         </Border>
     </ScrollViewer>
 </UserControl>
