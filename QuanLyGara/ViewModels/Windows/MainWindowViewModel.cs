@@ -10,11 +10,8 @@ namespace QuanLyGara.ViewModels.Windows
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        //public static NguoiDungDTO currentUser { get; set; }
 
         private ViewModelBase currentViewModel;
-        private string currentCaption;
-        private IconChar currentIcon;
         public ViewModelBase CurrentViewModel
         {
             get
@@ -27,6 +24,8 @@ namespace QuanLyGara.ViewModels.Windows
                 OnPropertyChanged(nameof(CurrentViewModel));
             }
         }
+
+        private string currentCaption;
         public string CurrentCaption
         {
             get
@@ -39,6 +38,8 @@ namespace QuanLyGara.ViewModels.Windows
                 OnPropertyChanged(nameof(CurrentCaption));
             }
         }
+
+        private IconChar currentIcon;
         public IconChar CurrentIcon
         {
             get
@@ -52,10 +53,12 @@ namespace QuanLyGara.ViewModels.Windows
                 OnPropertyChanged(nameof(CurrentIcon));
             }
         }
+
+        public ICommand ToggleMaximizeCommand { get; }
         public ICommand ShowDashboardViewCommand { get; }
         public ICommand ShowServiceViewCommand { get; }
-        public ICommand ShowBillViewCommand { get; }
         public ICommand ShowPartViewCommand { get; }
+        public ICommand ShowStatisticViewCommand { get; }
         public ICommand ShowUserViewCommand { get; }
         //public MainWindowViewModel(NguoiDungDTO input)
         //{
@@ -74,8 +77,8 @@ namespace QuanLyGara.ViewModels.Windows
         {
             ShowDashboardViewCommand = new ViewModelCommand(ExecuteShowDashboardViewCommand);
             ShowServiceViewCommand = new ViewModelCommand(ExecuteShowServiceViewCommand);
-            ShowBillViewCommand = new ViewModelCommand(ExecuteShowBillViewCommand);
             ShowPartViewCommand = new ViewModelCommand(ExecuteShowPartViewCommand);
+            ShowStatisticViewCommand = new ViewModelCommand(ExecuteShowStatisticViewCommand);
             ShowUserViewCommand = new ViewModelCommand(ExecuteShowUserViewCommand);
 
             //default
@@ -91,6 +94,7 @@ namespace QuanLyGara.ViewModels.Windows
                 CurrentIcon = IconChar.Eye;
             }
         }
+
         private void ExecuteShowServiceViewCommand(object obj)
         {
             if (CurrentViewModel is not ServiceViewModel)
@@ -100,15 +104,7 @@ namespace QuanLyGara.ViewModels.Windows
                 CurrentIcon = IconChar.ScrewdriverWrench;
             }
         }
-        private void ExecuteShowBillViewCommand(object obj)
-        {
-            if (CurrentViewModel is not BillViewModel)
-            {
-                CurrentViewModel = new BillViewModel();
-                CurrentCaption = "Hóa đơn";
-                CurrentIcon = IconChar.FileInvoiceDollar;
-            }
-        }
+
         private void ExecuteShowPartViewCommand(object obj)
         {
             if (CurrentViewModel is not PartViewModel)
@@ -118,6 +114,17 @@ namespace QuanLyGara.ViewModels.Windows
                 CurrentIcon = IconChar.Toolbox;
             }
         }
+
+        private void ExecuteShowStatisticViewCommand(object obj)
+        {
+            if (CurrentViewModel is not StatisticViewModel)
+            {
+                CurrentViewModel = new StatisticViewModel();
+                CurrentCaption = "Thống kê";
+                CurrentIcon = IconChar.ChartSimple;
+            }
+        }
+
         private void ExecuteShowUserViewCommand(object obj)
         {
             if (CurrentViewModel is not UserViewModel)

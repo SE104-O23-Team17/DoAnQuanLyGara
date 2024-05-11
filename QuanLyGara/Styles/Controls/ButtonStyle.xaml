@@ -133,15 +133,14 @@
 
     <!--Menu Button Style-->
     <Style x:Key="menuButton" TargetType="RadioButton">
-        <Setter Property="Height" Value="40"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border Background="{TemplateBinding Background}" Padding="20 5">
-                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Border Background="{TemplateBinding Background}" Padding="25 15">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -163,9 +162,9 @@
     <!--Menu Button Icon-->
     <Style x:Key="menuIconButton" TargetType="fa:IconImage">
         <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
-        <Setter Property="Height" Value="18"/>
-        <Setter Property="Width" Value="18"/>
-        <Setter Property="Margin" Value="0, 0, 10, 0"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Margin" Value="0, 0, 12, 0"/>
     </Style>
 
     <!--Menu Button Text Style-->
@@ -173,7 +172,7 @@
         <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
         <Setter Property="FontFamily" Value="Montserrat"/>
         <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
@@ -185,8 +184,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                            CornerRadius="4">
+                    <Border Background="{TemplateBinding Background}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
@@ -204,15 +202,15 @@
     <!--Window Control Button Icon-->
     <Style x:Key="winCtrIcon" TargetType="fa:IconImage">
         <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
-        <Setter Property="Height" Value="9"/>
-        <Setter Property="Width" Value="9"/>
+        <Setter Property="Height" Value="12"/>
+        <Setter Property="Width" Value="12"/>
     </Style>
 
-    <!--Set Mixed button-->
-    <Style x:Key="mixedButtonStyle" TargetType="Button">
-        <Setter Property="Foreground" Value="{StaticResource darkFont}"/>
+    <!--Set Dark button-->
+    <Style x:Key="darkButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Padding" Value="12, 6, 12, 6"/>
+        <Setter Property="Padding" Value="8 4"/>
         <Setter Property="BorderBrush" Value="{StaticResource darkButtonBorder}"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Width" Value="Auto"/>
@@ -222,60 +220,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border
-                        x:Name="lightButtonBorder"
-                        CornerRadius="5"
-                        Background="{StaticResource lightButtonBackground}"
-                        Width="{TemplateBinding Width}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Padding="{TemplateBinding Padding}">
-
-                        <ContentPresenter
-                            Focusable="False"
-                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                            Margin="{TemplateBinding Padding}"
-                            RecognizesAccessKey="True"/>
-                    </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="lightButtonBorder"
-                                    Property="Background"
-                                    Value="{StaticResource darkButtonOver}"/>
-                            <Setter TargetName="lightButtonBorder"
-                                    Property="BorderBrush"
-                                    Value="{StaticResource darkButtonOver}"/>
-                            <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
-                        </Trigger>
-
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="lightButtonBorder"
-                                    Property="Background"
-                                    Value="{StaticResource darkButtonPress}"/>
-                            <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!--Set Dark button-->
-    <Style x:Key="darkButtonStyle" TargetType="Button">
-        <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Padding" Value="8 4"/>
-        <Setter Property="BorderBrush" Value="{StaticResource lightButtonBorder}"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="Width" Value="Auto"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border
-                        x:Name="lightButtonBorder"
+                        x:Name="darkButtonBorder"
                         CornerRadius="5"
                         Background="{StaticResource darkButtonBackground}"
                         Width="{TemplateBinding Width}"
@@ -293,15 +238,15 @@
                     
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="lightButtonBorder"
+                            <Setter TargetName="darkButtonBorder"
                                 Property="Background"
                                 Value="{StaticResource darkButtonOver}"/>
                         </Trigger>
 
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="lightButtonBorder"
-                                Property="Background"
-                                Value="{StaticResource darkButtonPress}"/>
+                            <Setter TargetName="darkButtonBorder"
+                                    Property="Background"
+                                    Value="{StaticResource darkButtonPress}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -357,13 +302,12 @@
         </Setter>
     </Style>
 
-    <!--Set Green button-->
-    <Style x:Key="greenButtonStyle" TargetType="Button">
-        <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
+    <!--Set Transparent button-->
+    <Style x:Key="transparentButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource darkFont}"/>
+        <Setter Property="Background" Value="{StaticResource transparentButtonBackground}"/>
         <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Padding" Value="6 4"/>
-        <Setter Property="BorderBrush" Value="{StaticResource blurGreen}"/>
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Padding" Value="8 4"/>
         <Setter Property="Width" Value="Auto"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -371,60 +315,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border
-                    x:Name="lightButtonBorder"
-                    CornerRadius="5"
-                    Background="{StaticResource greenUI}"
-                    Width="{TemplateBinding Width}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    Padding="{TemplateBinding Padding}">
-
-                        <ContentPresenter
-                        Focusable="False"
-                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                        Margin="{TemplateBinding Padding}"
-                        RecognizesAccessKey="True"/>
-                    </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="lightButtonBorder"
-                            Property="Background"
-                            Value="{StaticResource lighterGreen}"/>
-                        </Trigger>
-
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="lightButtonBorder"
-                            Property="Background"
-                            Value="{StaticResource darkerGreen}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!--Set Red button-->
-    <Style x:Key="redButtonStyle" TargetType="Button">
-        <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Padding" Value="6 4"/>
-        <Setter Property="BorderBrush" Value="{StaticResource blurRed}"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="Width" Value="Auto"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border
-                        x:Name="lightButtonBorder"
+                        x:Name="transparentButtonBorder"
                         CornerRadius="5"
-                        Background="{StaticResource redUI}"
                         Width="{TemplateBinding Width}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
                         Padding="{TemplateBinding Padding}">
 
                         <ContentPresenter
@@ -437,15 +330,17 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="lightButtonBorder"
+                            <Setter TargetName="transparentButtonBorder"
                             Property="Background"
-                            Value="{StaticResource lighterRed}"/>
+                            Value="{StaticResource transparentButtonOver}">                                
+                            </Setter>
                         </Trigger>
 
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="lightButtonBorder"
+                            <Setter TargetName="transparentButtonBorder"
                             Property="Background"
-                            Value="{StaticResource darkerRed}"/>
+                            Value="{StaticResource transparentButtonPress}">
+                            </Setter>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -494,43 +389,64 @@
         </Setter>
     </Style>
 
+    <!--Normal Button Icon-->
+    <Style x:Key="normalIconButton" TargetType="fa:IconImage">
+        <Setter Property="Foreground" Value="{StaticResource darkFont}"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="Margin" Value="0, 0, 8, 0"/>
+    </Style>
+    
     <!--Sort Button Style-->
     <Style x:Key="sortButton" TargetType="RadioButton">
-        <Setter Property="Height" Value="40"/>
-        <Setter Property="Width" Value="40"/>
-        <Setter Property="Background" Value="{StaticResource lightBackground}"/>
+        <Setter Property="Foreground" Value="{StaticResource lightFont}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="BorderBrush" Value="{StaticResource darkButtonBorder}"/>
         <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="{StaticResource lightBorder}"/>
-        <Setter Property="Foreground" Value="{StaticResource darkFont}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border Background="{TemplateBinding Background}"
+                    <Border x:Name="darkButtonBorder"
+                            CornerRadius="5"
+                            Background="{StaticResource darkButtonBackground}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="7">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            Padding="{TemplateBinding Padding}">
+
+                        <fa:IconImage Icon="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"
+                                      Style="{StaticResource normalIconButton}"
+                                      Foreground="{StaticResource lightBackground}"
+                                      Margin="0"/>
                     </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="darkButtonBorder"
+                                    Property="Background"
+                                    Value="{StaticResource darkButtonOver}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="darkButtonBorder"
+                                    Property="Background"
+                                    Value="{StaticResource darkButtonPress}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource lightButtonOver}"/>
-            </Trigger>
-
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="{StaticResource lightButtonPress}"/>
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
-    <!--Sort Button Icon-->
-    <Style x:Key="sortButtonIcon" TargetType="fa:IconImage">
-        <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="Width" Value="25"/>
+    <!--Button Text Style-->
+    <Style x:Key="buttonText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource darkFont}"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
 </ResourceDictionary> 

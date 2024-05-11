@@ -4,11 +4,11 @@
     <!--Background Color-->
     <SolidColorBrush x:Key="darkBackground">#2155CD</SolidColorBrush>
     <SolidColorBrush x:Key="darkBorder">#0AA1DD</SolidColorBrush>
-    <SolidColorBrush x:Key="darkBorderShadow">#394867</SolidColorBrush>
+    <SolidColorBrush x:Key="darkBorderShadow">#A7394867</SolidColorBrush>
 
     <SolidColorBrush x:Key="lightBackground">#E8F9FD</SolidColorBrush>
     <SolidColorBrush x:Key="lightBorder">#89CFF3</SolidColorBrush>
-    <SolidColorBrush x:Key="lightBorderShadow">#9DB2BF</SolidColorBrush>
+    <SolidColorBrush x:Key="lightBorderShadow">#719DB2BF</SolidColorBrush>
 
     <!--Font Color-->
     <SolidColorBrush x:Key="lightFont">#ffffff</SolidColorBrush>
@@ -27,14 +27,17 @@
     <SolidColorBrush x:Key="blurRed">#c47e82</SolidColorBrush>
 
     <!--Button Color-->
-    <SolidColorBrush x:Key="darkButtonBackground">#2155CD</SolidColorBrush>
+    <SolidColorBrush x:Key="darkButtonBackground">#0AA1DD</SolidColorBrush>
     <SolidColorBrush x:Key="darkButtonOver">#00A9FF</SolidColorBrush>
-    <SolidColorBrush x:Key="darkButtonPress">#11009E</SolidColorBrush>
-    <SolidColorBrush x:Key="darkButtonBorder">#0AA1DD</SolidColorBrush>
+    <SolidColorBrush x:Key="darkButtonPress">#2155CD</SolidColorBrush>
+    <SolidColorBrush x:Key="darkButtonBorder">#D241B5EC</SolidColorBrush>
 
-    <SolidColorBrush x:Key="lightButtonBackground">#B8FFF9</SolidColorBrush>
-    <SolidColorBrush x:Key="lightButtonOver">#EFFFFD</SolidColorBrush>
-    <SolidColorBrush x:Key="lightButtonPress">#42C2FF</SolidColorBrush>
-    <SolidColorBrush x:Key="lightButtonBorder">#79DAE8</SolidColorBrush>
+    <SolidColorBrush x:Key="lightButtonBackground">#E8F9FD</SolidColorBrush>
+    <SolidColorBrush x:Key="lightButtonOver">#B7FAF1</SolidColorBrush>
+    <SolidColorBrush x:Key="lightButtonPress">#B442C2FF</SolidColorBrush>
+    <SolidColorBrush x:Key="lightButtonBorder">#6979DAE8</SolidColorBrush>
 
+    <SolidColorBrush x:Key="transparentButtonBackground">Transparent</SolidColorBrush>
+    <SolidColorBrush x:Key="transparentButtonOver">#8D007AC6</SolidColorBrush>
+    <SolidColorBrush x:Key="transparentButtonPress">#D8DCEFFF</SolidColorBrush>
 </ResourceDictionary>

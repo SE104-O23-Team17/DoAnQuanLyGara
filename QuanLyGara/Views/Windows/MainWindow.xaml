@@ -11,7 +11,8 @@
         mc:Ignorable="d"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         
-        WindowStartupLocation="CenterScreen" 
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -31,8 +32,8 @@
             <view:Service/>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vmPage:BillViewModel}">
-            <view:Bill/>
+        <DataTemplate DataType="{x:Type vmPage:StatisticViewModel}">
+            <view:Statistic/>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmPage:PartViewModel}">
@@ -46,118 +47,57 @@
 
     <Border
         CornerRadius="10"
-        BorderBrush="{StaticResource darkBorderShadow}"
+        BorderBrush="{StaticResource darkBorder}"
         BorderThickness="2"
         Background="{StaticResource lightBackground}">
         
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <StackPanel 
-                x:Name="winCtrBar"
-                Grid.Row="0"
-                Orientation="Horizontal"
-                FlowDirection="RightToLeft"
-                Background="Transparent"
-                Margin="5, 0, 5, 0"
-                MouseLeftButtonDown="winCtrBar_MouseLeftButtonDown">
-
-                <Button 
-                    x:Name="winCloseButton"
-                    Style="{StaticResource winCtrButton}"
-                    Tag="{StaticResource redUI}"
-                    Click="winCloseButton_Click">
-                    <fa:IconImage Icon="Xmark" Style="{StaticResource winCtrIcon}"/>
-                </Button>
-
-                <Button 
-                    x:Name="winMaxButton"
-                    Style="{StaticResource winCtrButton}"
-                    Tag="{StaticResource darkFont}"
-                    Click="winMaxButton_Click">
-                    <fa:IconImage Icon="Square" Style="{StaticResource winCtrIcon}"/>
-                </Button>
-
-                <Button 
-                    x:Name="winMinButton"
-                    Style="{StaticResource winCtrButton}"
-                    Tag="{StaticResource darkFont}"
-                        Click="winMinButton_Click">
-                    <fa:IconImage Icon="WindowMinimize" Style="{StaticResource winCtrIcon}"/>
-                </Button>
-            </StackPanel>
-
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
+            <Border Background="{StaticResource darkBorder}"
+                    CornerRadius="9,9,0,0"
+                    Grid.Row="0">
                 <StackPanel 
+                    x:Name="winCtrBar"
                     Orientation="Horizontal"
-                    Grid.Column="0"
-                    Height="Auto"
-                    Margin="20 10">
-                    <TextBlock 
-                        Text="Quản lý Gara"
-                        Foreground="{StaticResource darkFont}"
-                        FontSize="18"
-                        FontFamily="Montserrat"
-                        FontWeight="Medium"
-                        VerticalAlignment="Center"
-                        Margin="10, 0, 0, 0"/>
+                    FlowDirection="RightToLeft"
+                    Background="Transparent"
+                    Margin="5, 0, 5, 0"
+                    MouseLeftButtonDown="winCtrBar_MouseLeftButtonDown">
+
+                    <Button 
+                        x:Name="winCloseButton"
+                        Style="{StaticResource winCtrButton}"
+                        Tag="{StaticResource redUI}"
+                        Click="winCloseButton_Click">
+                        <fa:IconImage Icon="Xmark" Style="{StaticResource winCtrIcon}"/>
+                    </Button>
+
+                    <Button 
+                        x:Name="winMinButton"
+                        Style="{StaticResource winCtrButton}"
+                        Tag="{StaticResource darkFont}"
+                            Click="winMinButton_Click">
+                        <fa:IconImage Icon="WindowMinimize" Style="{StaticResource winCtrIcon}"/>
+                    </Button>
                 </StackPanel>
+            </Border>
 
-                <Border
-                    Grid.Column="2"
-                    CornerRadius="5">
-
-                    <Button 
-                        Style="{StaticResource lightButtonStyle}"
-                        Margin="8 8 0 8"
-                        Click="ChangePageButtonClick">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage 
-                                Icon="Gear" 
-                                Style="{StaticResource menuIconButton}"
-                                Foreground="{StaticResource darkFont}"/>
-                            <TextBlock 
-                                Text="Cài đặt" 
-                                Style="{StaticResource menuIconText}" 
-                                Foreground="{StaticResource darkFont}"/>
-                        </StackPanel>
-                    </Button>
-                </Border>
-
-                <Border
-                    Grid.Column="3"
-                    CornerRadius="5">
-
-                    <Button 
-                        Style="{StaticResource lightButtonStyle}"
-                        Command="{Binding ShowUserViewCommand}"
-                        Margin="8"
-                        Click="ChangePageButtonClick">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconImage 
-                                Icon="UserAlt" 
-                                Style="{StaticResource menuIconButton}"
-                                Foreground="{StaticResource darkFont}"/>
-                            <TextBlock 
-                                Text="Tài khoản" 
-                                Style="{StaticResource menuIconText}" 
-                                Foreground="{StaticResource darkFont}"/>
-                        </StackPanel>
-                    </Button>
-                </Border>
-            </Grid>
+            <TextBlock 
+                Text="Quản lý Gara"
+                 Grid.Row="1"
+                Foreground="{StaticResource darkFont}"
+                FontSize="24"
+                FontFamily="Montserrat"
+                FontWeight="Bold"
+                VerticalAlignment="Center"
+                Margin="30 20"/>
 
             <Border 
                 Background="{StaticResource darkButtonBackground}"
@@ -200,18 +140,45 @@
                     <RadioButton 
                         Style="{StaticResource menuButton}"
                         Tag="{StaticResource lightFont}"
-                        Command="{Binding ShowBillViewCommand}">
+                        Command="{Binding ShowStatisticViewCommand}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="FileInvoiceDollar" Style="{StaticResource menuIconButton}"/>
-                            <TextBlock Text="Hóa đơn" Style="{StaticResource menuIconText}"/>
+                            <fa:IconImage Icon="ChartSimple" Style="{StaticResource menuIconButton}"/>
+                            <TextBlock Text="Thống kê" Style="{StaticResource menuIconText}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton 
+                        Style="{StaticResource menuButton}"
+                        Tag="{StaticResource lightFont}"
+                        Command="{Binding ShowUserViewCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Warehouse"  
+                                          Style="{StaticResource menuIconButton}"/>
+                            <TextBlock Text="Thông tin Gara" Style="{StaticResource menuIconText}"/>
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
             </Border>
 
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="10 15 0 0">
+                <fa:IconImage Icon="{Binding CurrentIcon}"
+                              Style="{StaticResource menuIconButton}"
+                              Foreground="{StaticResource darkFont}"/>
+                <TextBlock Text="{Binding CurrentCaption}"
+                           Foreground="{StaticResource darkFont}"
+                           FontSize="20"
+                           FontFamily="Montserrat"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+
             <ContentControl Content="{Binding CurrentViewModel}"
-                Grid.Row="3"
-                Margin="10"/>
+                            Grid.Row="4"
+                            Margin="10"
+                            x:Name="Content"/>
         </Grid>
     </Border>
 </Window>

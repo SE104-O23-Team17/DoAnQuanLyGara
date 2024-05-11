@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace QuanLyGara.ViewModels.Pages
 {
-    public class BillViewModel : ViewModelBase
+    public class StatisticViewModel : ViewModelBase
     {
-        public BillViewModel() { }
+        public StatisticViewModel() { }
     }
 }
