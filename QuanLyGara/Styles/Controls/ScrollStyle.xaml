@@ -9,7 +9,7 @@
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border
                         SnapsToDevicePixels="True"
-                        Background="{StaticResource darkBackground}"
+                        Background="{StaticResource lightButtonPress}"
                         CornerRadius="3"
                         Height="{TemplateBinding Height}"
                         Width="7"/>
@@ -92,6 +92,7 @@
     
     <!--ScrollViewer Style-->
     <Style x:Key="customScrollViewer" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="PanningMode" Value="Both"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -112,7 +113,7 @@
                             ContentTemplate="{TemplateBinding ContentTemplate}" 
                             Content="{TemplateBinding Content}" 
                             Margin="{TemplateBinding Padding}"/>
-                        
+
                         <ScrollBar
                             x:Name="PART_VerticalScrollBar"
                             Style="{StaticResource customScrollBar}"
@@ -141,7 +142,7 @@
                             Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" 
                             ViewportSize="{TemplateBinding ViewportWidth}"/>
                     </Grid>
-                    
+
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="MouseEnter">
                             <BeginStoryboard>
@@ -164,5 +165,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
 </ResourceDictionary>

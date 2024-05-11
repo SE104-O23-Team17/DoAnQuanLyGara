@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace QuanLyGara.Views.Pages
+namespace QuanLyGara.Views.Windows
 {
     /// <summary>
-    /// Interaction logic for Bill.xaml
+    /// Interaction logic for YesNoDialog.xaml
     /// </summary>
-    public partial class Bill : UserControl
+    public partial class YesNoDialog : Window
     {
-        public Bill()
+        public YesNoDialog()
         {
             InitializeComponent();
         }

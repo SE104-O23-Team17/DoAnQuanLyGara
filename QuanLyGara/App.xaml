@@ -8,8 +8,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Colors/UIColor.xaml"/>
                 <ResourceDictionary Source="/Styles/Controls/ButtonStyle.xaml"/>
-                <ResourceDictionary Source="/Styles/Controls/IOStyle.xaml"/>
                 <ResourceDictionary Source="/Styles/Controls/ScrollStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/Controls/IOStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

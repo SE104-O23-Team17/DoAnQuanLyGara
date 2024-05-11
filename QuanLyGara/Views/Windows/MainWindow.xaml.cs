@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using QuanLyGara.ViewModels.Windows;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,7 +22,7 @@ namespace QuanLyGara
     {
         public MainWindow()
         {
-            InitializeComponent();
+            //InitializeComponent();
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
 
@@ -33,18 +35,6 @@ namespace QuanLyGara
             SendMessage(helper.Handle, 161, 2, 0);
         }
 
-        private void winMaxButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.WindowState == WindowState.Normal)
-            {
-                this.WindowState = WindowState.Maximized;
-            }
-            else
-            {
-                this.WindowState = WindowState.Normal;
-            }
-        }
-
         private void winMinButton_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
@@ -53,17 +43,6 @@ namespace QuanLyGara
         private void winCloseButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
-        }
-
-        private void ChangePageButtonClick(object sender, RoutedEventArgs e)
-        {
-            foreach (RadioButton radioButton in NavigationBar.Children)
-            {
-                if (radioButton.IsChecked == true)
-                {
-                    radioButton.IsChecked = false;
-                }
-            }
         }
     }
 }
