@@ -1,5 +1,6 @@
 ﻿using QuanLyGara.Models.DonViTinh;
 using QuanLyGara.Models.HieuXe;
+using QuanLyGara.Models.PhieuNhapVTPT;
 using QuanLyGara.Models.VTPT;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace QuanLyGara.Services
         public List<HieuXeModel> danhSachHieuXe { get; set; }
         public List<DonViTinhModel> danhSachDVT { get; set; }
         public List<VTPTModel> danhSachVTPT { get; set; }
+        public List<PhieuNhapVTPTModel> danhSachPhieuNhap { get; set; }
 
         private static readonly Global instance = new Global();
         public static Global Instance
@@ -63,6 +65,8 @@ namespace QuanLyGara.Services
                 new VTPTModel { maVTPT = 9, tenVTPT = "Phanh", soLuongTon = 10, giaNhap = 500000, donViTinh = danhSachDVT[1]},
                 new VTPTModel { maVTPT = 10, tenVTPT = "Sơn", soLuongTon = 3, giaNhap = 50000, donViTinh = danhSachDVT[2]},
             };
+
+            danhSachPhieuNhap = new List<PhieuNhapVTPTModel>();
         }
     }
 }

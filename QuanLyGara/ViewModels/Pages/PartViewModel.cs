@@ -5,6 +5,9 @@ using QuanLyGara.ViewModels.Windows;
 using System.ComponentModel;
 using System.Windows.Input;
 using System.Windows;
+using QuanLyGara.Models.PhieuNhapVTPT;
+using QuanLyGara.Models.CTPhieuNhapVTPT;
+using System.Collections.ObjectModel;
 
 namespace QuanLyGara.ViewModels.Pages
 {
@@ -36,6 +39,15 @@ namespace QuanLyGara.ViewModels.Pages
             }
         }
 
+        public ObservableCollection<VTPTModel> DanhSachVTPTImport
+        {
+            get
+            {
+                var sortedList = danhSachVTPT.OrderBy(vtpt => vtpt.tenVTPT).ToList();
+                return new ObservableCollection<VTPTModel>(sortedList);
+            }
+        }
+
         private string searchKeyword;
         public string SearchKeyword
         {
@@ -48,27 +60,28 @@ namespace QuanLyGara.ViewModels.Pages
             }
         }
 
-        private List<DonViTinhModel> danhSachDVT;
-        public BindingList<DonViTinhModel> DanhSachDVT
+        private ObservableCollection<DonViTinhModel> danhSachDVT;
+        public ObservableCollection<DonViTinhModel> DanhSachDVT
         {
             get
             {
-                var sortedList = danhSachDVT.OrderBy(dvt => dvt.tenDVT).ToList();
-                return new BindingList<DonViTinhModel>(sortedList);
+                var sortedList = new ObservableCollection<DonViTinhModel>(danhSachDVT.OrderBy(dvt => dvt.tenDVT));
+                return sortedList;
             }
             set
             {
-                danhSachDVT = new List<DonViTinhModel>(value);
+                danhSachDVT = value;
                 OnPropertyChanged(nameof(DanhSachDVT));
+                OnPropertyChanged(nameof(DanhSachDVTNotNull));
             }
         }
 
-        public BindingList<DonViTinhModel> DanhSachDVTNotNull
+        public ObservableCollection<DonViTinhModel> DanhSachDVTNotNull
         {
             get
             {
-                var sortedList = danhSachDVT.Where(dvt => !string.IsNullOrEmpty(dvt.tenDVT)).OrderBy(dvt => dvt.tenDVT).ToList();
-                return new BindingList<DonViTinhModel>(sortedList);
+                var sortedList = new ObservableCollection<DonViTinhModel>(danhSachDVT.Where(dvt => !string.IsNullOrEmpty(dvt.tenDVT)).OrderBy(dvt => dvt.tenDVT).ToList());
+                return sortedList;
             }
         }
 
@@ -96,6 +109,17 @@ namespace QuanLyGara.ViewModels.Pages
             }
         }
 
+        private bool isViewing;
+        public bool IsViewing
+        {
+            get { return isViewing; }
+            set
+            {
+                isViewing = value;
+                OnPropertyChanged(nameof(IsViewing));
+            }
+        }
+
         private bool isAdding;
         public bool IsAdding
         {
@@ -104,6 +128,28 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 isAdding = value;
                 OnPropertyChanged(nameof(IsAdding));
+            }
+        }
+
+        private bool isImporting;
+        public bool IsImporting
+        {
+            get { return isImporting; }
+            set
+            {
+                isImporting = value;
+                OnPropertyChanged(nameof(IsImporting));
+            }
+        }
+
+        private bool isViewingImport;
+        public bool IsViewingImport
+        {
+            get { return isViewingImport; }
+            set
+            {
+                isViewingImport = value;
+                OnPropertyChanged(nameof(IsViewingImport));
             }
         }
 
@@ -118,6 +164,31 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 themVTPT = new List<VTPTModel>(value);
                 OnPropertyChanged(nameof(ThemVTPT));
+            }
+        }
+
+        private PhieuNhapVTPTModel phieuNhapVTPT;
+        public PhieuNhapVTPTModel PhieuNhapVTPT
+        {
+            get { return phieuNhapVTPT; }
+            set
+            {
+                phieuNhapVTPT = value;
+                OnPropertyChanged(nameof(PhieuNhapVTPT));
+            }
+        }
+
+        private List<PhieuNhapVTPTModel> danhSachPhieuNhap;
+        public List<PhieuNhapVTPTModel> DanhSachPhieuNhap
+        {
+            get
+            {
+                return danhSachPhieuNhap;
+            }
+            set
+            {
+                danhSachPhieuNhap = value;
+                OnPropertyChanged(nameof(DanhSachPhieuNhap));
             }
         }
 
@@ -144,19 +215,29 @@ namespace QuanLyGara.ViewModels.Pages
         public ICommand AddCommand { get; set; }
         public ICommand AddVTPTCommand { get; set; }
         public ICommand SaveVTPTCommand { get; set; }
-        public ICommand CancelVTPTCommand { get; set; }
+        public ICommand BackToView { get; set; }
         public ICommand RemoveVTPTCommand { get; set; }
+        public ICommand NewImportCommand { get; set; }
+        public ICommand AddImportCommand { get; set; }
+        public ICommand SaveImportCommand { get; set; }
+        public ICommand RemoveImportCommand { get; set; }
+        public ICommand ViewImportCommand { get; set; }
 
         public PartViewModel() {
             dialogService = new DialogService();
             sortOption = "1";
             searchKeyword = "";
             isReadOnly = true;
+            isViewing = true;
             isAdding = false;
+            isImporting = false;
+            isViewingImport = false;
             danhSachVTPT = Global.Instance.danhSachVTPT;
-            danhSachDVT = Global.Instance.danhSachDVT;
+            danhSachDVT = new ObservableCollection<DonViTinhModel>(Global.Instance.danhSachDVT);
             ratio = Global.Instance.tiLeTinhDonGiaBan;
             themVTPT = [];
+            phieuNhapVTPT = new PhieuNhapVTPTModel();
+            danhSachPhieuNhap = Global.Instance.danhSachPhieuNhap;
             UpdateIsAllSelectedCommand = new ViewModelCommand(ExecuteUpdateIsAllSelectedCommand);
             EditRatioCommand = new ViewModelCommand(ExecuteEditRatioCommand);
             SaveRatioCommand = new ViewModelCommand(ExecuteSaveRatioCommand);
@@ -175,8 +256,13 @@ namespace QuanLyGara.ViewModels.Pages
             AddCommand = new ViewModelCommand(ExecuteAddCommand);
             AddVTPTCommand = new ViewModelCommand(ExecuteAddVTPTCommand);
             SaveVTPTCommand = new ViewModelCommand(ExecuteSaveVTPTCommand);
-            CancelVTPTCommand = new ViewModelCommand(ExecuteCancelVTPTCommand);
+            BackToView = new ViewModelCommand(ExecuteBackToView);
             RemoveVTPTCommand = new ViewModelCommand(ExecuteRemoveVTPTCommand);
+            NewImportCommand = new ViewModelCommand(ExecuteNewImportCommand);
+            AddImportCommand = new ViewModelCommand(ExecuteAddImportCommand);
+            SaveImportCommand = new ViewModelCommand(ExecuteSaveImportCommand);
+            RemoveImportCommand = new ViewModelCommand(ExecuteRemoveImportCommand);
+            ViewImportCommand = new ViewModelCommand(ExecuteViewImportCommand);
         }
 
         private void ExecuteUpdateIsAllSelectedCommand(object obj)
@@ -232,7 +318,7 @@ namespace QuanLyGara.ViewModels.Pages
         {
             if (obj is VTPTModel)
             {
-                VTPTModel vtpt = DanhSachVTPT.FirstOrDefault(d => d.isReadOnly == false);
+                VTPTModel? vtpt = DanhSachVTPT.FirstOrDefault(d => d.isReadOnly == false);
                 ExecuteCancelCommand(vtpt);
 
                 vtpt = obj as VTPTModel;
@@ -319,21 +405,25 @@ namespace QuanLyGara.ViewModels.Pages
 
         private void ExecuteAddDVTCommand(object obj)
         {
-            DonViTinhModel dvt = danhSachDVT.FirstOrDefault(d => string.IsNullOrEmpty(d.tenDVT));
+            DonViTinhModel dvt = DanhSachDVT.FirstOrDefault(d => string.IsNullOrEmpty(d.tenDVT));
             if (dvt != null)
             {
                 dvt.isReadOnly = false;
-                OnPropertyChanged(nameof(danhSachDVT));
+                OnPropertyChanged(nameof(DanhSachDVT));
                 return;
             }
 
             dvt = new()
             {
-                maDVT = danhSachDVT.Count + 1,
+                maDVT = DanhSachDVT.Count + 1,
                 isReadOnly = false
             };
             danhSachDVT.Insert(0, dvt);
-            OnPropertyChanged(nameof(danhSachDVT));
+            OnPropertyChanged(nameof(DanhSachDVT));
+            if (isAdding)
+            { 
+                OnPropertyChanged(nameof(ThemVTPT));
+            }
         }
 
         private void ExecuteEditDVTCommand(object obj)
@@ -354,7 +444,7 @@ namespace QuanLyGara.ViewModels.Pages
             if (obj is DonViTinhModel)
             {
                 DonViTinhModel dvt = obj as DonViTinhModel;
-                if (danhSachDVT.Any(existingDvt => existingDvt != dvt && existingDvt.tenDVT == dvt.tenDVT))
+                if (DanhSachDVT.Any(existingDvt => existingDvt != dvt && existingDvt.tenDVT == dvt.tenDVT))
                 {
                     dialogService.ShowInfoDialog(
                         "Lỗi",
@@ -376,7 +466,11 @@ namespace QuanLyGara.ViewModels.Pages
                 }
 
                 dvt.isReadOnly = true;
-                OnPropertyChanged(nameof(danhSachDVT));
+                OnPropertyChanged(nameof(DanhSachDVT));
+                if (isAdding)
+                {
+                    OnPropertyChanged(nameof(ThemVTPT));
+                }
             }
         }
 
@@ -387,7 +481,7 @@ namespace QuanLyGara.ViewModels.Pages
                 DonViTinhModel dvt = obj as DonViTinhModel;
                 dvt.isReadOnly = true;
                 dvt.tenDVT = previousDVT;
-                OnPropertyChanged(nameof(danhSachDVT));
+                OnPropertyChanged(nameof(DanhSachDVT));
             }
         }
 
@@ -402,7 +496,11 @@ namespace QuanLyGara.ViewModels.Pages
             if (dvt != null)
             {
                 danhSachDVT.Remove(dvt);
-                OnPropertyChanged(nameof(danhSachDVT));
+                OnPropertyChanged(nameof(DanhSachDVT));
+                if (isAdding)
+                {
+                    OnPropertyChanged(nameof(ThemVTPT));
+                }
             }
         }
 
@@ -417,9 +515,12 @@ namespace QuanLyGara.ViewModels.Pages
 
         private void ExecuteAddCommand(object obj)
         {
+            themVTPT.Clear();
             isAdding = true;
+            isViewing = false;
             ExecuteAddVTPTCommand(obj);
             OnPropertyChanged(nameof(IsAdding));
+            OnPropertyChanged(nameof(IsViewing));
         }
 
         private void ExecuteAddVTPTCommand(object obj)
@@ -453,11 +554,20 @@ namespace QuanLyGara.ViewModels.Pages
                 newVTPTs.Add(vtpt);
                 count++;
             }
-
+                        
             danhSachVTPT.AddRange(newVTPTs);
             themVTPT.Clear();
             OnPropertyChanged(nameof(DanhSachVTPT));
             isAdding = false;
+            if (isImporting)
+            {
+                OnPropertyChanged(nameof(IsImporting));
+            }
+            else
+            {
+                isViewing = true;
+                OnPropertyChanged(nameof(IsViewing));
+            }
             OnPropertyChanged(nameof(IsAdding));
             dialogService.ShowInfoDialog(
                 "Thông báo",
@@ -466,11 +576,22 @@ namespace QuanLyGara.ViewModels.Pages
                 );
         }
 
-        private void ExecuteCancelVTPTCommand(object obj)
+        private void ExecuteBackToView(object obj)
         {
-            themVTPT.Clear();
             isAdding = false;
+            isImporting = false;
+            isViewingImport = false;
+            isViewing = true;
             OnPropertyChanged(nameof(IsAdding));
+            OnPropertyChanged(nameof(IsViewing));
+            OnPropertyChanged(nameof(IsImporting));
+            OnPropertyChanged(nameof(IsViewingImport));
+
+            foreach (VTPTModel vtpt in DanhSachVTPT)
+            {
+                vtpt.isReadOnly = true;
+            }
+            OnPropertyChanged(nameof(DanhSachVTPT));
         }
 
         private void ExecuteRemoveVTPTCommand(object obj)
@@ -481,6 +602,79 @@ namespace QuanLyGara.ViewModels.Pages
                 themVTPT.Remove(vtpt);
                 OnPropertyChanged(nameof(themVTPT));
             }
+        }
+
+        private void ExecuteNewImportCommand(object obj)
+        {
+            IsImporting = true;
+            IsViewing = false;
+
+            phieuNhapVTPT = new PhieuNhapVTPTModel(danhSachPhieuNhap.Count + 1);
+            phieuNhapVTPT.ThemCT(new CTPhieuNhapVTPTModel());
+            OnPropertyChanged(nameof(PhieuNhapVTPT));
+        }
+
+        private void ExecuteAddImportCommand(object obj)
+        {
+            phieuNhapVTPT.ThemCT(new CTPhieuNhapVTPTModel());
+            OnPropertyChanged(nameof(PhieuNhapVTPT));
+        }
+
+        private void ExecuteSaveImportCommand(object obj)
+        {
+            
+                var vtptSet = new HashSet<VTPTModel>();
+                foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
+                {
+                    if (!vtptSet.Add(ct.VTPT))
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Có mục bị trùng. Vui lòng kiểm tra lại.",
+                            () => { }
+                        );
+                        return;
+                    }
+
+                    if (ct.VTPT == null)
+                    {
+                        phieuNhapVTPT.XoaCT(ct);
+                        continue;
+                    }
+                }
+                
+                foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
+                {
+                    if (ct.GiaNhap != ct.VTPT.giaNhap)
+                    {
+                        danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().giaNhap = ct.GiaNhap;
+                    }
+
+                    danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().NhapThem(ct.SoLuong);
+            }
+                danhSachPhieuNhap.Add(phieuNhapVTPT);
+
+            dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Đã nhập thành công " + phieuNhapVTPT.DanhSachCT.Count + " loại vật tư.",
+                    () => { }
+                    );
+
+            ExecuteBackToView(null);
+        }
+
+        private void ExecuteRemoveImportCommand(object obj)
+        {
+            if (obj is CTPhieuNhapVTPTModel ct)
+            {
+                phieuNhapVTPT.XoaCT(ct);
+                OnPropertyChanged(nameof(PhieuNhapVTPT));
+            }
+        }
+
+        private void ExecuteViewImportCommand(object obj)
+        {
+
         }
     }
 }

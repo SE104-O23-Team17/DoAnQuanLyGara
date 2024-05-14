@@ -20,8 +20,13 @@ namespace QuanLyGara.Services
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string valueAsString = value as string;
+            if (string.IsNullOrEmpty(valueAsString))
+            {
+                return 0;
+            }
             valueAsString = valueAsString.Replace(".", "");
             return double.Parse(valueAsString, NumberStyles.Any);
         }
+
     }
 }

@@ -31,6 +31,14 @@ namespace QuanLyGara.Behaviors
         {
             var regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+            
+            TextBox textBox = sender as TextBox;
+            if (e.Text == "0" && string.IsNullOrEmpty(textBox.Text))
+            {
+                textBox.Text = "1";
+                textBox.CaretIndex = textBox.Text.Length;
+                e.Handled = true;
+            }
         }
 
         private void Pasting(object sender, DataObjectPastingEventArgs e)

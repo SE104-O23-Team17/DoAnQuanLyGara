@@ -28,8 +28,11 @@ namespace QuanLyGara.Models.DonViTinh
             get { return _tenDVT; }
             set
             {
-                _tenDVT = value;
-                OnPropertyChanged(nameof(tenDVT));
+                if (_tenDVT != value)
+                {
+                    _tenDVT = value;
+                    OnPropertyChanged(nameof(tenDVT));
+                }
             }
         }
 
@@ -45,6 +48,11 @@ namespace QuanLyGara.Models.DonViTinh
                     OnPropertyChanged(nameof(isReadOnly));
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            return tenDVT;
         }
     }
 }
