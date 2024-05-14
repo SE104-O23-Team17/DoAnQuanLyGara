@@ -1,17 +1,19 @@
 ﻿<UserControl x:Class="QuanLyGara.Views.Pages.Part"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:QuanLyGara.Views.Pages"
-      xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-      xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Pages"
-      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-      xmlns:behaviors="clr-namespace:QuanLyGara.Behaviors"
-      xmlns:services="clr-namespace:QuanLyGara.Services"
-      xmlns:helpers="clr-namespace:QuanLyGara.Helpers"
-      mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="1200">
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:local="clr-namespace:QuanLyGara.Views.Pages"
+              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+              xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Pages"
+              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+              xmlns:behaviors="clr-namespace:QuanLyGara.Behaviors"
+              xmlns:services="clr-namespace:QuanLyGara.Services"
+              xmlns:helpers="clr-namespace:QuanLyGara.Helpers"
+              d:DataContext="{d:DesignInstance Type=viewmodel:PartViewModel}"
+              xmlns:components="clr-namespace:QuanLyGara.Components"
+              mc:Ignorable="d" 
+              d:DesignHeight="600" d:DesignWidth="1200">
 
     <UserControl.DataContext>
         <viewmodel:PartViewModel/>
@@ -24,6 +26,13 @@
         <services:InvertedBooleanToVisibilityConverter x:Key="InvertedBoolToVis"/>
         <services:ModelAndTextConverter x:Key="ModelAndTextConverter"/>
         <services:InvertedBool x:Key="InvertedBool"/>
+        <services:MultiBoolToVis x:Key="MultiBoolToVis"/>
+
+        <CollectionViewSource x:Key="GroupedImportList" Source="{Binding DanhSachPhieuNhap}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="MonthYear" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
     </UserControl.Resources>
 
     <ScrollViewer Style="{StaticResource customScrollViewer}">
@@ -34,30 +43,72 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" Margin="0 0 24 0">
-                    <StackPanel Width="240">
-                        <StackPanel Visibility="{Binding IsAdding, Converter={StaticResource InvertedBoolToVis}}">
-                            <TextBlock Text="Tỉ lệ giá bán so với giá nhập"
+                <Button Grid.Column="0"
+                        Style="{StaticResource transparentButtonStyle}"
+                        VerticalAlignment="Top"
+                        Command="{Binding BackToView}"
+                        Margin="0 0 8 0">
+                    <Button.Visibility>
+                        <MultiBinding Converter="{StaticResource MultiBoolToVis}">
+                            <Binding Path="IsImporting"/>
+                            <Binding Path="IsAdding"/>
+                            <Binding Path="IsViewingImport"/>
+                        </MultiBinding>
+                    </Button.Visibility>                        
+                    
+                    <fa:IconImage Icon="ArrowLeft" 
+                                  Style="{StaticResource normalIconButton}"
+                                  Margin="0"
+                                  Width="28"
+                                  Height="20"/>
+                </Button>
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.Visibility>
+                            <MultiBinding Converter="{StaticResource MultiBoolToVis}">
+                                <Binding Path="IsViewing" />
+                                <Binding Path="IsAdding" />
+                            </MultiBinding>
+                        </Grid.Visibility>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0"
+                            Margin="0 0 24 0"
+                            Width="240">
+                            <StackPanel Visibility="{Binding IsViewing, Converter={StaticResource BoolToVis}}"
+                                Margin="0 0 0 24">
+                                <StackPanel>
+                                    <TextBlock Text="Tỉ lệ giá bán so với giá nhập"
                                        Style="{StaticResource buttonText}"/>
 
-                            <Grid Margin="0 8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBox x:Name="ratioTextBox"
+                                    <Grid Margin="0 8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="ratioTextBox"
                                          Grid.Column="0"
                                          Style="{StaticResource middleTextBox}"
                                          Text="{Binding Ratio, Converter={StaticResource DecimalSeparatorConverter}}"
                                          Tag="Percent"
                                          IsReadOnly="{Binding IsReadOnly, Mode=TwoWay}"
                                          helpers:FocusExtension.IsFocused="{Binding IsReadOnly, Converter={StaticResource InvertedBool}}">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:DoubleInputBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
+                                            <i:Interaction.Behaviors>
+                                                <behaviors:DoubleInputBehavior/>
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
 
-                                <Button Grid.Column="1"
+                                        <Button Grid.Column="1"
                                         Style="{StaticResource darkButtonStyle}"
                                         Padding="4"
                                         Margin="10,0,0,0"
@@ -65,48 +116,47 @@
                                         Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVis}}" 
                                         HorizontalAlignment="Left">
 
-                                    <fa:IconImage Icon="Edit" 
+                                            <fa:IconImage Icon="Edit" 
                                                   Style="{StaticResource normalIconButton}"
                                                   Foreground="{StaticResource lightFont}"
                                                   Margin="0"/>
-                                </Button>
-                            </Grid>
+                                        </Button>
+                                    </Grid>
 
-                            <StackPanel Orientation="Horizontal"
+                                    <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Right"
                                         Margin="0 0 0 8"
                                         Visibility="{Binding IsReadOnly, Converter={StaticResource InvertedBoolToVis}}">
-                                <Button Style="{StaticResource darkButtonStyle}"
+                                        <Button Style="{StaticResource darkButtonStyle}"
                                         Content="Lưu"
                                         Margin="0 0 8 0"
                                         FontSize="13"
                                         Padding="6 3"
                                         Command="{Binding SaveRatioCommand}"/>
 
-                                <Button Style="{StaticResource lightButtonStyle}"
+                                        <Button Style="{StaticResource lightButtonStyle}"
                                         Content="Hủy"
                                         FontSize="13"
                                         Padding="6 3"
                                         Command="{Binding CancelRatioCommand}"/>
-                            </StackPanel>
-                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
 
-                        <StackPanel Margin="0 24"
-                                    Visibility="{Binding IsAdding, Converter={StaticResource InvertedBoolToVis}}">
-                            <TextBlock Text="Sắp xếp theo"
+                                <StackPanel Margin="0 24">
+                                    <TextBlock Text="Sắp xếp theo"
                                        Style="{StaticResource buttonText}"/>
 
-                            <Grid Margin="0 8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="  Tên"
+                                    <Grid Margin="0 8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="  Tên"
                                            Style="{StaticResource buttonText}"/>
 
-                                <StackPanel Grid.Column="1"
+                                        <StackPanel Grid.Column="1"
                                             Orientation="Horizontal">
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountDown"
                                                  GroupName="sortGroup"
                                                  Margin="8 0"
@@ -114,407 +164,575 @@
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="1"/>
 
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountUp"
                                                  GroupName="sortGroup"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="2"/>
-                                </StackPanel>
-                            </Grid>
+                                        </StackPanel>
+                                    </Grid>
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="  Số lượng tồn"
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="  Số lượng tồn"
                                            Style="{StaticResource buttonText}"/>
 
-                                <StackPanel Grid.Column="1"
+                                        <StackPanel Grid.Column="1"
                                             Orientation="Horizontal">
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountDown"
                                                  GroupName="sortGroup"
                                                  Margin="8 0"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="3"/>
 
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountUp"
                                                  GroupName="sortGroup"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="4"/>
-                                </StackPanel>
-                            </Grid>
+                                        </StackPanel>
+                                    </Grid>
 
-                            <Grid Margin="0 8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="  Giá tiền"
+                                    <Grid Margin="0 8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="  Giá tiền"
                                            Style="{StaticResource buttonText}"/>
 
-                                <StackPanel Grid.Column="1"
+                                        <StackPanel Grid.Column="1"
                                             Orientation="Horizontal">
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountDown"
                                                  GroupName="sortGroup"
                                                  Margin="8 0"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="5"/>
 
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountUp"
                                                  GroupName="sortGroup"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="6"/>
+                                        </StackPanel>
+                                    </Grid>
                                 </StackPanel>
-                            </Grid>
-                        </StackPanel>
-                    </StackPanel>
 
-                    <ListBox ItemsSource="{Binding DanhSachDVT}"
+                                <StackPanel>
+                                    <Button Style="{StaticResource darkButtonStyle}"
+                                    Padding="0 4"
+                                    Margin="10 0"
+                                    HorizontalAlignment="Stretch"
+                                    Command="{Binding NewImportCommand}">
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center">
+                                            <fa:IconImage Icon="FilePen"
+                                                          Style="{StaticResource normalIconButton}"
+                                                          Foreground="{StaticResource lightFont}"/>
+                                            <TextBlock Text="Tạo phiếu nhập mới" 
+                                                       Style="{StaticResource buttonText}" 
+                                                       Foreground="{StaticResource lightFont}"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Style="{StaticResource darkButtonStyle}"
+                                    Padding="0 4"
+                                    Margin="10 8"
+                                    HorizontalAlignment="Stretch"
+                                    Command="{Binding ViewImportCommand}">
+                                        <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                            <fa:IconImage Icon="RectangleList"
+                                                  Style="{StaticResource normalIconButton}"
+                                                  Foreground="{StaticResource lightFont}"/>
+                                            <TextBlock Text="Danh sách phiếu nhập" 
+                                               Style="{StaticResource buttonText}" 
+                                               Foreground="{StaticResource lightFont}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <ListBox ItemsSource="{Binding DanhSachDVT}"
                              HorizontalContentAlignment="Stretch">
-                        <ListBox.Template>
-                            <ControlTemplate>
-                                <Border Background="{StaticResource darkButtonBackground}"
+                                <ListBox.Visibility>
+                                    <MultiBinding Converter="{StaticResource MultiBoolToVis}">
+                                        <Binding Path="IsViewing" />
+                                        <Binding Path="IsAdding" />
+                                    </MultiBinding>
+                                </ListBox.Visibility>
+                                <ListBox.Template>
+                                    <ControlTemplate>
+                                        <Border Background="{StaticResource darkButtonBackground}"
                                         CornerRadius="10"
                                         Padding="5 10 5 5">
-                                    <StackPanel>
-                                        <Grid Margin="4 0 4 8">
+                                            <StackPanel>
+                                                <Grid Margin="4 0 4 8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="Danh sách đơn vị tính"
+                                                       Style="{StaticResource buttonText}"
+                                                       Foreground="{StaticResource lightFont}"/>
+
+                                                    <Button Style="{StaticResource lightButtonStyle}"
+                                                    Command="{Binding AddDVTCommand}"
+                                                    Padding="3"
+                                                    Grid.Column="1">
+                                                        <fa:IconImage Icon="Add" 
+                                                              Style="{StaticResource normalIconButton}"
+                                                              Foreground="{StaticResource darkFont}"
+                                                              Margin="0"/>
+                                                    </Button>
+                                                </Grid>
+                                                <Border Background="{StaticResource lightBackground}"
+                                                CornerRadius="10">
+                                                    <ItemsPresenter/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ListBox.Template>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Text="Danh sách đơn vị tính"
-                                                       Style="{StaticResource buttonText}"
-                                                       Foreground="{StaticResource lightFont}"/>
 
-                                            <Button Style="{StaticResource lightButtonStyle}"
-                                                    Command="{Binding AddDVTCommand}"
-                                                    Padding="3"
-                                                    Grid.Column="1">
-                                                <fa:IconImage Icon="Add" 
-                                                              Style="{StaticResource normalIconButton}"
-                                                              Foreground="{StaticResource darkFont}"
-                                                              Margin="0"/>
-                                            </Button>
-                                        </Grid>
-                                        <Border Background="{StaticResource lightBackground}"
-                                                CornerRadius="10">
-                                            <ItemsPresenter/>
-                                        </Border>
-                                    </StackPanel>
-                                </Border>
-                            </ControlTemplate>
-                        </ListBox.Template>
-
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBox Text="{Binding tenDVT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            <TextBox Text="{Binding tenDVT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                              x:Name="itemTextBox"
                                              Grid.Column="0"
                                              Style="{StaticResource middleTextBox}"
                                              IsReadOnly="{Binding isReadOnly, Mode=TwoWay}"
                                              helpers:FocusExtension.IsFocused="{Binding isReadOnly, Converter={StaticResource InvertedBool}}">
-                                        <i:Interaction.Behaviors>
-                                            <behaviors:TextChangedBehavior Command="{Binding DataContext.TextChangeCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"/>
-                                        </i:Interaction.Behaviors>
-                                    </TextBox>
+                                                <i:Interaction.Behaviors>
+                                                    <behaviors:TextChangedBehavior Command="{Binding DataContext.TextChangeCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                                </i:Interaction.Behaviors>
+                                            </TextBox>
 
-                                    <StackPanel Orientation="Horizontal"
+                                            <StackPanel Orientation="Horizontal"
                                                 Grid.Column="1">
-                                        <Button Command="{Binding DataContext.EditDVTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                <Button Command="{Binding DataContext.EditDVTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource darkButtonStyle}"
                                                 Padding="4"
                                                 Margin="8 0 0 0"
                                                 Visibility="{Binding isReadOnly, Converter={StaticResource BoolToVis}, Mode=TwoWay}">
-                                            <fa:IconImage Icon="Edit" 
+                                                    <fa:IconImage Icon="Edit" 
                                                           Style="{StaticResource normalIconButton}"
                                                           Foreground="{StaticResource lightFont}"
                                                           Margin="0"/>
-                                        </Button>
+                                                </Button>
 
-                                        <Button Command="{Binding DataContext.RemoveDVTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                <Button Command="{Binding DataContext.RemoveDVTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource darkButtonStyle}"
                                                 Padding="4"
                                                 Margin="8 0 0 0"
                                                 Visibility="{Binding isReadOnly, Converter={StaticResource BoolToVis}, Mode=TwoWay}">
-                                            <fa:IconImage Icon="TrashCan" 
+                                                    <fa:IconImage Icon="TrashCan" 
                                                           Style="{StaticResource normalIconButton}"
                                                           Foreground="{StaticResource lightFont}"
                                                           Margin="0"/>
-                                        </Button>
+                                                </Button>
 
-                                        <Button Command="{Binding DataContext.SaveDVTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                <Button Command="{Binding DataContext.SaveDVTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                 Style="{StaticResource darkButtonStyle}"
                                                 Padding="4"
                                                 Margin="8 0 0 0"
                                                 Visibility="{Binding isReadOnly, Converter={StaticResource InvertedBoolToVis}, Mode=TwoWay}"
                                                 CommandParameter="{Binding}">
-                                            <fa:IconImage Icon="Check" 
+                                                    <fa:IconImage Icon="Check" 
                                                           Style="{StaticResource normalIconButton}"
                                                           Foreground="{StaticResource lightFont}"
                                                           Margin="0"/>
-                                        </Button>
+                                                </Button>
 
-                                        <Button Command="{Binding DataContext.CancelDVTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                <Button Command="{Binding DataContext.CancelDVTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource darkButtonStyle}"
                                                 Padding="4"
                                                 Margin="8 0 0 0"
                                                 Visibility="{Binding isReadOnly, Converter={StaticResource InvertedBoolToVis}, Mode=TwoWay}">
-                                            <fa:IconImage Icon="Xmark" 
+                                                    <fa:IconImage Icon="Xmark" 
                                                           Style="{StaticResource normalIconButton}"
                                                           Foreground="{StaticResource lightFont}"
                                                           Margin="0"/>
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
 
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-                    <StackPanel Visibility="{Binding IsAdding, Converter={StaticResource InvertedBoolToVis}}"
-                                Grid.Row="0">
-                        <TextBlock Style="{StaticResource menuIconText}"
+                            <StackPanel Visibility="{Binding IsViewing, Converter={StaticResource BoolToVis}}"
+                                        Grid.Row="0">
+                                <TextBlock Style="{StaticResource menuIconText}"
                                    Foreground="{StaticResource darkFont}"
                                    FontSize="20"
                                    Text="Danh sách vật tư phụ tùng"/>
-                        
-                        <Grid Margin="0 10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>                            
 
-                            <Button Grid.Column="0"
-                                Style="{StaticResource darkButtonStyle}"
-                                Padding="8 4"
-                                Margin="10 0"
-                                Command="{Binding AddCommand}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fa:IconImage Icon="Add"
-                                              Style="{StaticResource normalIconButton}"
-                                              Foreground="{StaticResource lightFont}"/>
-                                    <TextBlock Text="Thêm vật tư" 
-                                           Style="{StaticResource buttonText}" 
-                                           Foreground="{StaticResource lightFont}"/>
-                                </StackPanel>
-                            </Button>
+                                <Grid Margin="0 10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="1"
-                                    Style="{StaticResource darkButtonStyle}"
-                                    Padding="8 4"
-                                    Command="{Binding RemoveSelectedCommand}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fa:IconImage Icon="TrashCan"
-                                                  Style="{StaticResource normalIconButton}"
-                                                  Foreground="{StaticResource lightFont}"/>
-                                    <TextBlock Text="Xóa đã chọn" 
-                                               Style="{StaticResource buttonText}" 
-                                               Foreground="{StaticResource lightFont}"/>
-                                </StackPanel>
-                            </Button>
+                                    <Button Grid.Column="0"
+                                            Style="{StaticResource darkButtonStyle}"
+                                            Padding="8 4"
+                                            Margin="10 0"
+                                            Command="{Binding AddCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="FolderPlus"
+                                                          Style="{StaticResource normalIconButton}"
+                                                          Foreground="{StaticResource lightFont}"/>
+                                            <TextBlock Text="Thêm vật tư" 
+                                                       Style="{StaticResource buttonText}" 
+                                                       Foreground="{StaticResource lightFont}"/>
+                                        </StackPanel>
+                                    </Button>
 
-                            <TextBox Grid.Column="3"
-                                 Style="{StaticResource iconTextBox}"
-                                 Tag="Search"
-                                 Width="300"
-                                 helpers:TextBoxHelper.HintText="Tìm tên vật tư phụ tùng"
-                                 Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </Grid>
+                                    <Button Grid.Column="1"
+                                            Style="{StaticResource darkButtonStyle}"
+                                            Padding="8 4"
+                                            Command="{Binding RemoveSelectedCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="TrashCan"
+                                                          Style="{StaticResource normalIconButton}"
+                                                          Foreground="{StaticResource lightFont}"/>
+                                            <TextBlock Text="Xóa đã chọn" 
+                                                       Style="{StaticResource buttonText}" 
+                                                       Foreground="{StaticResource lightFont}"/>
+                                        </StackPanel>
+                                    </Button>
 
-                        <Border Background="{StaticResource darkBorder}"
-                                CornerRadius="10"
-                                VerticalAlignment="Top">
-                            <DataGrid x:Name="BangVTPT"
-                                  ItemsSource="{Binding DanhSachVTPT, Mode=TwoWay}"
-                                  Style="{StaticResource NoScrollDataGridStyle}"
-                                  CellStyle="{StaticResource DataGridCellStyle}" 
-                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                  RowStyle="{StaticResource DataGridRowStyle}"
-                                  VerticalAlignment="Top">
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Width="Auto">
-                                        <DataGridTemplateColumn.Header>
-                                            <CheckBox x:Name="HeaderCheckBox"
-                                          Style="{StaticResource DataGridCheckBoxStyle}"
-                                          IsChecked="{Binding DataContext.isAllChecked, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
-                                          Command="{Binding DataContext.UpdateIsAllSelectedCommand,  RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                          CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                        </DataGridTemplateColumn.Header>
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <CheckBox IsChecked="{Binding isChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                              Style="{StaticResource DataGridCheckBoxStyle}"
-                                              Command="{Binding DataContext.UpdateIsAllSelectedCommand,  RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                              CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    <TextBox Grid.Column="3"
+                                         Style="{StaticResource iconTextBox}"
+                                         Tag="Search"
+                                         Width="300"
+                                         helpers:TextBoxHelper.HintText="Tìm tên vật tư phụ tùng"
+                                         Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
 
-                                    <DataGridTemplateColumn Header="Vật tư phụ tùng" Width="4*">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBox Text="{Binding tenVTPT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                <Border Background="{StaticResource darkBorder}"
+                                    CornerRadius="10"
+                                    VerticalAlignment="Top">
+                                    <DataGrid x:Name="BangVTPT"
+                                    ItemsSource="{Binding DanhSachVTPT, Mode=TwoWay}"
+                                    Style="{StaticResource NoScrollDataGridStyle}"
+                                    CellStyle="{StaticResource DataGridCellStyle}" 
+                                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                    RowStyle="{StaticResource DataGridRowStyle}"
+                                    VerticalAlignment="Top">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTemplateColumn Width="Auto">
+                                                <DataGridTemplateColumn.Header>
+                                                    <CheckBox x:Name="HeaderCheckBox"
+                                                      Style="{StaticResource DataGridCheckBoxStyle}"
+                                                      IsChecked="{Binding DataContext.isAllChecked, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
+                                                      Command="{Binding DataContext.UpdateIsAllSelectedCommand,  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                </DataGridTemplateColumn.Header>
+
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox IsChecked="{Binding isChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          Style="{StaticResource DataGridCheckBoxStyle}"
+                                                          Command="{Binding DataContext.UpdateIsAllSelectedCommand,  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+
+                                            <DataGridTemplateColumn Header="Vật tư phụ tùng" Width="3*">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBox Text="{Binding tenVTPT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                          Style="{StaticResource aLineTextBox}"
                                                          IsReadOnly="{Binding isReadOnly}" />
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
 
-                                    <DataGridTextColumn Header="Tồn" IsReadOnly="True" Width="*" Binding="{Binding soLuongTon}"/>
+                                            <DataGridTextColumn Header="Tồn" IsReadOnly="True" Width="*" Binding="{Binding soLuongTon}"/>
 
-                                    <DataGridTemplateColumn Header="Đơn vị" Width="*">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <ComboBox ItemsSource="{Binding DataContext.DanhSachDVTNotNull, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                          SelectedItem="{Binding donViTinh, UpdateSourceTrigger=PropertyChanged}"
-                                                          DisplayMemberPath="tenDVT"
-                                                          Style="{StaticResource lightComboBoxStyle}"
-                                                          IsEnabled="{Binding isReadOnly, Converter={StaticResource InvertedBool}}"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Header="Đơn vị" Width="*">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <components:FilteredComboBox 
+                                                            Style="{StaticResource lightComboBoxStyle}"
+                                                            ItemsSource="{Binding DataContext.DanhSachDVTNotNull, RelativeSource={RelativeSource AncestorType=DataGrid}}"  
+                                                            SelectedItem="{Binding donViTinh, UpdateSourceTrigger=PropertyChanged}"
+                                                            DisplayMemberPath="tenDVT"
+                                                            IsEnabled="{Binding isReadOnly, Converter={StaticResource InvertedBool}}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
 
-                                    <DataGridTemplateColumn Header="Giá nhập" Width="*">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBox Text="{Binding giaNhap, Converter={StaticResource NumberFormatConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            <DataGridTemplateColumn Header="Giá nhập" Width="*">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBox Text="{Binding giaNhap, Converter={StaticResource NumberFormatConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                          Style="{StaticResource aLineTextBox}"
                                                          IsReadOnly="{Binding isReadOnly}">
-                                                    <i:Interaction.Behaviors>
-                                                        <behaviors:NumericInputBehavior/>
-                                                    </i:Interaction.Behaviors>
-                                                </TextBox>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    
-                                    <DataGridTextColumn Header="Giá bán" IsReadOnly="True" Width="*" Binding="{Binding giaBan, Converter={StaticResource NumberFormatConverter}}"/>
+                                                            <i:Interaction.Behaviors>
+                                                                <behaviors:NumericInputBehavior/>
+                                                            </i:Interaction.Behaviors>
+                                                        </TextBox>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
 
-                                    <DataGridTemplateColumn Width="Auto">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                            <DataGridTextColumn Header="Giá bán" IsReadOnly="True" Width="*" Binding="{Binding giaBan, Converter={StaticResource NumberFormatConverter}}"/>
+
+                                            <DataGridTemplateColumn Width="*">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
                                                             Padding="4"
                                                             Visibility="{Binding isReadOnly, Converter={StaticResource BoolToVis}}">
-                                                        <fa:IconImage Icon="Edit"
+                                                                <fa:IconImage Icon="Edit"
                                                                       Style="{StaticResource normalIconButton}"
                                                                       Foreground="{StaticResource darkFont}"
                                                                       Margin="0"/>
-                                                    </Button>
+                                                            </Button>
 
-                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                                            <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
                                                             Padding="4"
                                                             Visibility="{Binding isReadOnly, Converter={StaticResource BoolToVis}}">
-                                                        <fa:IconImage Icon="TrashCan" 
+                                                                <fa:IconImage Icon="TrashCan" 
                                                                       Style="{StaticResource normalIconButton}"
                                                                       Foreground="{StaticResource darkFont}"
                                                                       Margin="0"/>
-                                                    </Button>
+                                                            </Button>
 
-                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                                            <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.SaveCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
                                                             Padding="4"
                                                             Visibility="{Binding isReadOnly, Converter={StaticResource InvertedBoolToVis}}">
-                                                        <fa:IconImage Icon="Check"
+                                                                <fa:IconImage Icon="Check"
                                                                       Style="{StaticResource normalIconButton}"
                                                                       Foreground="{StaticResource darkFont}"
                                                                       Margin="0"/>
-                                                    </Button>
+                                                            </Button>
 
-                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                                            <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
                                                             Padding="4"
                                                             Visibility="{Binding isReadOnly, Converter={StaticResource InvertedBoolToVis}}">
-                                                        <fa:IconImage Icon="Xmark" 
+                                                                <fa:IconImage Icon="Xmark" 
                                                                       Style="{StaticResource normalIconButton}"
                                                                       Foreground="{StaticResource darkFont}"
                                                                       Margin="0"/>
-                                                    </Button>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </Border>
-                    </StackPanel>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Border>
+                            </StackPanel>
 
-                    <Grid Visibility="{Binding IsAdding, Converter={StaticResource BoolToVis}}"
-                          Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                            <StackPanel Visibility="{Binding IsAdding, Converter={StaticResource BoolToVis}}"
+                                       Grid.Row="1">
+                                <TextBlock Style="{StaticResource buttonText}"
+                                           Text="Thêm vật tư phụ tùng"
+                                           FontSize="20"
+                                           Margin="0 8"/>
 
-                        <Button Grid.Column="0"
-                                Style="{StaticResource transparentButtonStyle}"
-                                VerticalAlignment="Top"
-                                Command="{Binding CancelVTPTCommand}">
-                            <fa:IconImage Icon="ArrowLeft" 
-                                          Style="{StaticResource normalIconButton}"
-                                          Margin="0"
-                                          Width="28"
-                                          Height="20"/>
-                        </Button>
+                                <Button HorizontalAlignment="Left"
+                                        Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Margin="10 0"
+                                        Command="{Binding AddVTPTCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="Add"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                        <TextBlock Text="Thêm vật tư" 
+                                                   Style="{StaticResource buttonText}" 
+                                                   Foreground="{StaticResource lightFont}"/>
+                                    </StackPanel>
+                                </Button>
 
-                        <DockPanel Grid.Column="1"
-                                   Margin="20 0"
-                                   LastChildFill="False">
-                            <TextBlock Style="{StaticResource buttonText}"
-                                       Text="Thêm vật tư phụ tùng"
-                                       FontSize="20"
-                                       Margin="0 8"
-                                       DockPanel.Dock="Top"/>
+                                <ListBox ItemsSource="{Binding ThemVTPT}"
+                                         HorizontalContentAlignment="Stretch"
+                                         Margin="0 8">
+                                    <ListBox.Template>
+                                        <ControlTemplate>
+                                            <ItemsPresenter/>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
 
-                            <Button HorizontalAlignment="Left"
-                                    Style="{StaticResource darkButtonStyle}"
-                                    Padding="8 4"
-                                    Margin="10 0"
-                                    Command="{Binding AddVTPTCommand}"
-                                    DockPanel.Dock="Top">
-                                <StackPanel Orientation="Horizontal">
-                                    <fa:IconImage Icon="Add"
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0 0 0 8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="3*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="Tên vật tư:"
+                                                       VerticalAlignment="Bottom"
+                                                       Grid.Column="0"
+                                                       Margin="0 0 0 2"/>
+
+                                                <TextBox Style="{StaticResource aLineTextBox}"
+                                                     Text="{Binding tenVTPT}"
+                                                     Margin="8 0 16 2"
+                                                     Grid.Column="1"/>
+
+                                                <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="Giá tiền nhập:"
+                                                       Margin="0 0 8 2"
+                                                       VerticalAlignment="Bottom"
+                                                       Grid.Column="2"/>
+
+                                                <TextBox Style="{StaticResource aLineTextBox}"
+                                                     Text="{Binding giaNhap, Converter={StaticResource NumberFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                                     Margin="8 0 16 2"
+                                                     Grid.Column="3">
+                                                    <i:Interaction.Behaviors>
+                                                        <behaviors:NumericInputBehavior/>
+                                                    </i:Interaction.Behaviors>
+                                                </TextBox>
+
+                                                <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="Đơn vị tính:"
+                                                       VerticalAlignment="Bottom"
+                                                       Margin="8 0 16 2"
+                                                       Grid.Column="4"/>
+
+                                                <components:FilteredComboBox
+                                                    ItemsSource="{Binding DataContext.DanhSachDVTNotNull, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                    SelectedItem="{Binding donViTinh, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    DisplayMemberPath="tenDVT"
+                                                    Grid.Column="5"
+                                                    Style="{StaticResource lightComboBoxStyle}"/>
+
+                                                <Button Command="{Binding DataContext.RemoveVTPTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource darkButtonStyle}"
+                                                    Padding="4"
+                                                    Margin="8 0 0 0"
+                                                    Visibility="{Binding isReadOnly, Converter={StaticResource BoolToVis}, Mode=TwoWay}"
+                                                    Grid.Column="6">
+                                                    <fa:IconImage Icon="TrashCan" 
+                                                              Style="{StaticResource normalIconButton}"
+                                                              Foreground="{StaticResource lightFont}"
+                                                              Margin="0"/>
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <Button HorizontalAlignment="Left"
+                                        Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Margin="10 10"
+                                        Command="{Binding SaveVTPTCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="Check"
                                                   Style="{StaticResource normalIconButton}"
                                                   Foreground="{StaticResource lightFont}"/>
-                                    <TextBlock Text="Thêm vật tư" 
+                                        <TextBlock Text="Xác nhận" 
                                                Style="{StaticResource buttonText}" 
                                                Foreground="{StaticResource lightFont}"/>
-                                </StackPanel>
-                            </Button>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
 
-                            <ListBox ItemsSource="{Binding ThemVTPT}"
+                    <Grid Visibility="{Binding IsImporting, Converter={StaticResource BoolToVis}}"
+                          Grid.Row="1">
+                        <StackPanel VerticalAlignment="Top">
+                            <TextBlock Style="{StaticResource buttonText}"
+                                       Text="Phiếu nhập vật tư phụ tùng"
+                                       FontSize="20"
+                                       Margin="0 8"/>
+
+                            <DatePicker Style="{StaticResource DatePickerStyle}"
+                                        Width="200"
+                                        HorizontalAlignment="Left"
+                                        SelectedDate="{Binding PhieuNhapVTPT.NgayNhap}"
+                                        Margin="0 0 0 16"/>
+
+                            <Grid Margin="8 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0"
+                                        Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Command="{Binding AddImportCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="Add"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                        <TextBlock Text="Bổ sung" 
+                                                   Style="{StaticResource buttonText}" 
+                                                   Foreground="{StaticResource lightFont}"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Grid.Column="2"
+                                        Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Command="{Binding AddCommand}"
+                                        Visibility="{Binding IsAdding, Converter={StaticResource InvertedBoolToVis}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="FolderPlus"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                        <TextBlock Text="Thêm vật tư" 
+                                                   Style="{StaticResource buttonText}" 
+                                                   Foreground="{StaticResource lightFont}"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+
+                            <ListBox ItemsSource="{Binding PhieuNhapVTPT.DanhSachCT}"
                                      HorizontalContentAlignment="Stretch"
-                                     Margin="0 8"
-                                     DockPanel.Dock="Top">
+                                     Margin="0 8">
                                 <ListBox.Template>
                                     <ControlTemplate>
                                         <ItemsPresenter/>
@@ -523,14 +741,16 @@
 
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Margin="0 0 0 8">
+                                        <Grid Margin="12 8">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="3*"/>
-                                                <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="2*"/>
                                                 <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
 
@@ -540,19 +760,22 @@
                                                        Grid.Column="0"
                                                        Margin="0 0 0 2"/>
 
-                                            <TextBox Style="{StaticResource aLineTextBox}"
-                                                     Text="{Binding tenVTPT}"
-                                                     Margin="8 0 16 2"
-                                                     Grid.Column="1"/>
+                                            <components:FilteredComboBox 
+                                                    ItemsSource="{Binding DataContext.DanhSachVTPTImport, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                    SelectedItem="{Binding VTPT, UpdateSourceTrigger=PropertyChanged}"
+                                                    DisplayMemberPath="tenVTPT"
+                                                    Grid.Column="1"
+                                                    Style="{StaticResource lightComboBoxStyle}"
+                                                    Margin="8 0 16 0"/>
 
                                             <TextBlock Style="{StaticResource buttonText}"
-                                                       Text="Giá tiền nhập:"
-                                                       Margin="0 0 8 2"
+                                                       Text="Giá nhập:"
                                                        VerticalAlignment="Bottom"
-                                                       Grid.Column="2"/>
+                                                       Grid.Column="2"
+                                                       Margin="0 0 0 2"/>
 
                                             <TextBox Style="{StaticResource aLineTextBox}"
-                                                     Text="{Binding giaNhap, Converter={StaticResource NumberFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                                     Text="{Binding GiaNhap, Converter={StaticResource NumberFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
                                                      Margin="8 0 16 2"
                                                      Grid.Column="3">
                                                 <i:Interaction.Behaviors>
@@ -561,24 +784,39 @@
                                             </TextBox>
 
                                             <TextBlock Style="{StaticResource buttonText}"
-                                                       Text="Đơn vị tính:"
+                                                       Text="Số lượng:"
+                                                       Margin="0 0 0 2"
                                                        VerticalAlignment="Bottom"
-                                                       Margin="8 0 16 2"
                                                        Grid.Column="4"/>
 
-                                            <ComboBox ItemsSource="{Binding DataContext.DanhSachDVTNotNull, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                                      SelectedItem="{Binding donViTinh, UpdateSourceTrigger=PropertyChanged}"
-                                                      DisplayMemberPath="tenDVT"
-                                                      Grid.Column="5"
-                                                      Style="{StaticResource lightComboBoxStyle}"/>
+                                            <TextBox Style="{StaticResource aLineTextBox}"
+                                                     Text="{Binding SoLuong, UpdateSourceTrigger=PropertyChanged}"
+                                                     Margin="8 0 16 2"
+                                                     Grid.Column="5">
+                                                <i:Interaction.Behaviors>
+                                                    <behaviors:NumericInputBehavior/>
+                                                </i:Interaction.Behaviors>
+                                            </TextBox>
 
-                                            <Button Command="{Binding DataContext.RemoveVTPTCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="Thành tiền:"
+                                                       VerticalAlignment="Bottom"
+                                                       Margin="0 0 0 2"
+                                                       Grid.Column="6"/>
+
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="{Binding thanhTien, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NumberFormatConverter}}"
+                                                       VerticalAlignment="Bottom"
+                                                       Margin="8 0 16 2"
+                                                       Grid.Column="7"/>
+
+                                            <Button Command="{Binding DataContext.RemoveImportCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                     CommandParameter="{Binding}"
                                                     Style="{StaticResource darkButtonStyle}"
                                                     Padding="4"
                                                     Margin="8 0 0 0"
                                                     Visibility="{Binding isReadOnly, Converter={StaticResource BoolToVis}, Mode=TwoWay}"
-                                                    Grid.Column="6">
+                                                    Grid.Column="8">
                                                 <fa:IconImage Icon="TrashCan" 
                                                               Style="{StaticResource normalIconButton}"
                                                               Foreground="{StaticResource lightFont}"
@@ -589,12 +827,22 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
 
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="16 16 8 8">
+                                <TextBlock Style="{StaticResource buttonText}"
+                                           Text="Tổng tiền:"
+                                           Margin="0 0 8 0"/>
+
+                                <TextBlock Style="{StaticResource buttonText}"
+                                           Text="{Binding PhieuNhapVTPT.tongTienNhap, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NumberFormatConverter}}"/>
+                            </StackPanel>
+
                             <Button HorizontalAlignment="Left"
-                                    DockPanel.Dock="Bottom"
                                     Style="{StaticResource darkButtonStyle}"
                                     Padding="8 4"
-                                    Margin="10 10"
-                                    Command="{Binding SaveVTPTCommand}">
+                                    Margin="8"
+                                    Command="{Binding SaveImportCommand}"
+                                    CommandParameter="{Binding}">
                                 <StackPanel Orientation="Horizontal">
                                     <fa:IconImage Icon="Check"
                                                   Style="{StaticResource normalIconButton}"
@@ -604,7 +852,184 @@
                                                Foreground="{StaticResource lightFont}"/>
                                 </StackPanel>
                             </Button>
-                        </DockPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Visibility="{Binding IsViewingImport, Converter={StaticResource BoolToVis}}"
+                      Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Background="{StaticResource lightBackground}"
+                                CornerRadius="5"
+                                Padding="12 12 4 12"
+                                Grid.Column="0"
+                                BorderBrush="{StaticResource darkBorder}"
+                                BorderThickness="2"
+                                Visibility="{Binding IsImportListNull, Converter={StaticResource InvertedBoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource menuIconText}"
+                                           Text="Chọn phiếu nhập vật tư"
+                                           Foreground="{StaticResource darkFont}"/>
+
+                                <ScrollViewer Style="{StaticResource customScrollViewer}"
+                                              MaxHeight="500">
+                                    <ItemsControl ItemsSource="{Binding Source={StaticResource GroupedImportList}}"
+                                                  HorizontalContentAlignment="Center">
+                                        <ItemsControl.GroupStyle>
+                                            <GroupStyle>
+                                                <GroupStyle.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   Style="{StaticResource menuIconText}"
+                                                                   Foreground="{StaticResource darkFont}"
+                                                                   Margin="0 12 0 4"/>
+                                                    </DataTemplate>
+                                                </GroupStyle.HeaderTemplate>
+                                            </GroupStyle>
+                                        </ItemsControl.GroupStyle>
+
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <RadioButton Style="{StaticResource lightRadioButtonStyle}"
+                                                             Margin="2"
+                                                             GroupName="importList"
+                                                             HorizontalContentAlignment="Center"
+                                                             HorizontalAlignment="Stretch"
+                                                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetListImportCommand}"
+                                                             CommandParameter="{Binding}"
+                                                             IsChecked="{Binding IsChecked}">
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <fa:IconImage Icon="CalendarDay" 
+                                                                          Style="{StaticResource normalIconButton}"
+                                                                          Margin="0 0 8 4"/>
+
+                                                            <TextBlock Text="{Binding NgayNhap, StringFormat='dd/MM/yyyy'}"
+                                                                       Style="{StaticResource buttonText}"/>
+                                                        </StackPanel>
+
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Margin="0 4 0 0">
+                                                            <fa:IconImage Icon="MoneyBills" 
+                                                                          Style="{StaticResource normalIconButton}"
+                                                                          Margin="0 0 8 0"/>
+
+                                                            <TextBlock Text="{Binding tongTienNhap, Converter={StaticResource NumberFormatConverter}}"
+                                                                       Style="{StaticResource buttonText}"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </RadioButton>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="24 0 0 0"
+                                    Visibility="{Binding IsImportListNull, Converter={StaticResource InvertedBoolToVis}}">
+                            <TextBlock Style="{StaticResource buttonText}"
+                                       Text="Phiếu nhập vật tư phụ tùng"
+                                       FontSize="20"
+                                       Margin="0 8"/>
+
+                            <StackPanel>
+                                <Border CornerRadius="10"
+                                        BorderThickness="2"
+                                        BorderBrush="{StaticResource darkBorder}"
+                                        VerticalAlignment="Top"
+                                        Padding="12">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="Ngày nhập:"
+                                                       FontSize="16"
+                                                       Margin="0 0 8 0"/>
+
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="{Binding PhieuNhapVTPT.NgayNhap, StringFormat='dd/MM/yyyy'}"
+                                                       FontSize="16"/>
+                                        </StackPanel>
+
+                                        <TextBlock Style="{StaticResource buttonText}"
+                                                   Text="Danh sách vật tư đã mua"
+                                                   FontSize="16"
+                                                   Margin="0 16 0 8"/>
+
+                                        <Border Background="{StaticResource darkBorder}"
+                                                CornerRadius="10">
+                                            <DataGrid x:Name="PhieuNhap"
+                                                      ItemsSource="{Binding PhieuNhapVTPT.DanhSachCT}"
+                                                      Style="{StaticResource NoScrollDataGridStyle}"
+                                                      CellStyle="{StaticResource DataGridCellStyle}" 
+                                                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                                      RowStyle="{StaticResource DataGridRowStyle}"
+                                                      VerticalAlignment="Top">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Vật tư phụ tùng"
+                                                                IsReadOnly="True"
+                                                                Width="3*"
+                                                                Binding="{Binding VTPT.tenVTPT}"/>
+
+                                                    <DataGridTextColumn Header="Giá nhập"
+                                                                    IsReadOnly="True"
+                                                                    Width="*"
+                                                                    Binding="{Binding GiaNhap, Converter={StaticResource NumberFormatConverter}}"/>
+
+                                                    <DataGridTextColumn Header="Số lượng"
+                                                                    IsReadOnly="True"
+                                                                    Width="*"
+                                                                    Binding="{Binding SoLuong}"/>
+
+                                                    <DataGridTextColumn Header="Thành tiền"
+                                                                    IsReadOnly="True"
+                                                                    Width="*" 
+                                                                    Binding="{Binding thanhTien}"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Border>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0 16 0 0">
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="Tổng tiền:"
+                                                       FontSize="16"
+                                                       Margin="0 0 8 0"/>
+
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="{Binding PhieuNhapVTPT.tongTienNhap, Converter={StaticResource NumberFormatConverter}}"
+                                                       FontSize="16"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Button Style="{StaticResource darkButtonStyle}"
+                                        Margin="4 16"
+                                        Padding="8 4"
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding RemoveListImportCommand}"
+                                        CommandParameter="{Binding PhieuNhapVTPT}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="TrashCan"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                        <TextBlock Text="Xóa phiếu nhập" 
+                                                   Style="{StaticResource buttonText}" 
+                                                   Foreground="{StaticResource lightFont}"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <TextBlock Grid.ColumnSpan="2"
+                                   Style="{StaticResource buttonText}"
+                                   Text="Không có phiếu nhập"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding IsImportListNull, Converter={StaticResource BoolToVis}}"/>
                     </Grid>
                 </Grid>
             </Grid>

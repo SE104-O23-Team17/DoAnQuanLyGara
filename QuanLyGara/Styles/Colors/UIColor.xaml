@@ -35,7 +35,7 @@
     <SolidColorBrush x:Key="lightButtonBackground">#E8F9FD</SolidColorBrush>
     <SolidColorBrush x:Key="lightButtonOver">#B7FAF1</SolidColorBrush>
     <SolidColorBrush x:Key="lightButtonPress">#B442C2FF</SolidColorBrush>
-    <SolidColorBrush x:Key="lightButtonBorder">#6979DAE8</SolidColorBrush>
+    <SolidColorBrush x:Key="lightButtonBorder">#D43C8AC9</SolidColorBrush>
 
     <SolidColorBrush x:Key="transparentButtonBackground">Transparent</SolidColorBrush>
     <SolidColorBrush x:Key="transparentButtonOver">#8D007AC6</SolidColorBrush>

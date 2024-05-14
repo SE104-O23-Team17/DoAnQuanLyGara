@@ -214,6 +214,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource darkButtonBorder}"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Width" Value="Auto"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Template">
@@ -262,6 +263,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource lightButtonBorder}"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Width" Value="Auto"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Template">
@@ -309,6 +311,7 @@
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Padding" Value="8 4"/>
         <Setter Property="Width" Value="Auto"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Template">
@@ -341,6 +344,56 @@
                             Property="Background"
                             Value="{StaticResource transparentButtonPress}">
                             </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Set Light Radio button-->
+    <Style x:Key="lightRadioButtonStyle" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{StaticResource darkFont}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Padding" Value="12 4"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="BorderBrush" Value="{StaticResource lightButtonBorder}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="FontFamily" Value="Montserrat"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border
+                    x:Name="lightButtonBorder"
+                    CornerRadius="5"
+                    Background="{StaticResource lightButtonBackground}"
+                    Width="{TemplateBinding Width}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}">
+
+                        <ContentPresenter
+                        Focusable="False"
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        Margin="{TemplateBinding Padding}"
+                        RecognizesAccessKey="True"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="lightButtonBorder"
+                        Property="Background"
+                        Value="{StaticResource lightButtonOver}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="lightButtonBorder"
+                        Property="Background"
+                        Value="{StaticResource lightBorder}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -17,6 +17,7 @@ namespace QuanLyGara.Models.VTPT
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         public VTPTModel() {
             maVTPT = 0;
             tenVTPT = "";
@@ -88,6 +89,16 @@ namespace QuanLyGara.Models.VTPT
             {
                 OnPropertyChanged("donViTinh");
             }
+        }
+
+        public void NhapThem(int soLuong)
+        {
+            soLuongTon += soLuong;
+        }
+
+        public override string ToString()
+        {
+            return tenVTPT;
         }
     }
 }

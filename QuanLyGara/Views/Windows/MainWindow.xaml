@@ -17,7 +17,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         Height="720" Width="1280"
-        Title="Eco-Wallet">
+        Title="Quản lý Gara">
 
     <Window.DataContext>
         <vmWindow:MainWindowViewModel/>
@@ -68,23 +68,24 @@
                     Orientation="Horizontal"
                     FlowDirection="RightToLeft"
                     Background="Transparent"
-                    Margin="5, 0, 5, 0"
-                    MouseLeftButtonDown="winCtrBar_MouseLeftButtonDown">
+                    Margin="5, 0, 5, 0">
 
                     <Button 
                         x:Name="winCloseButton"
                         Style="{StaticResource winCtrButton}"
                         Tag="{StaticResource redUI}"
                         Click="winCloseButton_Click">
-                        <fa:IconImage Icon="Xmark" Style="{StaticResource winCtrIcon}"/>
+                        <fa:IconImage Icon="Xmark"
+                                      Style="{StaticResource winCtrIcon}"/>
                     </Button>
 
                     <Button 
                         x:Name="winMinButton"
                         Style="{StaticResource winCtrButton}"
                         Tag="{StaticResource darkFont}"
-                            Click="winMinButton_Click">
-                        <fa:IconImage Icon="WindowMinimize" Style="{StaticResource winCtrIcon}"/>
+                        Click="winMinButton_Click">
+                        <fa:IconImage Icon="WindowMinimize"
+                                      Style="{StaticResource winCtrIcon}"/>
                     </Button>
                 </StackPanel>
             </Border>
@@ -177,7 +178,7 @@
 
             <ContentControl Content="{Binding CurrentViewModel}"
                             Grid.Row="4"
-                            Margin="10"
+                            Margin="10 15 10 10"
                             x:Name="Content"/>
         </Grid>
     </Border>

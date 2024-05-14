@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="/Styles/Controls/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Styles/Controls/ScrollStyle.xaml"/>
                 <ResourceDictionary Source="/Styles/Controls/IOStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/Controls/DatePickerStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
