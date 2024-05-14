@@ -183,12 +183,22 @@ namespace QuanLyGara.ViewModels.Pages
         {
             get
             {
-                return danhSachPhieuNhap;
+                return [.. danhSachPhieuNhap.OrderByDescending(phieuNhap => phieuNhap.NgayNhap)];
             }
             set
             {
                 danhSachPhieuNhap = value;
                 OnPropertyChanged(nameof(DanhSachPhieuNhap));
+            }
+        }
+
+        private bool isImportListNull;
+        public bool IsImportListNull
+        {
+            get
+            {
+                isImportListNull = danhSachPhieuNhap.Count == 0;
+                return isImportListNull;
             }
         }
 
@@ -222,6 +232,8 @@ namespace QuanLyGara.ViewModels.Pages
         public ICommand SaveImportCommand { get; set; }
         public ICommand RemoveImportCommand { get; set; }
         public ICommand ViewImportCommand { get; set; }
+        public ICommand RemoveListImportCommand { get; set; }
+        public ICommand SetListImportCommand { get; set; }
 
         public PartViewModel() {
             dialogService = new DialogService();
@@ -263,6 +275,8 @@ namespace QuanLyGara.ViewModels.Pages
             SaveImportCommand = new ViewModelCommand(ExecuteSaveImportCommand);
             RemoveImportCommand = new ViewModelCommand(ExecuteRemoveImportCommand);
             ViewImportCommand = new ViewModelCommand(ExecuteViewImportCommand);
+            RemoveListImportCommand = new ViewModelCommand(ExecuteRemoveListImportCommand);
+            SetListImportCommand = new ViewModelCommand(ExecuteSetListImportCommand);
         }
 
         private void ExecuteUpdateIsAllSelectedCommand(object obj)
@@ -636,7 +650,7 @@ namespace QuanLyGara.ViewModels.Pages
                         return;
                     }
 
-                    if (ct.VTPT == null)
+                    if (string.IsNullOrEmpty(ct.VTPT.tenVTPT))
                     {
                         phieuNhapVTPT.XoaCT(ct);
                         continue;
@@ -653,6 +667,8 @@ namespace QuanLyGara.ViewModels.Pages
                     danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().NhapThem(ct.SoLuong);
             }
                 danhSachPhieuNhap.Add(phieuNhapVTPT);
+            OnPropertyChanged(nameof(IsImportListNull));
+            OnPropertyChanged(nameof(DanhSachPhieuNhap));
 
             dialogService.ShowInfoDialog(
                     "Thông báo",
@@ -674,7 +690,52 @@ namespace QuanLyGara.ViewModels.Pages
 
         private void ExecuteViewImportCommand(object obj)
         {
+            IsViewing = false;
+            IsViewingImport = true;
+            phieuNhapVTPT = danhSachPhieuNhap.LastOrDefault();
+            if (phieuNhapVTPT == null)
+            {
+                OnPropertyChanged(nameof(PhieuNhapVTPT));
+                OnPropertyChanged(nameof(IsImportListNull));
+                return;
+            }
+            phieuNhapVTPT.IsChecked = true;
+            OnPropertyChanged(nameof(PhieuNhapVTPT));
+        }
 
+        private void ExecuteRemoveListImportCommand(object obj)
+        {
+            if (obj is PhieuNhapVTPTModel phieuNhap)
+            {
+                dialogService.ShowYesNoDialog(
+                    "Xác nhận",
+                    "Bạn có chắc chắn muốn xóa phiếu nhập vật tư phụ tùng này không?",
+                    () =>
+                    {
+                        danhSachPhieuNhap.Remove(phieuNhap);
+                        OnPropertyChanged(nameof(DanhSachPhieuNhap));
+                        phieuNhapVTPT = danhSachPhieuNhap.LastOrDefault();
+                        if (phieuNhapVTPT == null)
+                        {
+                            OnPropertyChanged(nameof(PhieuNhapVTPT));
+                            OnPropertyChanged(nameof(IsImportListNull));
+                            return;
+                        }
+                        phieuNhapVTPT.IsChecked = true;
+                        OnPropertyChanged(nameof(PhieuNhapVTPT));
+                    },
+                    () => { }
+                    );
+            }
+        }
+
+        private void ExecuteSetListImportCommand(object obj)
+        {
+            if (obj is PhieuNhapVTPTModel phieuNhap)
+            {
+                phieuNhapVTPT = phieuNhap;
+                OnPropertyChanged(nameof(PhieuNhapVTPT));
+            }
         }
     }
 }

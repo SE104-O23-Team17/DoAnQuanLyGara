@@ -27,6 +27,12 @@
         <services:ModelAndTextConverter x:Key="ModelAndTextConverter"/>
         <services:InvertedBool x:Key="InvertedBool"/>
         <services:MultiBoolToVis x:Key="MultiBoolToVis"/>
+
+        <CollectionViewSource x:Key="GroupedImportList" Source="{Binding DanhSachPhieuNhap}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="MonthYear" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
     </UserControl.Resources>
 
     <ScrollViewer Style="{StaticResource customScrollViewer}">
@@ -63,7 +69,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
                     <Grid Grid.Row="0">
                         <Grid.Visibility>
                             <MultiBinding Converter="{StaticResource MultiBoolToVis}">
@@ -238,7 +244,7 @@
                                     Padding="0 4"
                                     Margin="10 8"
                                     HorizontalAlignment="Stretch"
-                                    Command="{Binding AddCommand}">
+                                    Command="{Binding ViewImportCommand}">
                                         <StackPanel Orientation="Horizontal"
                                             HorizontalAlignment="Center">
                                             <fa:IconImage Icon="RectangleList"
@@ -396,7 +402,7 @@
                                             Margin="10 0"
                                             Command="{Binding AddCommand}">
                                         <StackPanel Orientation="Horizontal">
-                                            <fa:IconImage Icon="Add"
+                                            <fa:IconImage Icon="FolderPlus"
                                                           Style="{StaticResource normalIconButton}"
                                                           Foreground="{StaticResource lightFont}"/>
                                             <TextBlock Text="Thêm vật tư" 
@@ -676,29 +682,53 @@
                     <Grid Visibility="{Binding IsImporting, Converter={StaticResource BoolToVis}}"
                           Grid.Row="1">
                         <StackPanel VerticalAlignment="Top">
-                            <DatePicker Style="{StaticResource DatePickerStyle}"
-                                        Width="240"
-                                        HorizontalAlignment="Left"/>
-                            
                             <TextBlock Style="{StaticResource buttonText}"
                                        Text="Phiếu nhập vật tư phụ tùng"
                                        FontSize="20"
-                                       Margin="0 8 0 16"/>
+                                       Margin="0 8"/>
 
-                            <Button HorizontalAlignment="Left"
-                                    Style="{StaticResource darkButtonStyle}"
-                                    Padding="8 4"
-                                    Margin="8 0"
-                                    Command="{Binding AddImportCommand}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fa:IconImage Icon="Add"
-                                                  Style="{StaticResource normalIconButton}"
-                                                  Foreground="{StaticResource lightFont}"/>
-                                    <TextBlock Text="Bổ sung" 
-                                               Style="{StaticResource buttonText}" 
-                                               Foreground="{StaticResource lightFont}"/>
-                                </StackPanel>
-                            </Button>
+                            <DatePicker Style="{StaticResource DatePickerStyle}"
+                                        Width="200"
+                                        HorizontalAlignment="Left"
+                                        SelectedDate="{Binding PhieuNhapVTPT.NgayNhap}"
+                                        Margin="0 0 0 16"/>
+
+                            <Grid Margin="8 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0"
+                                        Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Command="{Binding AddImportCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="Add"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                        <TextBlock Text="Bổ sung" 
+                                                   Style="{StaticResource buttonText}" 
+                                                   Foreground="{StaticResource lightFont}"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Grid.Column="2"
+                                        Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Command="{Binding AddCommand}"
+                                        Visibility="{Binding IsAdding, Converter={StaticResource InvertedBoolToVis}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="FolderPlus"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                        <TextBlock Text="Thêm vật tư" 
+                                                   Style="{StaticResource buttonText}" 
+                                                   Foreground="{StaticResource lightFont}"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
 
                             <ListBox ItemsSource="{Binding PhieuNhapVTPT.DanhSachCT}"
                                      HorizontalContentAlignment="Stretch"
@@ -730,13 +760,13 @@
                                                        Grid.Column="0"
                                                        Margin="0 0 0 2"/>
 
-                                                <components:FilteredComboBox 
+                                            <components:FilteredComboBox 
                                                     ItemsSource="{Binding DataContext.DanhSachVTPTImport, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                     SelectedItem="{Binding VTPT, UpdateSourceTrigger=PropertyChanged}"
                                                     DisplayMemberPath="tenVTPT"
                                                     Grid.Column="1"
                                                     Style="{StaticResource lightComboBoxStyle}"
-                                                    Margin="8 0 16 2"/>
+                                                    Margin="8 0 16 0"/>
 
                                             <TextBlock Style="{StaticResource buttonText}"
                                                        Text="Giá nhập:"
@@ -797,10 +827,11 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
 
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="16 16 8 8">
                                 <TextBlock Style="{StaticResource buttonText}"
                                            Text="Tổng tiền:"
-                                           Margin="16 16 8 8"/>
+                                           Margin="0 0 8 0"/>
 
                                 <TextBlock Style="{StaticResource buttonText}"
                                            Text="{Binding PhieuNhapVTPT.tongTienNhap, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NumberFormatConverter}}"/>
@@ -826,10 +857,181 @@
 
                     <Grid Visibility="{Binding IsViewingImport, Converter={StaticResource BoolToVis}}"
                       Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
+                        <Border Background="{StaticResource lightBackground}"
+                                CornerRadius="5"
+                                Padding="12 12 4 12"
+                                Grid.Column="0"
+                                BorderBrush="{StaticResource darkBorder}"
+                                BorderThickness="2"
+                                Visibility="{Binding IsImportListNull, Converter={StaticResource InvertedBoolToVis}}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource menuIconText}"
+                                           Text="Chọn phiếu nhập vật tư"
+                                           Foreground="{StaticResource darkFont}"/>
+
+                                <ScrollViewer Style="{StaticResource customScrollViewer}"
+                                              MaxHeight="500">
+                                    <ItemsControl ItemsSource="{Binding Source={StaticResource GroupedImportList}}"
+                                                  HorizontalContentAlignment="Center">
+                                        <ItemsControl.GroupStyle>
+                                            <GroupStyle>
+                                                <GroupStyle.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   Style="{StaticResource menuIconText}"
+                                                                   Foreground="{StaticResource darkFont}"
+                                                                   Margin="0 12 0 4"/>
+                                                    </DataTemplate>
+                                                </GroupStyle.HeaderTemplate>
+                                            </GroupStyle>
+                                        </ItemsControl.GroupStyle>
+
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <RadioButton Style="{StaticResource lightRadioButtonStyle}"
+                                                             Margin="2"
+                                                             GroupName="importList"
+                                                             HorizontalContentAlignment="Center"
+                                                             HorizontalAlignment="Stretch"
+                                                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SetListImportCommand}"
+                                                             CommandParameter="{Binding}"
+                                                             IsChecked="{Binding IsChecked}">
+                                                    <StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <fa:IconImage Icon="CalendarDay" 
+                                                                          Style="{StaticResource normalIconButton}"
+                                                                          Margin="0 0 8 4"/>
+
+                                                            <TextBlock Text="{Binding NgayNhap, StringFormat='dd/MM/yyyy'}"
+                                                                       Style="{StaticResource buttonText}"/>
+                                                        </StackPanel>
+
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Margin="0 4 0 0">
+                                                            <fa:IconImage Icon="MoneyBills" 
+                                                                          Style="{StaticResource normalIconButton}"
+                                                                          Margin="0 0 8 0"/>
+
+                                                            <TextBlock Text="{Binding tongTienNhap, Converter={StaticResource NumberFormatConverter}}"
+                                                                       Style="{StaticResource buttonText}"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </RadioButton>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="24 0 0 0"
+                                    Visibility="{Binding IsImportListNull, Converter={StaticResource InvertedBoolToVis}}">
+                            <TextBlock Style="{StaticResource buttonText}"
+                                       Text="Phiếu nhập vật tư phụ tùng"
+                                       FontSize="20"
+                                       Margin="0 8"/>
+
+                            <StackPanel>
+                                <Border CornerRadius="10"
+                                        BorderThickness="2"
+                                        BorderBrush="{StaticResource darkBorder}"
+                                        VerticalAlignment="Top"
+                                        Padding="12">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="Ngày nhập:"
+                                                       FontSize="16"
+                                                       Margin="0 0 8 0"/>
+
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="{Binding PhieuNhapVTPT.NgayNhap, StringFormat='dd/MM/yyyy'}"
+                                                       FontSize="16"/>
+                                        </StackPanel>
+
+                                        <TextBlock Style="{StaticResource buttonText}"
+                                                   Text="Danh sách vật tư đã mua"
+                                                   FontSize="16"
+                                                   Margin="0 16 0 8"/>
+
+                                        <Border Background="{StaticResource darkBorder}"
+                                                CornerRadius="10">
+                                            <DataGrid x:Name="PhieuNhap"
+                                                      ItemsSource="{Binding PhieuNhapVTPT.DanhSachCT}"
+                                                      Style="{StaticResource NoScrollDataGridStyle}"
+                                                      CellStyle="{StaticResource DataGridCellStyle}" 
+                                                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                                      RowStyle="{StaticResource DataGridRowStyle}"
+                                                      VerticalAlignment="Top">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Vật tư phụ tùng"
+                                                                IsReadOnly="True"
+                                                                Width="3*"
+                                                                Binding="{Binding VTPT.tenVTPT}"/>
+
+                                                    <DataGridTextColumn Header="Giá nhập"
+                                                                    IsReadOnly="True"
+                                                                    Width="*"
+                                                                    Binding="{Binding GiaNhap, Converter={StaticResource NumberFormatConverter}}"/>
+
+                                                    <DataGridTextColumn Header="Số lượng"
+                                                                    IsReadOnly="True"
+                                                                    Width="*"
+                                                                    Binding="{Binding SoLuong}"/>
+
+                                                    <DataGridTextColumn Header="Thành tiền"
+                                                                    IsReadOnly="True"
+                                                                    Width="*" 
+                                                                    Binding="{Binding thanhTien}"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Border>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0 16 0 0">
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="Tổng tiền:"
+                                                       FontSize="16"
+                                                       Margin="0 0 8 0"/>
+
+                                            <TextBlock Style="{StaticResource buttonText}"
+                                                       Text="{Binding PhieuNhapVTPT.tongTienNhap, Converter={StaticResource NumberFormatConverter}}"
+                                                       FontSize="16"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Button Style="{StaticResource darkButtonStyle}"
+                                        Margin="4 16"
+                                        Padding="8 4"
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding RemoveListImportCommand}"
+                                        CommandParameter="{Binding PhieuNhapVTPT}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="TrashCan"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                        <TextBlock Text="Xóa phiếu nhập" 
+                                                   Style="{StaticResource buttonText}" 
+                                                   Foreground="{StaticResource lightFont}"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <TextBlock Grid.ColumnSpan="2"
+                                   Style="{StaticResource buttonText}"
+                                   Text="Không có phiếu nhập"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding IsImportListNull, Converter={StaticResource BoolToVis}}"/>
                     </Grid>
                 </Grid>
-
             </Grid>
         </Border>
     </ScrollViewer>

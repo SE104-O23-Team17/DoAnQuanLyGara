@@ -31,5 +31,4 @@ namespace QuanLyGara.Behaviors
                 e.Handled = true;
         }
     }
-
 }

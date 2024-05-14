@@ -24,11 +24,26 @@ namespace QuanLyGara.Models.PhieuNhapVTPT
             this.maPhieuNhapVTPT = maPhieuNhapVTPT;
             ngayNhap = DateTime.Now;
             danhSachCT = [];
+            isChecked = false;
         }
 
         public int maPhieuNhapVTPT { get; set; }
-        public DateTime ngayNhap { get; set; }
-        
+
+        private DateTime ngayNhap;
+        public DateTime NgayNhap
+        {
+            get
+            {
+                return ngayNhap;
+            }
+            set
+            {
+                ngayNhap = value;
+                OnPropertyChanged(nameof(NgayNhap));
+                OnPropertyChanged(nameof(MonthYear));
+            }
+        }
+
         private List<CTPhieuNhapVTPTModel> danhSachCT;
         public List<CTPhieuNhapVTPTModel> DanhSachCT
         {
@@ -64,6 +79,14 @@ namespace QuanLyGara.Models.PhieuNhapVTPT
             OnPropertyChanged(nameof(tongTienNhap));
         }
 
+        public string MonthYear
+        {
+            get
+            {
+                return ngayNhap.ToString("MM/yyyy");
+            }
+        }
+
         public void XoaCT(CTPhieuNhapVTPTModel ct)
         {
             ct.PropertyChanged -= CTPhieuNhapVTPTModel_PropertyChanged;
@@ -77,6 +100,20 @@ namespace QuanLyGara.Models.PhieuNhapVTPT
             if (e.PropertyName == nameof(CTPhieuNhapVTPTModel.thanhTien))
             {
                 OnPropertyChanged(nameof(tongTienNhap));
+            }
+        }
+
+        private bool isChecked;
+        public bool IsChecked
+        {
+            get
+            {
+                return isChecked;
+            }
+            set
+            {
+                isChecked = value;
+                OnPropertyChanged(nameof(IsChecked));
             }
         }
     }

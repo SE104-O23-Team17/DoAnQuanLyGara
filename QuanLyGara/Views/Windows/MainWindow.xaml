@@ -68,8 +68,7 @@
                     Orientation="Horizontal"
                     FlowDirection="RightToLeft"
                     Background="Transparent"
-                    Margin="5, 0, 5, 0"
-                    MouseLeftButtonDown="winCtrBar_MouseLeftButtonDown">
+                    Margin="5, 0, 5, 0">
 
                     <Button 
                         x:Name="winCloseButton"
