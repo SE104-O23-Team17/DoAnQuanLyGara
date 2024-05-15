@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyGara.Models.HieuXe;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +10,14 @@ namespace QuanLyGara.Models.Xe
     public class XeModel
     {
         public XeModel() {
-            maXe = 0;
             bienSo = "";
             tenXe = "";
-            maHieuXe = 0;
+            hieuXe = new HieuXeModel();
             tienNo = 0;
         }
-        public int maXe { get; set; }
         public string bienSo { get; set; }
         public string tenXe { get; set; }
-        public int maHieuXe { get; set; }
+        public HieuXeModel hieuXe { get; set; }
         public double tienNo { get; set; }
     }
 }

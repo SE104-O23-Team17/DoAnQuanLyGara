@@ -663,8 +663,7 @@ namespace QuanLyGara.ViewModels.Pages
                     {
                         danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().giaNhap = ct.GiaNhap;
                     }
-
-                    danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().NhapThem(ct.SoLuong);
+                danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().NhapThem(ct.SoLuong);
             }
                 danhSachPhieuNhap.Add(phieuNhapVTPT);
             OnPropertyChanged(nameof(IsImportListNull));

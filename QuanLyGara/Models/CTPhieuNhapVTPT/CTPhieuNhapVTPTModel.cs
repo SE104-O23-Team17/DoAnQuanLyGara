@@ -64,13 +64,13 @@ namespace QuanLyGara.Models.CTPhieuNhapVTPT
                 {
                     soLuong = value;
                     OnPropertyChanged(nameof(SoLuong));
-                    OnPropertyChanged(nameof(thanhTien)); // Notify that thanhTien has changed
+                    OnPropertyChanged(nameof(thanhTien));
                 }
             }
         }
         public double thanhTien
         { 
-            get { return GiaNhap * soLuong; }
+            get { return giaNhap * soLuong; }
         }
     }
 }
