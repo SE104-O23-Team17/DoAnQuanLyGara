@@ -74,6 +74,7 @@ namespace QuanLyGara.Models.PhieuNhapVTPT
         public void ThemCT(CTPhieuNhapVTPTModel ct)
         {
             ct.PropertyChanged += CTPhieuNhapVTPTModel_PropertyChanged;
+            ct.maPhieuNhapVTPT = maPhieuNhapVTPT;
             danhSachCT.Insert(0, ct);
             OnPropertyChanged(nameof(DanhSachCT));
             OnPropertyChanged(nameof(tongTienNhap));

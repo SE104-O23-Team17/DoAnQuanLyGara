@@ -11,7 +11,7 @@ namespace QuanLyGara.Models.NoiDungSuaChua
         public NoiDungSuaChuaModel() {
             maNDSC = 0;
             tenNDSC = "";
-            giaTien = 0.0;
+            giaTien = 0;
         }
         public int maNDSC { get; set; }
         public string tenNDSC { get; set; }

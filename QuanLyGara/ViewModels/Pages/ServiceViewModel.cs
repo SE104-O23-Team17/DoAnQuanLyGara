@@ -1,4 +1,5 @@
-﻿using QuanLyGara.ViewModels.Windows;
+﻿using QuanLyGara.Services;
+using QuanLyGara.ViewModels.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,9 @@ namespace QuanLyGara.ViewModels.Pages
 {
     public class ServiceViewModel : ViewModelBase
     {
-        public ServiceViewModel() { }
+        private IDialogService dialogService;
+        public ServiceViewModel() {
+            dialogService = new DialogService();
+        }
     }
 }
