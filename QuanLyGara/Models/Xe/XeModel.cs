@@ -19,5 +19,15 @@ namespace QuanLyGara.Models.Xe
         public string tenXe { get; set; }
         public HieuXeModel hieuXe { get; set; }
         public double tienNo { get; set; }
+
+        public void ThemNo(double tienNo)
+        {
+            this.tienNo += tienNo;
+        }
+
+        public void GiamNo(double tienNo)
+        {
+            this.tienNo -= tienNo;
+        }
     }
 }

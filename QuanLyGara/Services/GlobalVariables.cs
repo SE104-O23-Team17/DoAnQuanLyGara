@@ -6,6 +6,7 @@ using QuanLyGara.Models.HieuXe;
 using QuanLyGara.Models.NoiDungSuaChua;
 using QuanLyGara.Models.PhieuNhapVTPT;
 using QuanLyGara.Models.PhieuSuaChua;
+using QuanLyGara.Models.PhieuThuTien;
 using QuanLyGara.Models.VTPT;
 using QuanLyGara.Models.Xe;
 using System;
@@ -28,6 +29,7 @@ namespace QuanLyGara.Services
         public List<NoiDungSuaChuaModel> danhSachNDSC { get; set; }
         public List<PhieuSuaChuaModel> danhSachPhieuSC { get; set; }
         public List<XeModel> danhSachXe { get; set; }
+        public List<PhieuThuTienModel> danhSachPhieuThuTien { get; set; }
 
         private static readonly Global instance = new Global();
         public static Global Instance
@@ -498,6 +500,38 @@ namespace QuanLyGara.Services
                         }
                     }
                 }
+            };
+
+            danhSachPhieuThuTien = new List<PhieuThuTienModel>
+            {
+                new PhieuThuTienModel
+                {
+                    maPhieu = 1,
+                    bienSo = "30A-12345",
+                    ngayThuTien = new DateTime(2023, 5, 1),
+                    soTienThu = 500000,
+                },
+                new PhieuThuTienModel
+                {
+                    maPhieu = 2,
+                    bienSo = "31A-13536",
+                    ngayThuTien = new DateTime(2024, 3, 5),
+                    soTienThu = 200000,
+                },
+                new PhieuThuTienModel
+                {
+                    maPhieu = 3,
+                    bienSo = "20A-52736",
+                    ngayThuTien = new DateTime(2024, 5, 10),
+                    soTienThu = 100000,
+                },
+                new PhieuThuTienModel
+                {
+                    maPhieu = 4,
+                    bienSo = "30A-12345",
+                    ngayThuTien = new DateTime(2024, 5, 15),
+                    soTienThu = 150000,
+                },
             };
         }
     }
