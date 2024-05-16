@@ -9,16 +9,501 @@
              xmlns:behaviors="clr-namespace:QuanLyGara.Behaviors"
              xmlns:services="clr-namespace:QuanLyGara.Services"
              xmlns:helpers="clr-namespace:QuanLyGara.Helpers"
+             xmlns:components="clr-namespace:QuanLyGara.Components"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="1200">
+             d:DesignHeight="700" d:DesignWidth="1600">
 
     <UserControl.DataContext>
         <viewmodel:ServiceViewModel/>
     </UserControl.DataContext>
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <services:NumberFormatConverter x:Key="NumberFormatConverter"/>
+        <services:DecimalSeparatorConverter x:Key="DecimalSeparatorConverter"/>
+        <services:InvertedBooleanToVisibilityConverter x:Key="InvertedBoolToVis"/>
+        <services:ModelAndTextConverter x:Key="ModelAndTextConverter"/>
+        <services:InvertedBool x:Key="InvertedBool"/>
+        <services:MultiBoolToVis x:Key="MultiBoolToVis"/>
+        <services:ViewToVisibilityConverter x:Key="ViewToVisibilityConverter"/>
+    </UserControl.Resources>
+    
     <ScrollViewer Style="{StaticResource customScrollViewer}">
         <Border Background="{StaticResource lightBackground}">
-            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0"
+                      Visibility="{Binding CurrentView, Converter={StaticResource ViewToVisibilityConverter}, ConverterParameter=0}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="240"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <StackPanel>
+                            <TextBlock Text="Số xe sửa chữa trong ngày tối đa"
+                                       Style="{StaticResource buttonText}"/>
+
+                            <Grid Margin="0 8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBox Grid.Column="0"
+                                         Style="{StaticResource middleTextBox}"
+                                         Text="{Binding LimitPerDay}"
+                                         Tag="Car"
+                                         IsReadOnly="{Binding LimitIsReadOnly, Mode=TwoWay}"
+                                         helpers:FocusExtension.IsFocused="{Binding LimitIsReadOnly, Converter={StaticResource InvertedBool}}">
+                                    <i:Interaction.Behaviors>
+                                        <behaviors:NumericInputBehavior/>
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+
+                                <Button Grid.Column="1"
+                                        Style="{StaticResource darkButtonStyle}"
+                                        Padding="4"
+                                        Margin="10,0,0,0"
+                                        Command="{Binding EditLimitCommand}"
+                                        Visibility="{Binding LimitIsReadOnly, Converter={StaticResource BoolToVis}}" 
+                                        HorizontalAlignment="Left">
+
+                                    <fa:IconImage Icon="Edit" 
+                                                  Style="{StaticResource normalIconButton}"
+                                                  Foreground="{StaticResource lightFont}"
+                                                  Margin="0"/>
+                                </Button>
+                            </Grid>
+
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Right"
+                                        Margin="0 0 0 8"
+                                        Visibility="{Binding LimitIsReadOnly, Converter={StaticResource InvertedBoolToVis}}">            
+                                <Button Style="{StaticResource darkButtonStyle}"
+                                        Content="Lưu"
+                                        Margin="0 0 8 0"
+                                        FontSize="13"
+                                        Padding="6 3"
+                                        Command="{Binding SaveLimitCommand}"/>
+
+                                <Button Style="{StaticResource lightButtonStyle}"
+                                        Content="Hủy"
+                                        FontSize="13"
+                                        Padding="6 3"
+                                        Command="{Binding CancelLimitCommand}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Grid Margin="0 12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Kiểm tra số tiền thu"
+                                       Style="{StaticResource buttonText}"
+                                       Grid.Column="0"/>
+                            <CheckBox Style="{StaticResource ToggleCheckboxStyle}"
+                                      Width="40"
+                                      Grid.Column="2"
+                                      IsChecked="{Binding ApplyCheckPayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+
+                        <StackPanel Margin="0 24">
+                            <TextBlock Text="Sắp xếp theo"
+                                       Style="{StaticResource buttonText}"/>
+
+                            <Grid Margin="0 8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="  Tên xe"
+                                           Style="{StaticResource buttonText}"/>
+
+                                <StackPanel Grid.Column="1"
+                                            Orientation="Horizontal">
+                                    <RadioButton Style="{StaticResource sortButton}"
+                                                 Tag="SortAmountDown"
+                                                 GroupName="sortGroup"
+                                                 Margin="8 0"
+                                                 IsChecked="True"
+                                                 Command="{Binding SortCommand}"
+                                                 CommandParameter="1"/>
+
+                                    <RadioButton Style="{StaticResource sortButton}"
+                 Tag="SortAmountUp"
+                 GroupName="sortGroup"
+                 Command="{Binding SortCommand}"
+                 CommandParameter="2"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="  Tổng nợ"
+           Style="{StaticResource buttonText}"/>
+
+                                <StackPanel Grid.Column="1"
+            Orientation="Horizontal">
+                                    <RadioButton Style="{StaticResource sortButton}"
+                 Tag="SortAmountDown"
+                 GroupName="sortGroup"
+                 Margin="8 0"
+                 Command="{Binding SortCommand}"
+                 CommandParameter="3"/>
+
+                                    <RadioButton Style="{StaticResource sortButton}"
+                 Tag="SortAmountUp"
+                 GroupName="sortGroup"
+                 Command="{Binding SortCommand}"
+                 CommandParameter="4"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="0 8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="  Tên hiệu xe"
+           Style="{StaticResource buttonText}"/>
+
+                                <StackPanel Grid.Column="1"
+            Orientation="Horizontal">
+                                    <RadioButton Style="{StaticResource sortButton}"
+                 Tag="SortAmountDown"
+                 GroupName="sortGroup"
+                 Margin="8 0"
+                 Command="{Binding SortCommand}"
+                 CommandParameter="5"/>
+
+                                    <RadioButton Style="{StaticResource sortButton}"
+                 Tag="SortAmountUp"
+                 GroupName="sortGroup"
+                 Command="{Binding SortCommand}"
+                 CommandParameter="6"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1"
+                                Margin="32 0">
+                        <TextBlock Text="Danh sách xe"
+                                   Style="{StaticResource buttonText}"
+                                   FontSize="20"
+                                   Grid.Row="0"/>
+
+                        <Grid Margin="0 10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource darkButtonStyle}"
+                                    Padding="8 4"
+                                    Margin="10 0"
+                                    Command="{Binding ToAddingCarCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <fa:IconImage Icon="FolderPlus"
+                                                  Style="{StaticResource normalIconButton}"
+                                                  Foreground="{StaticResource lightFont}"/>
+                                    <TextBlock Text="Thêm xe" 
+                                               Style="{StaticResource buttonText}" 
+                                               Foreground="{StaticResource lightFont}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Grid.Column="1"
+                                    Style="{StaticResource darkButtonStyle}"
+                                    Padding="8 4"
+                                    Command="{Binding RemoveSelectedCarCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <fa:IconImage Icon="TrashCan"
+                                                  Style="{StaticResource normalIconButton}"
+                                                  Foreground="{StaticResource lightFont}"/>
+                                    <TextBlock Text="Xóa đã chọn" 
+                                               Style="{StaticResource buttonText}" 
+                                               Foreground="{StaticResource lightFont}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <TextBox Grid.Column="3"
+                                     Style="{StaticResource iconTextBox}"
+                                     Tag="Search"
+                                     Width="300"
+                                     helpers:TextBoxHelper.HintText="Tìm biển số"
+                                     Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+
+                        <Border Background="{StaticResource darkBorder}"
+                                CornerRadius="10"
+                                VerticalAlignment="Top">
+                            <DataGrid ItemsSource="{Binding DanhSachXe, Mode=TwoWay}"
+                                      x:Name="BangXe"
+                                      Style="{StaticResource NoScrollDataGridStyle}"
+                                      CellStyle="{StaticResource DataGridCellStyle}" 
+                                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                      RowStyle="{StaticResource DataGridRowStyle}"
+                                      VerticalAlignment="Top">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Width="Auto">
+                                        <DataGridTemplateColumn.Header>
+                                            <CheckBox x:Name="HeaderCheckBox"
+                                                      Style="{StaticResource DataGridCheckBoxStyle}"
+                                                      IsChecked="{Binding DataContext.isAllChecked, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
+                                                      Command="{Binding DataContext.UpdateIsAllSelectedCommand,  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                      CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                        </DataGridTemplateColumn.Header>
+
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding isChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          Style="{StaticResource DataGridCheckBoxStyle}"
+                                                          Command="{Binding DataContext.UpdateIsAllSelectedCommand,  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="Biển số" Width="160">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding bienSo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         Style="{StaticResource aLineTextBox}"
+                                                         IsReadOnly="{Binding IsReadOnly}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="Tên xe" Width="280">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding tenXe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         Style="{StaticResource aLineTextBox}"
+                                                         IsReadOnly="{Binding IsReadOnly}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="Hiệu xe" Width="160">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <components:FilteredComboBox
+                                                    Style="{StaticResource lightComboBoxStyle}"
+                                                    ItemsSource="{Binding DataContext.DanhSachHieuXeNotNull, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    SelectedItem="{Binding HieuXe, UpdateSourceTrigger=PropertyChanged}"
+                                                    DisplayMemberPath="TenHieuXe"
+                                                    IsEnabled="{Binding IsReadOnly, Converter={StaticResource InvertedBool}}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Header="Tổng nợ"
+                                                        IsReadOnly="True"
+                                                        Width="160"
+                                                        FontSize="16"
+                                                        Binding="{Binding tienNo, Converter={StaticResource NumberFormatConverter}}"/>
+
+                                    <DataGridTemplateColumn Width="100">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                                            Command="{Binding DataContext.EditCarCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Padding="4"
+                                                            Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVis}}">
+                                                        <fa:IconImage Icon="Edit"
+                                                                      Style="{StaticResource normalIconButton}"
+                                                                      Foreground="{StaticResource darkFont}"
+                                                                      Margin="0"/>
+                                                    </Button>
+
+                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                                            Command="{Binding DataContext.RemoveCarCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Padding="4"
+                                                            Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVis}}">
+                                                        <fa:IconImage Icon="TrashCan" 
+                                                                      Style="{StaticResource normalIconButton}"
+                                                                      Foreground="{StaticResource darkFont}"
+                                                                      Margin="0"/>
+                                                    </Button>
+
+                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                                            Command="{Binding DataContext.SaveCarCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Padding="4"
+                                                            Visibility="{Binding IsReadOnly, Converter={StaticResource InvertedBoolToVis}}">
+                                                        <fa:IconImage Icon="Check"
+                                                                      Style="{StaticResource normalIconButton}"
+                                                                      Foreground="{StaticResource darkFont}"
+                                                                      Margin="0"/>
+                                                    </Button>
+
+                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                                            Command="{Binding DataContext.CancelCarCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Padding="4"
+                                                            Visibility="{Binding IsReadOnly, Converter={StaticResource InvertedBoolToVis}}">
+                                                        <fa:IconImage Icon="Xmark" 
+                                                                      Style="{StaticResource normalIconButton}"
+                                                                      Foreground="{StaticResource darkFont}"
+                                                                      Margin="0"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </StackPanel>
+
+                    <ListBox ItemsSource="{Binding DanhSachHieuXe}"
+                             HorizontalContentAlignment="Stretch"
+                             VerticalContentAlignment="Top"
+                             Grid.Column="2">
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <Border Background="{StaticResource darkButtonBackground}"
+                                        CornerRadius="10"
+                                        Padding="5 10 5 5">
+                                    <StackPanel>
+                                        <Grid Margin="4 0 4 8">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="Danh sách hiệu xe"
+                                                       Style="{StaticResource buttonText}"
+                                                       Foreground="{StaticResource lightFont}"/>
+
+                                            <Button Style="{StaticResource lightButtonStyle}"
+                                                    Command="{Binding AddBrandCommand}"
+                                                    Padding="3"
+                                                    Grid.Column="1">
+                                                <fa:IconImage Icon="Add" 
+                                                              Style="{StaticResource normalIconButton}"
+                                                              Foreground="{StaticResource darkFont}"
+                                                              Margin="0"/>
+                                            </Button>
+                                        </Grid>
+                                        <Border Background="{StaticResource lightBackground}"
+                                                CornerRadius="10">
+                                            <ItemsPresenter/>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ListBox.Template>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Text="{Binding TenHieuXe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             x:Name="itemTextBox"
+                                             Grid.Column="0"
+                                             Style="{StaticResource middleTextBox}"
+                                             IsReadOnly="{Binding IsReadOnly, Mode=TwoWay}"
+                                             helpers:FocusExtension.IsFocused="{Binding IsReadOnly, Converter={StaticResource InvertedBool}}"/>
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Grid.Column="1">
+                                        <Button Command="{Binding DataContext.EditBrandCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource darkButtonStyle}"
+                                                Padding="4"
+                                                Margin="8 0 0 0"
+                                                Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVis}, Mode=TwoWay}">
+                                            <fa:IconImage Icon="Edit" 
+                                                          Style="{StaticResource normalIconButton}"
+                                                          Foreground="{StaticResource lightFont}"
+                                                          Margin="0"/>
+                                        </Button>
+
+                                        <Button Command="{Binding DataContext.RemoveBrandCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource darkButtonStyle}"
+                                                Padding="4"
+                                                Margin="8 0 0 0"
+                                                Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVis}, Mode=TwoWay}">
+                                            <fa:IconImage Icon="TrashCan" 
+                                                          Style="{StaticResource normalIconButton}"
+                                                          Foreground="{StaticResource lightFont}"
+                                                          Margin="0"/>
+                                        </Button>
+
+                                        <Button Command="{Binding DataContext.SaveBrandCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                Style="{StaticResource darkButtonStyle}"
+                                                Padding="4"
+                                                Margin="8 0 0 0"
+                                                Visibility="{Binding IsReadOnly, Converter={StaticResource InvertedBoolToVis}, Mode=TwoWay}"
+                                                CommandParameter="{Binding}">
+                                            <fa:IconImage Icon="Check" 
+                                                          Style="{StaticResource normalIconButton}"
+                                                          Foreground="{StaticResource lightFont}"
+                                                          Margin="0"/>
+                                        </Button>
+
+                                        <Button Command="{Binding DataContext.CancelBrandCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource darkButtonStyle}"
+                                                Padding="4"
+                                                Margin="8 0 0 0"
+                                                Visibility="{Binding IsReadOnly, Converter={StaticResource InvertedBoolToVis}, Mode=TwoWay}">
+                                             <fa:IconImage Icon="Xmark" 
+                                                           Style="{StaticResource normalIconButton}"
+                                                           Foreground="{StaticResource lightFont}"
+                                                           Margin="0"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      Visibility="{Binding CurrentView, Converter={StaticResource ViewToVisibilityConverter}, ConverterParameter=1}"
+                      Background="AliceBlue">
+                    <!-- Grid 2 content -->
+                </Grid>
+
+                <Grid Grid.Row="2"
+                      Visibility="{Binding CurrentView, Converter={StaticResource ViewToVisibilityConverter}, ConverterParameter=2}"
+                      Background="AntiqueWhite">
+                    <!-- Grid 3 content -->
+                </Grid>
+
+                <Grid Grid.Row="3"
+                      Visibility="{Binding CurrentView, Converter={StaticResource ViewToVisibilityConverter}, ConverterParameter=3}"
+                      Background="Aquamarine">
+                    <!-- Grid 4 content -->
+                </Grid>
+            </Grid>
         </Border>
     </ScrollViewer>
 </UserControl>

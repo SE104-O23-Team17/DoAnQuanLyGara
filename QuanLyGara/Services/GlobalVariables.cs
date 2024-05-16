@@ -46,16 +46,16 @@ namespace QuanLyGara.Services
             apDungQDKiemTraSoTienThu = true;
 
             danhSachHieuXe = new List<HieuXeModel>{
-                new HieuXeModel { maHieuXe = 1, tenHieuXe = "Toyota" },
-                new HieuXeModel { maHieuXe = 2, tenHieuXe = "Honda" },
-                new HieuXeModel { maHieuXe = 3, tenHieuXe = "Suzuki" },
-                new HieuXeModel { maHieuXe = 4, tenHieuXe = "Yamaha" },
-                new HieuXeModel { maHieuXe = 5, tenHieuXe = "Kawasaki" },
-                new HieuXeModel { maHieuXe = 6, tenHieuXe = "SYM" },
-                new HieuXeModel { maHieuXe = 7, tenHieuXe = "Piaggio" },
-                new HieuXeModel { maHieuXe = 8, tenHieuXe = "Vespa" },
-                new HieuXeModel { maHieuXe = 9, tenHieuXe = "Kymco" },
-                new HieuXeModel { maHieuXe = 10, tenHieuXe = "Lambretta" },
+                new HieuXeModel { maHieuXe = 1, TenHieuXe = "Toyota" },
+                new HieuXeModel { maHieuXe = 2, TenHieuXe = "Honda" },
+                new HieuXeModel { maHieuXe = 3, TenHieuXe = "Suzuki" },
+                new HieuXeModel { maHieuXe = 4, TenHieuXe = "Yamaha" },
+                new HieuXeModel { maHieuXe = 5, TenHieuXe = "Kawasaki" },
+                new HieuXeModel { maHieuXe = 6, TenHieuXe = "SYM" },
+                new HieuXeModel { maHieuXe = 7, TenHieuXe = "Piaggio" },
+                new HieuXeModel { maHieuXe = 8, TenHieuXe = "Vespa" },
+                new HieuXeModel { maHieuXe = 9, TenHieuXe = "Kymco" },
+                new HieuXeModel { maHieuXe = 10, TenHieuXe = "Lambretta" },
             };
 
             danhSachDVT = new List<DonViTinhModel> {
@@ -214,12 +214,12 @@ namespace QuanLyGara.Services
 
             danhSachXe = new List<XeModel>
             {
-                new XeModel { bienSo = "30A-12345", hieuXe = danhSachHieuXe[0], tenXe = "Vios", tienNo = 300000 },
-                new XeModel { bienSo = "31A-13536", hieuXe = danhSachHieuXe[1], tenXe = "Wave", tienNo = 1452000 },
-                new XeModel { bienSo = "20A-52736", hieuXe = danhSachHieuXe[1], tenXe = "Exciter", tienNo = 1355000 },
-                new XeModel { bienSo = "34A-53484", hieuXe = danhSachHieuXe[3], tenXe = "Air Blade", tienNo = 214000 },
-                new XeModel { bienSo = "24A-35726", hieuXe = danhSachHieuXe[4], tenXe = "Z1000", tienNo = 0 },
-                new XeModel { bienSo = "36A-52535", hieuXe = danhSachHieuXe[5], tenXe = "Exciter", tienNo = 0 },
+                new() { bienSo = "30A-12345", HieuXe = danhSachHieuXe[0], tenXe = "Vios", tienNo = 300000 },
+                new() { bienSo = "31A-13536", HieuXe = danhSachHieuXe[1], tenXe = "Wave", tienNo = 1452000 },
+                new() { bienSo = "20A-52736", HieuXe = danhSachHieuXe[1], tenXe = "Exciter", tienNo = 1355000 },
+                new() { bienSo = "34A-53484", HieuXe = danhSachHieuXe[3], tenXe = "Air Blade", tienNo = 214000 },
+                new() { bienSo = "24A-35726", HieuXe = danhSachHieuXe[4], tenXe = "Z1000", tienNo = 0 },
+                new() { bienSo = "36A-52535", HieuXe = danhSachHieuXe[5], tenXe = "Exciter", tienNo = 0 },
             };
 
             danhSachPhieuSC = new List<PhieuSuaChuaModel>

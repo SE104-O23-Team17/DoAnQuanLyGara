@@ -4,7 +4,7 @@
     <!--Background Color-->
     <SolidColorBrush x:Key="darkBackground">#2155CD</SolidColorBrush>
     <SolidColorBrush x:Key="darkBorder">#0AA1DD</SolidColorBrush>
-    <SolidColorBrush x:Key="darkBorderShadow">#A7394867</SolidColorBrush>
+    <SolidColorBrush x:Key="darkBorderShadow">#FF394867</SolidColorBrush>
 
     <SolidColorBrush x:Key="lightBackground">#E8F9FD</SolidColorBrush>
     <SolidColorBrush x:Key="lightBorder">#89CFF3</SolidColorBrush>
