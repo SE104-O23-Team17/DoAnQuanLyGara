@@ -1,8 +1,8 @@
 ﻿namespace QuanLyGara.Models
 {
-    public class NguoiDungDTO
+    public class GaraDTO
     {
-        public NguoiDungDTO() { }
+        public GaraDTO() { }
         public int ID { get; set; }
         public string TaiKhoan { get; set; }
         public string MatKhau { get; set; }

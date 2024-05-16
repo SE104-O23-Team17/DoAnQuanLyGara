@@ -244,7 +244,9 @@ namespace QuanLyGara.ViewModels.Pages
             isAdding = false;
             isImporting = false;
             isViewingImport = false;
+
             danhSachVTPT = Global.Instance.danhSachVTPT;
+
             danhSachDVT = new ObservableCollection<DonViTinhModel>(Global.Instance.danhSachDVT);
             ratio = Global.Instance.tiLeTinhDonGiaBan;
             themVTPT = [];

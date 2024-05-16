@@ -1,0 +1,28 @@
+﻿<Window x:Class="QuanLyGara.Views.Windows.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuanLyGara.Views.Windows"
+        xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Windows"
+        xmlns:behaviors="clr-namespace:QuanLyGara.Behaviors"
+        xmlns:services="clr-namespace:QuanLyGara.Services"
+        xmlns:helpers="clr-namespace:QuanLyGara.Helpers"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Height="720" Width="640"
+        Title="Quản lý Gara">
+    
+    <Window.DataContext>
+        <viewmodel:LoginViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+
+    </Grid>
+</Window>

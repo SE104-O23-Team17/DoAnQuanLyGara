@@ -1,4 +1,5 @@
-﻿using QuanLyGara.Models.CTPhieuNhapVTPT;
+﻿using QuanLyGara.Models;
+using QuanLyGara.Models.CTPhieuNhapVTPT;
 using QuanLyGara.Models.CTPhieuSuaChua;
 using QuanLyGara.Models.CTSuDungVTPT;
 using QuanLyGara.Models.DonViTinh;
@@ -19,6 +20,8 @@ namespace QuanLyGara.Services
 {
     public class Global
     {
+        public GaraModel garaHienTai { get; set; }
+        public List<GaraModel> danhSachGara { get; set; }
         public double tiLeTinhDonGiaBan { get; set; }
         public int soXeSuaChuaToiDa { get; set; }
         public bool apDungQDKiemTraSoTienThu { get; set; }
@@ -41,9 +44,17 @@ namespace QuanLyGara.Services
         }
         private Global()
         {
+            garaHienTai = new GaraModel();
             tiLeTinhDonGiaBan = 105;
             soXeSuaChuaToiDa = 30;
             apDungQDKiemTraSoTienThu = true;
+
+            danhSachGara = new List<GaraModel> {
+                new GaraModel { ID = 1, TaiKhoan = "Gara 1", MatKhau = "aggs424y2", Sdt = "0123456789" },
+                new GaraModel { ID = 2, TaiKhoan = "Gara 2", MatKhau = "aggs424y2", Sdt = "0123456789" },
+                new GaraModel { ID = 3, TaiKhoan = "Gara 3", MatKhau = "aggs424y2", Sdt = "0123456789" },
+                new GaraModel { ID = 4, TaiKhoan = "Gara 4", MatKhau = "aggs424y2", Sdt = "0123456789" },
+            };
 
             danhSachHieuXe = new List<HieuXeModel>{
                 new HieuXeModel { maHieuXe = 1, tenHieuXe = "Toyota" },

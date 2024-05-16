@@ -1,0 +1,88 @@
+﻿<Window x:Class="QuanLyGara.Views.Windows.Register"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuanLyGara.Views.Windows"
+        xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Windows"
+        xmlns:behaviors="clr-namespace:QuanLyGara.Behaviors"
+        xmlns:services="clr-namespace:QuanLyGara.Services"
+        xmlns:helpers="clr-namespace:QuanLyGara.Helpers" 
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        Height="720" Width="600"
+        Title="Quản lý Gara">
+
+    <Window.DataContext>
+        <viewmodel:RegisterViewModel/>
+    </Window.DataContext>
+
+    <Border CornerRadius="10"
+            BorderBrush="{StaticResource darkBorder}"
+            BorderThickness="2"
+            Background="{StaticResource lightBackground}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button x:Name="winCloseButton"
+                    Style="{StaticResource winCtrButton}"
+                    Tag="{StaticResource redUI}"
+                    Command="{Binding CloseCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                    Grid.Row="0"
+                    HorizontalAlignment="Right">
+                <fa:IconImage Icon="Xmark"
+                              Style="{StaticResource winCtrIcon}"/>
+            </Button>
+
+            <TextBlock Grid.Row="1"
+                       Text="Đăng ký Gara"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource buttonText}"
+                       FontSize="24"/>
+
+            <StackPanel Grid.Row="2"
+                        Margin="60 20">
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Họ và tên:"
+                               Style="{StaticResource buttonText}"
+                               Margin="0 0 8 0"/>
+                    
+                    <TextBox Style="{StaticResource aLineTextBox}"
+                             Width="300"
+                             Text="{Binding GaraMoi.TaiKhoan, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 12">
+                    <TextBlock Text="Số điện thoại:"
+                               Style="{StaticResource buttonText}"
+                               Margin="0 0 8 0"/>
+
+                    <TextBox Style="{StaticResource aLineTextBox}"
+                             Text="{Binding GaraMoi.Sdt}"
+                             Width="300">
+                        <i:Interaction.Behaviors>
+                            <behaviors:NumericInputBehavior/>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </StackPanel>
+
+                <Button Content="Lưu"
+                        Style="{StaticResource darkButtonStyle}"
+                        Command="{Binding SaveCommand}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
