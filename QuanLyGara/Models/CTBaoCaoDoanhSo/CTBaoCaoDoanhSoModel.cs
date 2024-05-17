@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyGara.Models.HieuXe;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,13 +11,13 @@ namespace QuanLyGara.Models.CTBaoCaoDoanhSo
     {
         public CTBaoCaoDoanhSoModel() {
             maBCDS = 0;
-            maHieuXe = 0;
+            hieuXe = new HieuXeModel();
             soLuotSua = 0;
             thanhTien = 0;
             tiLe = 0;
         }
         public int maBCDS { get; set; }
-        public int maHieuXe { get; set; }
+        public HieuXeModel hieuXe { get; set; }
         public int soLuotSua { get; set; }
         public double thanhTien { get; set; }
         public double tiLe { get; set; }

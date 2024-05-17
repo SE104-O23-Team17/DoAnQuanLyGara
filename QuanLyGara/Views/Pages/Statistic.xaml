@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QuanLyGara.Views.Pages"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:services="clr-namespace:QuanLyGara.Services"
              xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -13,7 +15,132 @@
     </UserControl.DataContext>
 
 
-    <Grid>
-            
-    </Grid>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <services:NumberFormatConverter x:Key="NumberFormatConverter"/>
+        <services:DecimalSeparatorConverter x:Key="DecimalSeparatorConverter"/>
+        <services:InvertedBooleanToVisibilityConverter x:Key="InvertedBoolToVis"/>
+        <services:ModelAndTextConverter x:Key="ModelAndTextConverter"/>
+        <services:InvertedBool x:Key="InvertedBool"/>
+    </UserControl.Resources>
+
+    <ScrollViewer Style="{StaticResource customScrollViewer}">
+        <Border Background="{StaticResource lightBackground}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Margin="0 0 0 0">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0 0 0 0">
+                                <TextBlock Text="BÁO CÁO THÁNG"
+                                           Style="{StaticResource buttonText}"
+                                           Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"/>
+
+                                <TextBlock Text="BÁO CÁO TỒN"
+                                           Style="{StaticResource buttonText}"
+                                           Visibility="{Binding IsSwitching, Converter={StaticResource BoolToVis}}"/>
+                            </StackPanel>
+
+                            <Grid Grid.Column="2" Margin="0 0 0 0">
+                                <StackPanel>
+                                    <StackPanel
+                                            Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}, UpdateSourceTrigger=PropertyChanged}">
+                                        <Button Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Margin="10 0"
+                                        Command="{Binding SwitchCommand}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Chuyển sang báo cáo tồn" 
+                                               Style="{StaticResource buttonText}" 
+                                               Foreground="{StaticResource lightFont}"
+                                               Margin="0 0 5 0"/>
+                                                <fa:IconImage Icon="ArrowCircleRight"
+                                                  Style="{StaticResource normalIconButton}"
+                                                Foreground="{StaticResource lightFont}"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <StackPanel
+                                            Visibility="{Binding IsSwitching, Converter={StaticResource BoolToVis}, UpdateSourceTrigger=PropertyChanged}">
+                                        <Button Style="{StaticResource darkButtonStyle}"
+                                            Padding="8 4"
+                                            Margin="10 0"
+                                            Command="{Binding SwitchCommand}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="ArrowCircleLeft"
+                                                          Style="{StaticResource normalIconButton}"
+                                                          Foreground="{StaticResource lightFont}"/>
+                                                <TextBlock Text="Chuyển sang báo cáo tháng" 
+                                                       Style="{StaticResource buttonText}" 
+                                                       Foreground="{StaticResource lightFont}"
+                                                       Margin="0 0 5 0"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+
+
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="0 0 0 0">
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox Width="100"
+                                  ItemsSource="{Binding DanhSachThang}"
+                                  SelectedItem="{Binding SelectedThang, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="tenThang"
+                                  Style="{StaticResource lightComboBoxStyle}"/>
+                        <ComboBox Width="100"
+                                  Margin="20 0 0 0"
+                                  ItemsSource="{Binding DanhSachNam}"
+                                  SelectedItem="{Binding SelectedNam, UpdateSourceTrigger=PropertyChanged}"
+                                  Style="{StaticResource lightComboBoxStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Margin="0 20 0 0">
+                    <Border Background="{StaticResource darkBorder}"
+                            CornerRadius="10"
+                            VerticalAlignment="Top">
+                        <DataGrid Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"
+                                  x:Name="BaoCaoThang"
+                                  ItemsSource="{Binding BaoCaoDoanhSo.DanhSachCT, Mode=TwoWay}"
+                                  Style="{StaticResource NoScrollDataGridStyle}"
+                                  CellStyle="{StaticResource DataGridCellStyle}" 
+                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                  RowStyle="{StaticResource DataGridRowStyle}"
+                                  VerticalAlignment="Top">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Hiệu xe" IsReadOnly="True" Width="*" Binding="{Binding hieuXe}"/>
+
+                                <DataGridTextColumn Header="Số lượt sửa" IsReadOnly="True" Width="*" Binding="{Binding soLuotSua}"/>
+
+                                <DataGridTextColumn Header="Thành tiền" IsReadOnly="True" Width="*" Binding="{Binding thanhTien}"/>
+
+                                <DataGridTextColumn Header="Tỉ lệ" IsReadOnly="True" Width="*" Binding="{Binding tiLe}"/>
+
+                            </DataGrid.Columns>
+                            
+                        </DataGrid>
+                    </Border>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+    </ScrollViewer>
 </UserControl>

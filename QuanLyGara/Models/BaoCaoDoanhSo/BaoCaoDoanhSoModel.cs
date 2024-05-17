@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using QuanLyGara.Models.CTBaoCaoDoanhSo;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace QuanLyGara.Models
@@ -15,5 +16,6 @@ namespace QuanLyGara.Models
         public int thang { get; set; }
         public int nam { get; set; }
         public double tongDoanhThu { get; set; }
+        public List<CTBaoCaoDoanhSoModel> DanhSachCT {  get; set; }
     }
 }

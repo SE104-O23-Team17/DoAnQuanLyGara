@@ -1,6 +1,8 @@
-﻿using QuanLyGara.Models.CTPhieuNhapVTPT;
+﻿using QuanLyGara.Models;
+using QuanLyGara.Models.CTPhieuNhapVTPT;
 using QuanLyGara.Models.CTPhieuSuaChua;
 using QuanLyGara.Models.CTSuDungVTPT;
+using QuanLyGara.Models.DanhSachThang;
 using QuanLyGara.Models.DonViTinh;
 using QuanLyGara.Models.HieuXe;
 using QuanLyGara.Models.NoiDungSuaChua;
@@ -30,6 +32,8 @@ namespace QuanLyGara.Services
         public List<PhieuSuaChuaModel> danhSachPhieuSC { get; set; }
         public List<XeModel> danhSachXe { get; set; }
         public List<PhieuThuTienModel> danhSachPhieuThuTien { get; set; }
+        public List<DanhSachThangModel> danhSachThang { get; set; }
+        public List<BaoCaoDoanhSoModel> danhSachDoanhSo { get; set; }
 
         private static readonly Global instance = new Global();
         public static Global Instance
@@ -532,6 +536,24 @@ namespace QuanLyGara.Services
                     ngayThuTien = new DateTime(2024, 5, 15),
                     soTienThu = 150000,
                 },
+            };
+
+            danhSachThang = new List<DanhSachThangModel>{
+                new DanhSachThangModel { maThang = 1, tenThang = "Tháng 1"},
+                new DanhSachThangModel { maThang = 2, tenThang = "Tháng 2"},
+                new DanhSachThangModel { maThang = 3, tenThang = "Tháng 3"},
+                new DanhSachThangModel { maThang = 4, tenThang = "Tháng 4"},
+                new DanhSachThangModel { maThang = 5, tenThang = "Tháng 5"},
+                new DanhSachThangModel { maThang = 6, tenThang = "Tháng 6"},
+                new DanhSachThangModel { maThang = 7, tenThang = "Tháng 7"},
+                new DanhSachThangModel { maThang = 8, tenThang = "Tháng 8"},
+                new DanhSachThangModel { maThang = 9, tenThang = "Tháng 9"},
+                new DanhSachThangModel { maThang = 10, tenThang = "Tháng 10"},
+                new DanhSachThangModel { maThang = 11, tenThang = "Tháng 11"},
+                new DanhSachThangModel { maThang = 12, tenThang = "Tháng 12"},
+            };
+            danhSachDoanhSo = new List<BaoCaoDoanhSoModel>
+            {
             };
         }
     }
