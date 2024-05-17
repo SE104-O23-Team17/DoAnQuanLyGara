@@ -1,4 +1,5 @@
-﻿using QuanLyGara.Models.CTPhieuNhapVTPT;
+﻿using QuanLyGara.Models;
+using QuanLyGara.Models.CTPhieuNhapVTPT;
 using QuanLyGara.Models.CTPhieuSuaChua;
 using QuanLyGara.Models.CTSuDungVTPT;
 using QuanLyGara.Models.DanhSachThang;
@@ -32,6 +33,7 @@ namespace QuanLyGara.Services
         public List<XeModel> danhSachXe { get; set; }
         public List<PhieuThuTienModel> danhSachPhieuThuTien { get; set; }
         public List<DanhSachThangModel> danhSachThang { get; set; }
+        public List<BaoCaoDoanhSoModel> danhSachDoanhSo { get; set; }
 
         private static readonly Global instance = new Global();
         public static Global Instance
@@ -549,6 +551,9 @@ namespace QuanLyGara.Services
                 new DanhSachThangModel { maThang = 10, tenThang = "Tháng 10"},
                 new DanhSachThangModel { maThang = 11, tenThang = "Tháng 11"},
                 new DanhSachThangModel { maThang = 12, tenThang = "Tháng 12"},
+            };
+            danhSachDoanhSo = new List<BaoCaoDoanhSoModel>
+            {
             };
         }
     }

@@ -43,11 +43,13 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0" Margin="0 0 0 0">
-                                <TextBlock Text=""
-                                           Style="{StaticResource buttonText}"/>
+                                <TextBlock Text="BÁO CÁO THÁNG"
+                                           Style="{StaticResource buttonText}"
+                                           Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"/>
 
-                                <TextBlock Text=""
-                                           Style="{StaticResource buttonText}"/>
+                                <TextBlock Text="BÁO CÁO TỒN"
+                                           Style="{StaticResource buttonText}"
+                                           Visibility="{Binding IsSwitching, Converter={StaticResource BoolToVis}}"/>
                             </StackPanel>
 
                             <Grid Grid.Column="2" Margin="0 0 0 0">
@@ -98,17 +100,46 @@
                 <StackPanel Grid.Row="1" Margin="0 0 0 0">
                     <StackPanel Orientation="Horizontal">
                         <ComboBox Width="100"
-                  ItemsSource="{Binding DanhSachThang}"
-                  SelectedItem="{Binding SelectedThang, UpdateSourceTrigger=PropertyChanged}"
-                  DisplayMemberPath="tenThang"
-                  Style="{StaticResource lightComboBoxStyle}"/>
+                                  ItemsSource="{Binding DanhSachThang}"
+                                  SelectedItem="{Binding SelectedThang, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="tenThang"
+                                  Style="{StaticResource lightComboBoxStyle}"/>
                         <ComboBox Width="100"
-                  Margin="20 0 0 0"
-                  ItemsSource="{Binding DanhSachNam}"
-                  SelectedItem="{Binding SelectedNam, UpdateSourceTrigger=PropertyChanged}"
-                  Style="{StaticResource lightComboBoxStyle}"/>
+                                  Margin="20 0 0 0"
+                                  ItemsSource="{Binding DanhSachNam}"
+                                  SelectedItem="{Binding SelectedNam, UpdateSourceTrigger=PropertyChanged}"
+                                  Style="{StaticResource lightComboBoxStyle}"/>
                     </StackPanel>
                 </StackPanel>
+
+                <StackPanel Grid.Row="2" Margin="0 20 0 0">
+                    <Border Background="{StaticResource darkBorder}"
+                            CornerRadius="10"
+                            VerticalAlignment="Top">
+                        <DataGrid Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"
+                                  x:Name="BaoCaoThang"
+                                  ItemsSource="{Binding BaoCaoDoanhSo.DanhSachCT, Mode=TwoWay}"
+                                  Style="{StaticResource NoScrollDataGridStyle}"
+                                  CellStyle="{StaticResource DataGridCellStyle}" 
+                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                  RowStyle="{StaticResource DataGridRowStyle}"
+                                  VerticalAlignment="Top">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Hiệu xe" IsReadOnly="True" Width="*" Binding="{Binding hieuXe}"/>
+
+                                <DataGridTextColumn Header="Số lượt sửa" IsReadOnly="True" Width="*" Binding="{Binding soLuotSua}"/>
+
+                                <DataGridTextColumn Header="Thành tiền" IsReadOnly="True" Width="*" Binding="{Binding thanhTien}"/>
+
+                                <DataGridTextColumn Header="Tỉ lệ" IsReadOnly="True" Width="*" Binding="{Binding tiLe}"/>
+
+                            </DataGrid.Columns>
+                            
+                        </DataGrid>
+                    </Border>
+                </StackPanel>
+
             </Grid>
         </Border>
     </ScrollViewer>

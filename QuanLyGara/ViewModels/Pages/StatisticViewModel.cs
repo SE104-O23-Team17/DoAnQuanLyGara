@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Forms;
+using QuanLyGara.Models;
 
 namespace QuanLyGara.ViewModels.Pages
 {
@@ -60,6 +61,7 @@ namespace QuanLyGara.ViewModels.Pages
             selectedNam = DateTime.Now.Year;
 
             SwitchCommand = new ViewModelCommand(ExecuteSwitchCommand);
+
         }
 
         private List<int> danhSachNam;
@@ -94,6 +96,18 @@ namespace QuanLyGara.ViewModels.Pages
         {
             isSwitching = !IsSwitching;
             OnPropertyChanged(nameof(IsSwitching));
+        }
+
+        private BaoCaoDoanhSoModel baoCaoDoanhSo;
+        public BaoCaoDoanhSoModel BaoCaoDoanhSo
+        {
+            get { return baoCaoDoanhSo; }
+            set
+            {
+                baoCaoDoanhSo = value;  
+                OnPropertyChanged(nameof(BaoCaoDoanhSo));
+            }
+
         }
     }
 }
