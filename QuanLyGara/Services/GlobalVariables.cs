@@ -1,4 +1,6 @@
 ﻿using QuanLyGara.Models;
+using QuanLyGara.Models.BaoCaoTon;
+using QuanLyGara.Models.CTBaoCaoDoanhSo;
 using QuanLyGara.Models.CTPhieuNhapVTPT;
 using QuanLyGara.Models.CTPhieuSuaChua;
 using QuanLyGara.Models.CTSuDungVTPT;
@@ -34,6 +36,8 @@ namespace QuanLyGara.Services
         public List<PhieuThuTienModel> danhSachPhieuThuTien { get; set; }
         public List<DanhSachThangModel> danhSachThang { get; set; }
         public List<BaoCaoDoanhSoModel> danhSachDoanhSo { get; set; }
+
+        public List<BaoCaoTonModel> danhSachTon;
 
         private static readonly Global instance = new Global();
         public static Global Instance
@@ -552,8 +556,50 @@ namespace QuanLyGara.Services
                 new DanhSachThangModel { maThang = 11, tenThang = "Tháng 11"},
                 new DanhSachThangModel { maThang = 12, tenThang = "Tháng 12"},
             };
+
             danhSachDoanhSo = new List<BaoCaoDoanhSoModel>
             {
+               
+            };
+
+            danhSachTon = new List<BaoCaoTonModel>
+            {
+                new BaoCaoTonModel
+                {
+                    thang = 1,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[0],
+                    tonDau = 50,
+                    phatSinh = 20,
+                    tonCuoi = 30
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 1,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[4],
+                    tonDau = 100,
+                    phatSinh = 30,
+                    tonCuoi = 70
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 1,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[6],
+                    tonDau = 80,
+                    phatSinh = 50,
+                    tonCuoi = 40
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 1,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[3],
+                    tonDau = 20,
+                    phatSinh = 80,
+                    tonCuoi = 70,
+                },
             };
         }
     }

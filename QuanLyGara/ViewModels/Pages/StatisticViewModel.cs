@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Windows;
 using System.Windows.Forms;
 using QuanLyGara.Models;
+using QuanLyGara.Models.BaoCaoTon;
+using System.Reflection.Metadata;
 
 namespace QuanLyGara.ViewModels.Pages
 {
@@ -49,6 +51,7 @@ namespace QuanLyGara.ViewModels.Pages
         }
 
         public ICommand SwitchCommand { get; set; }
+        public ICommand TruyXuatCommand { get; }
 
         public StatisticViewModel()
         {
@@ -62,6 +65,7 @@ namespace QuanLyGara.ViewModels.Pages
 
             SwitchCommand = new ViewModelCommand(ExecuteSwitchCommand);
 
+            baoCaoTon = Global.Instance.danhSachTon;
         }
 
         private List<int> danhSachNam;
@@ -104,10 +108,22 @@ namespace QuanLyGara.ViewModels.Pages
             get { return baoCaoDoanhSo; }
             set
             {
-                baoCaoDoanhSo = value;  
+                baoCaoDoanhSo = value;
                 OnPropertyChanged(nameof(BaoCaoDoanhSo));
             }
-
         }
+
+        private List <BaoCaoTonModel> baoCaoTon;
+        public List <BaoCaoTonModel> BaoCaoTon
+        {
+            get { return baoCaoTon; }
+            set
+            {
+                baoCaoTon = value;
+                OnPropertyChanged(nameof(BaoCaoTon));
+            }
+        }
+
+        
     }
 }

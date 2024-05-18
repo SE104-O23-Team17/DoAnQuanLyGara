@@ -284,6 +284,8 @@
         </Style.Resources>
     </Style>
 
+    <Style x:Key="NoScrollDataGridStyle2" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource NoScrollDataGridStyle}"/>
+    
     <!--Data Grid Cell Style-->
     <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent"/>
@@ -303,6 +305,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style x:Key="DataGridCellStyle2" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}"/>
 
     <!--Data Grid Column Header Style-->
     <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
@@ -340,6 +344,8 @@
         </Setter>
     </Style>
 
+    <Style x:Key="DataGridColumnHeaderStyle2" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}"/>
+    
     <!--Data Grid Row Style-->
     <Style x:Key="DataGridRowStyle" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="{StaticResource lightBackground}"/>
@@ -413,6 +419,8 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="DataGridRowStyle2" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DataGridRowStyle}"/>
+    
     <!--Icon text box style-->
     <Style x:Key="iconTextBox" TargetType="TextBox">
         <Setter Property="Background" Value="Transparent"/>
