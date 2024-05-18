@@ -1,4 +1,5 @@
 ﻿using QuanLyGara.Models;
+using QuanLyGara.Models.CTBaoCaoDoanhSo;
 using QuanLyGara.Models.CTPhieuNhapVTPT;
 using QuanLyGara.Models.CTPhieuSuaChua;
 using QuanLyGara.Models.CTSuDungVTPT;
@@ -554,6 +555,76 @@ namespace QuanLyGara.Services
             };
             danhSachDoanhSo = new List<BaoCaoDoanhSoModel>
             {
+                new BaoCaoDoanhSoModel
+                {
+
+                    maBCDS = 1,
+                    thang = 1,
+                    nam = 2023,
+                    tongDoanhThu = 500000,
+                    DanhSachCT = new List<CTBaoCaoDoanhSoModel>
+                    {
+                        new CTBaoCaoDoanhSoModel
+                        {
+                            maBCDS = 1,
+                            hieuXe = danhSachHieuXe[0],
+                            soLuotSua = 1,
+                            thanhTien = 500000,
+                            tiLe = 50,
+                        },
+                        new CTBaoCaoDoanhSoModel
+                        {
+                            maBCDS = 1,
+                            hieuXe = danhSachHieuXe[1],
+                            soLuotSua = 4,
+                            thanhTien = 30000,
+                            tiLe = 30,
+                        },
+                        new CTBaoCaoDoanhSoModel
+                        {
+                            maBCDS = 1,
+                            hieuXe = danhSachHieuXe[2],
+                            soLuotSua = 2,
+                            thanhTien = 20000,
+                            tiLe = 20,
+                        },
+                    }
+                },
+                new BaoCaoDoanhSoModel
+                {
+                    maBCDS = 2,
+                    thang = 2,
+                    nam = 2023,
+                    tongDoanhThu = 200000,
+                    DanhSachCT = new List<CTBaoCaoDoanhSoModel>
+                    {
+                        new CTBaoCaoDoanhSoModel
+                        {
+                            maBCDS = 2,
+                            hieuXe = danhSachHieuXe[0],
+                            soLuotSua = 2,
+                            thanhTien = 100000,
+                            tiLe = 50,
+                        },
+                        new CTBaoCaoDoanhSoModel
+                        {
+                            maBCDS = 2,
+                            hieuXe = danhSachHieuXe[1],
+                            soLuotSua = 1,
+                            thanhTien = 60000,
+                            tiLe = 30,
+                        },
+                        new CTBaoCaoDoanhSoModel
+                        {
+                            maBCDS = 2,
+                            hieuXe = danhSachHieuXe[2],
+                            soLuotSua = 1,
+                            thanhTien = 40000,
+                            tiLe = 20,
+                        },
+                    }
+                },
+
             };
         }
     }
