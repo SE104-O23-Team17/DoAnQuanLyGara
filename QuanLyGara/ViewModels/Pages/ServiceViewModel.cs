@@ -1,5 +1,8 @@
 ﻿using QuanLyGara.Models.DonViTinh;
 using QuanLyGara.Models.HieuXe;
+using QuanLyGara.Models.PhieuNhapVTPT;
+using QuanLyGara.Models.PhieuSuaChua;
+using QuanLyGara.Models.PhieuThuTien;
 using QuanLyGara.Models.VTPT;
 using QuanLyGara.Models.Xe;
 using QuanLyGara.Services;
@@ -65,12 +68,11 @@ namespace QuanLyGara.ViewModels.Pages
             }
         }
 
-        private int previousLimit;
 
         private List<XeModel> danhSachXe;
         public BindingList<XeModel> DanhSachXe
         {
-            get 
+            get
             {
                 var filteredList = danhSachXe.Where(car => car.bienSo.Contains(SearchKeyword, StringComparison.CurrentCultureIgnoreCase)).ToList();
                 return new BindingList<XeModel>(filteredList);
@@ -85,8 +87,8 @@ namespace QuanLyGara.ViewModels.Pages
         private ObservableCollection<HieuXeModel> danhSachHieuXe;
         public ObservableCollection<HieuXeModel> DanhSachHieuXe
         {
-            get 
-            { 
+            get
+            {
                 return new ObservableCollection<HieuXeModel>(danhSachHieuXe.OrderBy(hieuXe => hieuXe.TenHieuXe));
             }
             set
@@ -116,9 +118,64 @@ namespace QuanLyGara.ViewModels.Pages
             }
         }
 
+
+        private XeModel selectingCar;
+        public XeModel SelectingCar
+        {
+            get { return selectingCar; }
+            set
+            {
+                selectingCar = value;
+                OnPropertyChanged(nameof(SelectingCar));
+                OnPropertyChanged(nameof(DanhSachPhieuSua));
+                OnPropertyChanged(nameof(DanhSachPhieuThu));
+                ExecuteDetailCarCommand(null);
+            }
+        }
+
+        private ObservableCollection<PhieuThuTienModel> danhSachPhieuThu;
+        public ObservableCollection<PhieuThuTienModel> DanhSachPhieuThu
+        {
+            get 
+            { 
+                if (selectingCar == null) return new ObservableCollection<PhieuThuTienModel>();
+
+                return [.. danhSachPhieuThu.Where(phieuThu => phieuThu.bienSo == selectingCar.bienSo).ToList().OrderByDescending(phieuThu => phieuThu.ngayThuTien)]; 
+            }
+            set
+            {
+                danhSachPhieuThu = value;
+                OnPropertyChanged(nameof(DanhSachPhieuThu));
+            }
+        }
+
+        private List<PhieuSuaChuaModel> danhSachPhieuSua;
+        public List<PhieuSuaChuaModel> DanhSachPhieuSua
+        {
+            get { return [.. danhSachPhieuSua.Where(phieuSua => phieuSua.xe == selectingCar).ToList().OrderByDescending(phieuSua => phieuSua.ngayLap)]; }
+            set
+            {
+                danhSachPhieuSua = value;
+                OnPropertyChanged(nameof(DanhSachPhieuSua));
+            }
+        }
+
+        private PhieuSuaChuaModel phieuSuaChua;
+        public PhieuSuaChuaModel PhieuSuaChua
+        {
+            get { return phieuSuaChua; }
+            set
+            {
+                phieuSuaChua = value;
+                OnPropertyChanged(nameof(PhieuSuaChua));
+            }
+        }
+
+        private int previousLimit;
         private XeModel previousCar;
         private string previousBrand;
-        private string sortOption;
+        private DateTime previousDate;
+        private double previousPrice;
 
         public bool isAllChecked { get; set; }
 
@@ -138,23 +195,64 @@ namespace QuanLyGara.ViewModels.Pages
         public ICommand SaveBrandCommand { get; set; }
         public ICommand CancelBrandCommand { get; set; }
         public ICommand SortCommand { get; set; }
+        public ICommand BackToView { get; set; }
+        public ICommand SetListImportCommand { get; set; }
+        public ICommand AddBillCommand { get; set; }
+        public ICommand EditBillCommand { get; set; }
+        public ICommand RemoveBillCommand { get; set; }
+        public ICommand SaveBillCommand { get; set; }
+        public ICommand CancelBillCommand { get; set; }
 
-
-        public ServiceViewModel() {
-            dialogService = new DialogService();
-            CurrentView = 0;
-            LimitPerDay = Global.Instance.soXeSuaChuaToiDa;
+        private void ExecuteBackToView(object obj)
+        {
             LimitIsReadOnly = true;
-            ApplyCheckPayment = Global.Instance.apDungQDKiemTraSoTienThu;
-            danhSachXe = Global.Instance.danhSachXe;
-            danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
             searchKeyword = "";
-            sortOption = "1";
+            ExecuteSortCommand("1");
+            previousBrand = "";
+            previousCar = null;
+            previousLimit = 0;
+            limitIsReadOnly = true;
+            selectingCar = null;
+            searchKeyword = "";
+            selectingCar = null;
+            phieuSuaChua = null;
+            previousDate = DateTime.Now;
+            previousPrice = 0;
+            foreach (XeModel xe in danhSachXe)
+            {
+                xe.IsReadOnly = true;
+                xe.isChecked = false;
+            }
+            foreach (HieuXeModel hieuXe in danhSachHieuXe)
+            {
+                hieuXe.IsReadOnly = true;
+            }
+
+            currentView = 0;
+            OnPropertyChanged(nameof(SearchKeyword));
+            OnPropertyChanged(nameof(SelectingCar));
+            OnPropertyChanged(nameof(CurrentView));
+            OnPropertyChanged(nameof(PhieuSuaChua));
+            OnPropertyChanged(nameof(DanhSachPhieuSua));
+            OnPropertyChanged(nameof(DanhSachPhieuThu));
+        }
+
+
+        public ServiceViewModel()
+        {
+            dialogService = new DialogService();
+            LimitPerDay = Global.Instance.soXeSuaChuaToiDa;
+            ApplyCheckPayment = Global.Instance.apDungQDKiemTraSoTienThu;
+            danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
+            danhSachXe = Global.Instance.danhSachXe;
+            danhSachPhieuThu = new ObservableCollection<PhieuThuTienModel>(Global.Instance.danhSachPhieuThuTien);
+            danhSachPhieuSua = Global.Instance.danhSachPhieuSC;
+            ExecuteBackToView(null);
 
             EditLimitCommand = new ViewModelCommand(ExecuteEditLimitCommand);
             SaveLimitCommand = new ViewModelCommand(ExecuteSaveLimitCommand);
             CancelLimitCommand = new ViewModelCommand(ExecuteCancelLimitCommand);
-            ToAddingCarCommand = new ViewModelCommand(ExecuteToAddingCarCommand);
+            ToAddingCarCommand = new ViewModelCommand(ExecuteAddingCarCommand);
             RemoveSelectedCarCommand = new ViewModelCommand(ExecuteRemoveSelectedCarCommand);
             UpdateIsAllSelectedCommand = new ViewModelCommand(ExecuteUpdateIsAllSelectedCommand);
             EditCarCommand = new ViewModelCommand(ExecuteEditCarCommand);
@@ -167,6 +265,13 @@ namespace QuanLyGara.ViewModels.Pages
             SaveBrandCommand = new ViewModelCommand(ExecuteSaveBrandCommand);
             CancelBrandCommand = new ViewModelCommand(ExecuteCancelBrandCommand);
             SortCommand = new ViewModelCommand(ExecuteSortCommand);
+            BackToView = new ViewModelCommand(ExecuteBackToView);
+            SetListImportCommand = new ViewModelCommand(ExecuteSetListImportCommand);
+            AddBillCommand = new ViewModelCommand(ExecuteAddBillCommand);
+            EditBillCommand = new ViewModelCommand(ExecuteEditBillCommand);
+            RemoveBillCommand = new ViewModelCommand(ExecuteRemoveBillCommand);
+            SaveBillCommand = new ViewModelCommand(ExecuteSaveBillCommand);
+            CancelBillCommand = new ViewModelCommand(ExecuteCancelBillCommand);
         }
         private void ExecuteUpdateIsAllSelectedCommand(object obj)
         {
@@ -231,9 +336,20 @@ namespace QuanLyGara.ViewModels.Pages
             OnPropertyChanged(nameof(LimitPerDay));
         }
 
-        private void ExecuteToAddingCarCommand(object obj)
+        private void ExecuteAddingCarCommand(object obj)
         {
-            CurrentView = 1;
+            XeModel xeMoi = new XeModel()
+            {
+                bienSo = "",
+                tenXe = "",
+                HieuXe = null,
+                tienNo = 0,
+                isChecked = false,
+                IsReadOnly = false
+            };
+
+            danhSachXe.Insert(0, xeMoi);
+            OnPropertyChanged(nameof(DanhSachXe));
         }
 
         private void ExecuteRemoveSelectedCarCommand(object obj)
@@ -246,7 +362,8 @@ namespace QuanLyGara.ViewModels.Pages
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
                 "Bạn có chắc chắn muốn xóa " + selectedCar.Count + " mục đã chọn không?",
-                () => {
+                () =>
+                {
                     foreach (XeModel car in DanhSachXe)
                     {
                         selectedCar.Remove(car);
@@ -284,6 +401,7 @@ namespace QuanLyGara.ViewModels.Pages
                 () =>
                 {
                     danhSachXe.Remove(xe);
+                    Global.Instance.danhSachXe.Remove(xe);
                     OnPropertyChanged(nameof(DanhSachXe));
                 },
                 () => { }
@@ -296,8 +414,9 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 return;
             }
-            XeModel xe = obj as XeModel;
-            if (xe.bienSo == "" || xe.HieuXe == null)
+            XeModel xeLuu = obj as XeModel;
+
+            if (xeLuu.bienSo == "" || xeLuu.HieuXe == null || xeLuu.tenXe == "")
             {
                 dialogService.ShowInfoDialog(
                     "Lỗi",
@@ -306,7 +425,23 @@ namespace QuanLyGara.ViewModels.Pages
                     );
                 return;
             }
-            xe.IsReadOnly = true;
+
+            if (danhSachXe.Any(xe => xeLuu.bienSo == xe.bienSo && xeLuu != xe))
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Xe đã tồn tại",
+                    () => { }
+                    );
+                return;
+            }
+
+            if (Global.Instance.danhSachXe.FirstOrDefault(xe => xeLuu == xe) == null)
+            {
+                Global.Instance.danhSachXe.Add(xeLuu);
+            }
+
+            xeLuu.IsReadOnly = true;
             OnPropertyChanged(nameof(DanhSachXe));
         }
 
@@ -316,6 +451,14 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 return;
             }
+
+            if (previousCar == null)
+            {
+                danhSachXe.Remove(obj as XeModel);
+                OnPropertyChanged(nameof(DanhSachXe));
+                return;
+            }
+
             XeModel xe = obj as XeModel;
             xe.bienSo = previousCar.bienSo;
             xe.tenXe = previousCar.tenXe;
@@ -376,7 +519,7 @@ namespace QuanLyGara.ViewModels.Pages
                     );
                 return;
             }
-            
+
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
                 "Bạn có chắc chắn muốn xóa hiệu xe " + hieuXe.TenHieuXe + " không?",
@@ -467,6 +610,130 @@ namespace QuanLyGara.ViewModels.Pages
                     break;
             }
             OnPropertyChanged(nameof(DanhSachXe));
+        }
+
+
+        private void ExecuteDetailCarCommand(object obj)
+        {
+            if (SelectingCar != null)
+            {
+                currentView = 1;
+                OnPropertyChanged(nameof(CurrentView));
+
+                phieuSuaChua = DanhSachPhieuSua.FirstOrDefault();
+                if (phieuSuaChua != null)
+                {
+                    foreach (PhieuSuaChuaModel phieuSua in DanhSachPhieuSua)
+                    {
+                        phieuSua.IsChecked = false;
+                    }
+                    phieuSuaChua.IsChecked = true;
+                    OnPropertyChanged(nameof(PhieuSuaChua));
+                }
+            }
+        }
+
+        private void ExecuteSetListImportCommand(object obj)
+        {
+            if (obj is PhieuSuaChuaModel phieuSua)
+            {
+                phieuSuaChua = phieuSua;
+                OnPropertyChanged(nameof(PhieuSuaChua));
+            }
+        }
+
+        private void ExecuteAddBillCommand(object obj)
+        {
+            PhieuThuTienModel? phieuThuMoi = DanhSachPhieuThu.FirstOrDefault(phieuThu => string.IsNullOrEmpty(phieuThu.soTienThu.ToString()) || phieuThu.soTienThu == 0);
+            if (phieuThuMoi != null)
+            {
+                phieuThuMoi.IsReadOnly = false;
+                OnPropertyChanged(nameof(DanhSachPhieuThu));
+                return;
+            }
+
+            phieuThuMoi = new PhieuThuTienModel()
+            {
+                maPhieu = danhSachPhieuThu.Count == 0 ? 1 : danhSachPhieuThu.Max(phieuThu => phieuThu.maPhieu) + 1,
+                bienSo = selectingCar.bienSo,
+                ngayThuTien = DateTime.Now,
+                IsReadOnly = false
+            };
+            danhSachPhieuThu.Add(phieuThuMoi);
+            OnPropertyChanged(nameof(DanhSachPhieuThu));
+        }
+
+        private void ExecuteEditBillCommand(object obj)
+        {
+            if (obj is not PhieuThuTienModel)
+            {
+                return;
+            }
+            PhieuThuTienModel? phieuThu = DanhSachPhieuThu.FirstOrDefault(phieuThu => phieuThu.IsReadOnly == false);
+            ExecuteCancelBillCommand(phieuThu);
+
+            phieuThu = obj as PhieuThuTienModel;
+            phieuThu.IsReadOnly = false;
+            previousDate = phieuThu.ngayThuTien;
+            previousPrice = phieuThu.soTienThu;
+        }
+
+        private void ExecuteRemoveBillCommand(object obj)
+        {
+            if (obj is not PhieuThuTienModel || obj == null)
+            {
+                return;
+            }
+            PhieuThuTienModel phieuThu = obj as PhieuThuTienModel;
+            dialogService.ShowYesNoDialog(
+                "Xác nhận",
+                "Bạn có chắc chắn muốn xóa phiếu thu này không?",
+                () =>
+                {
+                    danhSachPhieuThu.Remove(phieuThu);
+                    Global.Instance.danhSachPhieuThuTien.Remove(phieuThu);
+                    OnPropertyChanged(nameof(DanhSachPhieuThu));
+                },
+                () => { }
+                );
+        }
+
+        private void ExecuteSaveBillCommand(object obj)
+        {
+            if (obj is not PhieuThuTienModel || obj == null)
+            {
+                return;
+            }
+
+            PhieuThuTienModel phieuThu = obj as PhieuThuTienModel;
+
+            if (string.IsNullOrEmpty(phieuThu.soTienThu.ToString()) || phieuThu.soTienThu == 0)
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Vui lòng nhập số tiền thu",
+                    () => { }
+                    );
+                ExecuteCancelBillCommand(phieuThu);
+                return;
+            }
+
+            phieuThu.IsReadOnly = true;
+            OnPropertyChanged(nameof(DanhSachPhieuThu));
+        }
+
+        private void ExecuteCancelBillCommand(object obj)
+        {
+            if (obj is not PhieuThuTienModel || obj == null)
+            {
+                return;
+            }
+
+            PhieuThuTienModel phieuThu = obj as PhieuThuTienModel;
+            phieuThu.ngayThuTien = previousDate;
+            phieuThu.soTienThu = previousPrice;
+            phieuThu.IsReadOnly = true;
+            OnPropertyChanged(nameof(DanhSachPhieuThu));
         }
     }
 }

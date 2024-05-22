@@ -692,7 +692,7 @@
                                        Margin="0 8"/>
 
                             <DatePicker Style="{StaticResource DatePickerStyle}"
-                                        Width="200"
+                                        Width="130"
                                         HorizontalAlignment="Left"
                                         SelectedDate="{Binding PhieuNhapVTPT.NgayNhap}"
                                         Margin="0 0 0 16"/>
@@ -964,15 +964,17 @@
                                                    FontSize="16"
                                                    Margin="0 16 0 8"/>
 
-                                        <Border Background="{StaticResource darkBorder}"
-                                                CornerRadius="10">
+                                        <Border Background="Transparent"
+                                                BorderBrush="{StaticResource darkBorder}"
+                                                BorderThickness="2">
                                             <DataGrid x:Name="PhieuNhap"
                                                       ItemsSource="{Binding PhieuNhapVTPT.DanhSachCT}"
                                                       Style="{StaticResource NoScrollDataGridStyle}"
                                                       CellStyle="{StaticResource DataGridCellStyle}" 
                                                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                                                       RowStyle="{StaticResource DataGridRowStyle}"
-                                                      VerticalAlignment="Top">
+                                                      VerticalAlignment="Top"
+                                                      Padding="0">
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Vật tư phụ tùng"
                                                                 IsReadOnly="True"

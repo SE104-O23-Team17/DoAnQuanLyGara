@@ -54,5 +54,27 @@ namespace QuanLyGara.Models.PhieuSuaChua
         {
             get { return tongTienSuaChua + tongTienVTPT; }
         }
+
+        public string MonthYear
+        {
+            get
+            {
+                return ngayLap.ToString("MM/yyyy");
+            }
+        }
+
+        private bool isChecked;
+        public bool IsChecked
+        {
+            get
+            {
+                return isChecked;
+            }
+            set
+            {
+                isChecked = value;
+                OnPropertyChanged(nameof(IsChecked));
+            }
+        }
     }
 }

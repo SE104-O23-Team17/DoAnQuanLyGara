@@ -578,6 +578,7 @@
 
                         <Trigger Property="IsReadOnly" Value="True">
                             <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="IsHitTestVisible" Value="False"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
