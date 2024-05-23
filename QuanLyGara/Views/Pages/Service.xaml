@@ -123,21 +123,28 @@
                                       IsChecked="{Binding ApplyCheckPayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
 
-                        <StackPanel Margin="0 24">
+                        <StackPanel Margin="0 16">
                             <TextBlock Text="Sắp xếp theo"
-                                       Style="{StaticResource buttonText}"/>
+                                       Style="{StaticResource buttonText}"
+                                       FontWeight="Bold"
+                                       Margin="0 0 0 8"/>
 
-                            <Grid Margin="0 8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="  Tên xe"
+                            <Border Padding="8 4 4 4"
+                                    BorderBrush="{StaticResource darkBorder}"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Tên xe"
                                            Style="{StaticResource buttonText}"/>
 
-                                <StackPanel Grid.Column="1"
+                                        <StackPanel Grid.Column="1"
                                             Orientation="Horizontal">
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountDown"
                                                  GroupName="sortGroup"
                                                  Margin="8 0"
@@ -145,64 +152,80 @@
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="1"/>
 
-                                    <RadioButton Style="{StaticResource sortButton}"
-                 Tag="SortAmountUp"
-                 GroupName="sortGroup"
-                 Command="{Binding SortCommand}"
-                 CommandParameter="2"/>
-                                </StackPanel>
-                            </Grid>
+                                            <RadioButton Style="{StaticResource sortButton}"
+                                                 Tag="SortAmountUp"
+                                                 GroupName="sortGroup"
+                                                 Command="{Binding SortCommand}"
+                                                 CommandParameter="2"/>
+                                        </StackPanel>
+                                    </Grid>
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="  Tổng nợ"
+                                    <Grid Margin="0 8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Tổng nợ"
            Style="{StaticResource buttonText}"/>
 
-                                <StackPanel Grid.Column="1"
+                                        <StackPanel Grid.Column="1"
             Orientation="Horizontal">
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                  Tag="SortAmountDown"
                  GroupName="sortGroup"
                  Margin="8 0"
                  Command="{Binding SortCommand}"
                  CommandParameter="3"/>
 
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                  Tag="SortAmountUp"
                  GroupName="sortGroup"
                  Command="{Binding SortCommand}"
                  CommandParameter="4"/>
-                                </StackPanel>
-                            </Grid>
+                                        </StackPanel>
+                                    </Grid>
 
-                            <Grid Margin="0 8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="  Tên hiệu xe"
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Tên hiệu xe"
            Style="{StaticResource buttonText}"/>
 
-                                <StackPanel Grid.Column="1"
+                                        <StackPanel Grid.Column="1"
             Orientation="Horizontal">
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                  Tag="SortAmountDown"
                  GroupName="sortGroup"
                  Margin="8 0"
                  Command="{Binding SortCommand}"
                  CommandParameter="5"/>
 
-                                    <RadioButton Style="{StaticResource sortButton}"
+                                            <RadioButton Style="{StaticResource sortButton}"
                  Tag="SortAmountUp"
                  GroupName="sortGroup"
                  Command="{Binding SortCommand}"
                  CommandParameter="6"/>
+                                        </StackPanel>
+                                    </Grid>
+
                                 </StackPanel>
-                            </Grid>
+                            </Border>
                         </StackPanel>
+
+                        <Button Style="{StaticResource darkButtonStyle}"
+                                Padding="8 4"
+                                Command="{Binding ToRepairInfoCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="RectangleList"
+                                              Style="{StaticResource normalIconButton}"
+                                              Foreground="{StaticResource lightFont}"/>
+                                <TextBlock Text="Nội dung sửa chữa" 
+                                           Style="{StaticResource buttonText}" 
+                                           Foreground="{StaticResource lightFont}"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1"
@@ -265,10 +288,8 @@
                                       Style="{StaticResource NoScrollDataGridStyle}"
                                       CellStyle="{StaticResource DataGridCellStyle}" 
                                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                      SelectedItem="{Binding SelectingCar}"
                                       RowStyle="{StaticResource DataGridRowStyle}"
                                       VerticalAlignment="Top">
-
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Width="Auto">
                                         <DataGridTemplateColumn.Header>
@@ -299,7 +320,7 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
 
-                                    <DataGridTemplateColumn Header="Tên xe" Width="280">
+                                    <DataGridTemplateColumn Header="Tên xe" Width="260">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox Text="{Binding tenXe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -328,10 +349,22 @@
                                                         FontSize="16"
                                                         Binding="{Binding tienNo, Converter={StaticResource NumberFormatConverter}}"/>
 
-                                    <DataGridTemplateColumn Width="100">
+                                    <DataGridTemplateColumn Width="120">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Right">
+                                                    <Button Style="{StaticResource transparentButtonStyle}"
+                                                            Command="{Binding DataContext.DetailCarCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Padding="4"
+                                                            Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVis}}">
+                                                        <fa:IconImage Icon="FileText"
+                                                                      Style="{StaticResource normalIconButton}"
+                                                                      Foreground="{StaticResource darkFont}"
+                                                                      Margin="0"/>
+                                                    </Button>
+                                                    
                                                     <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.EditCarCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
@@ -541,7 +574,8 @@
                                         Grid.Column="0"
                                         BorderBrush="{StaticResource darkBorder}"
                                         BorderThickness="2"
-                                        VerticalAlignment="Top">
+                                        VerticalAlignment="Top"
+                                        Margin="0 40 0 0">
                                     <StackPanel>
                                         <TextBlock Style="{StaticResource menuIconText}"
                                                    Text="Chọn phiếu sửa chữa"
@@ -604,10 +638,35 @@
                                 <StackPanel Grid.Column="1"
                                             Margin="24 0 0 0"
                                             VerticalAlignment="Top">
-                                    <TextBlock Style="{StaticResource buttonText}"
-                                               Text="Phiếu sửa chữa"
-                                               FontSize="20"
-                                               Margin="0 8"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>                                            
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Style="{StaticResource buttonText}"
+                                                   Text="Phiếu sửa chữa"
+                                                   FontSize="20"
+                                                   Margin="0 8"
+                                                   Grid.Column="0"/>
+                                        <Button Style="{StaticResource darkButtonStyle}"
+                                                Padding="8 4"
+                                                Margin="0 0 0 8"
+                                                Command="{Binding AddRepairCommand}"
+                                                HorizontalAlignment="Right"
+                                                Grid.Column="2"
+                                                Visibility="{Binding PhieuSuaChua.IsReadOnly, Converter={StaticResource BoolToVis}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="Add"
+                                                              Style="{StaticResource normalIconButton}"
+                                                              Foreground="{StaticResource lightFont}"/>
+                                                <TextBlock Text="Phiếu sửa chữa mới"
+                                                           Style="{StaticResource buttonText}"
+                                                           Foreground="{StaticResource lightFont}"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </Grid>
 
                                     <StackPanel>
                                         <Border CornerRadius="10"
@@ -616,22 +675,34 @@
                                                 VerticalAlignment="Top"
                                                 Padding="12">
                                             <StackPanel>
-                                                <StackPanel Orientation="Horizontal"
-                                                            Margin="0 0 0 8">
-                                                    <TextBlock Style="{StaticResource buttonText}"
-                                                               Text="Ngày lập:"
-                                                               FontSize="16"
-                                                               Margin="0 0 8 0"/>
-
-                                                    <TextBlock Style="{StaticResource buttonText}"
-                                                               Text="{Binding PhieuSuaChua.ngayLap, StringFormat='dd/MM/yyyy'}"
-                                                               FontSize="16"/>
-                                                </StackPanel>
+                                                <DatePicker Style="{StaticResource DatePickerStyle}"
+                                                            Width="130"
+                                                            HorizontalAlignment="Left"
+                                                            SelectedDate="{Binding PhieuSuaChua.ngayLap}"
+                                                            Background="Transparent"
+                                                            FontSize="12"
+                                                            IsHitTestVisible="{Binding PhieuSuaChua.IsReadOnly, Converter={StaticResource InvertedBool}}"/>
 
                                                 <TextBlock Style="{StaticResource buttonText}"
                                                            Text="Các mục sửa chữa:"
                                                            FontSize="16"
-                                                           Margin="0 16 0 8"/>
+                                                           Margin="0 8"/>
+
+                                                <Button Style="{StaticResource darkButtonStyle}"
+                                                        Padding="8 4"
+                                                        Margin="0 0 0 8"
+                                                        Command="{Binding AddRepairDetailCommand}"
+                                                        HorizontalAlignment="Left"
+                                                        Visibility="{Binding PhieuSuaChua.IsReadOnly, Converter={StaticResource InvertedBoolToVis}}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <fa:IconImage Icon="Add"
+                                                                      Style="{StaticResource normalIconButton}"
+                                                                      Foreground="{StaticResource lightFont}"/>
+                                                        <TextBlock Text="Thêm nội dung sửa chữa"
+                                                                   Style="{StaticResource buttonText}"
+                                                                   Foreground="{StaticResource lightFont}"/>
+                                                    </StackPanel>
+                                                </Button>
 
                                                 <ItemsControl x:Name="CTPhieuNhap"
                                                               ItemsSource="{Binding PhieuSuaChua.DanhSachCT}"
@@ -645,34 +716,67 @@
                                                                         Padding="8">
                                                                 <StackPanel>
                                                                     <StackPanel Orientation="Horizontal"
-                                                                                Margin="0 4 0 0">
+                                                                                Margin="0 4">
                                                                         <StackPanel Orientation="Horizontal"
-                                                                                    Width="640">
+                                                                                    Width="580">
                                                                             <TextBlock Style="{StaticResource buttonText}"
                                                                                        Text="Nội dung sửa chữa:"
                                                                                        FontSize="16"
                                                                                        Margin="0 0 8 0"
                                                                                        FontWeight="Bold"/>
 
-                                                                            <TextBlock Style="{StaticResource buttonText}"
-                                                                                       Text="{Binding NDSC.tenNDSC}"
-                                                                                       FontSize="16"
-                                                                                       FontWeight="Bold"/>
+                                                                            <components:FilteredComboBox
+                                                                                Style="{StaticResource lightComboBoxStyle}"
+                                                                                Width="300"
+                                                                                ItemsSource="{Binding DataContext.DanhSachNoiDung, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                                SelectedItem="{Binding NDSC, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                                                DisplayMemberPath="TenNDSC"
+                                                                                IsEnabled="{Binding DataContext.PhieuSuaChua.IsReadOnly, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource InvertedBool}}"/>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal">
+                                                                        <StackPanel Orientation="Horizontal"
+                                                                                    Width="180">
                                                                             <TextBlock Style="{StaticResource buttonText}"
                                                                                        Text="Giá tiền:"
                                                                                        FontSize="16"
                                                                                        Margin="0 0 8 0"
                                                                                        FontWeight="Bold"/>
-
+                                                                            
                                                                             <TextBlock Style="{StaticResource buttonText}"
                                                                                        Text="{Binding NDSC.giaTien, Converter={StaticResource NumberFormatConverter}}"
                                                                                        FontSize="16"
                                                                                        FontWeight="Bold"/>
                                                                         </StackPanel>
+
+                                                                        <Button Command="{Binding DataContext.RemoveRepairDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                                CommandParameter="{Binding}"
+                                                                                Style="{StaticResource darkButtonStyle}"
+                                                                                Padding="4"
+                                                                                Visibility="{Binding DataContext.PhieuSuaChua.IsReadOnly, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource InvertedBoolToVis}}">
+                                                                            <fa:IconImage Icon="TrashCan" 
+                                                                                          Style="{StaticResource normalIconButton}"
+                                                                                          Foreground="{StaticResource lightFont}"
+                                                                                          Margin="0"/>
+                                                                        </Button>
                                                                     </StackPanel>
+                                                                    
+                                                                    <Button Style="{StaticResource darkButtonStyle}"
+                                                                            Padding="8 4"
+                                                                            Margin="0 8"
+                                                                            Command="{Binding DataContext.AddPartDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                            CommandParameter="{Binding}"
+                                                                            HorizontalAlignment="Left" 
+                                                                            Visibility="{Binding DataContext.PhieuSuaChua.IsReadOnly, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource InvertedBoolToVis}}">
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <fa:IconImage Icon="Add"
+                                                                      Style="{StaticResource normalIconButton}"
+                                                                      Foreground="{StaticResource lightFont}"/>
+                                                                            <TextBlock Text="Thêm vật tư"
+                                                                                       Style="{StaticResource buttonText}"
+                                                                                       Foreground="{StaticResource lightFont}"
+                                                                                       FontSize="14"/>
+                                                                        </StackPanel>
+                                                                    </Button>
 
                                                                     <ItemsControl ItemsSource="{Binding DanhSachSuDung}">
                                                                         <ItemsControl.ItemTemplate>
@@ -680,55 +784,68 @@
                                                                                 <StackPanel Orientation="Horizontal"
                                                                                             Margin="0 8 0 0">
                                                                                     <StackPanel Orientation="Horizontal"
-                                                                                                    Width="280">
-                                                                                        <TextBlock Style="{StaticResource buttonText}"
-                                                                                                       Text="Tên vật tư:"
-                                                                                                       FontSize="16"
-                                                                                                       Margin="0 0 8 0"/>
-
-                                                                                        <TextBlock Style="{StaticResource buttonText}"
-                                                                                                       Text="{Binding VTPT.tenVTPT}"
-                                                                                                       FontSize="16"/>
-                                                                                    </StackPanel>
-
-                                                                                    <StackPanel Orientation="Horizontal"
-                                                                                                    Margin="0 8 0 0"
-                                                                                                    Width="160">
-                                                                                        <TextBlock Style="{StaticResource buttonText}"
-                                                                                                       Text="Số lượng:"
-                                                                                                       FontSize="16"
-                                                                                                       Margin="0 0 8 0"/>
-
-                                                                                        <TextBlock Style="{StaticResource buttonText}"
-                                                                                                       Text="{Binding SoLuong}"
-                                                                                                       FontSize="16"/>
-                                                                                    </StackPanel>
-
-                                                                                    <StackPanel Orientation="Horizontal"
-                                                                                                    Margin="0 8 0 0"
-                                                                                                    Width="200">
-                                                                                        <TextBlock Style="{StaticResource buttonText}"
-                                                                                                       Text="Đơn giá:"
-                                                                                                       FontSize="16"
-                                                                                                       Margin="0 0 8 0"/>
-
-                                                                                        <TextBlock Style="{StaticResource buttonText}"
-                                                                                                       Text="{Binding donGia, Converter={StaticResource NumberFormatConverter}}"
-                                                                                                       FontSize="16"/>
-                                                                                    </StackPanel>
-
-                                                                                    <StackPanel Orientation="Horizontal"
-                                                                                                    Margin="0 8 0 0"
                                                                                                     Width="240">
                                                                                         <TextBlock Style="{StaticResource buttonText}"
-                                                                                                       Text="Thành tiền:"
-                                                                                                       FontSize="16"
-                                                                                                       Margin="0 0 8 0"/>
+                                                                                                           Text="Tên vật tư:"
+                                                                                                           FontSize="16"
+                                                                                                           Margin="0 0 8 0"/>
+
+                                                                                        <components:FilteredComboBox
+                                                                                                Style="{StaticResource lightComboBoxStyle}"
+                                                                                                Width="140"
+                                                                                                ItemsSource="{Binding DataContext.DanhSachVTPT, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                                                SelectedItem="{Binding VTPT, UpdateSourceTrigger=PropertyChanged}"
+                                                                                                DisplayMemberPath="tenVTPT"
+                                                                                                IsEnabled="{Binding DataContext.PhieuSuaChua.IsReadOnly, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource InvertedBool}}"/>
+                                                                                    </StackPanel>
+
+                                                                                    <StackPanel Orientation="Horizontal"
+                                                                                                    Width="160">
+                                                                                        <TextBlock Style="{StaticResource buttonText}"
+                                                                                                           Text="Số lượng:"
+                                                                                                           FontSize="16"
+                                                                                                           Margin="0 0 8 0"/>
+
+                                                                                        <TextBox Text="{Binding SoLuong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                                     Style="{StaticResource aLineTextBox}"
+                                                                                                     IsReadOnly="{Binding DataContext.PhieuSuaChua.IsReadOnly, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                                                     Padding="0 2"
+                                                                                                 Width="60"/>
+                                                                                    </StackPanel>
+
+                                                                                    <StackPanel Orientation="Horizontal"
+                                                                                                    Width="180">
+                                                                                        <TextBlock Style="{StaticResource buttonText}"
+                                                                                                           Text="Đơn giá:"
+                                                                                                           FontSize="16"
+                                                                                                           Margin="0 0 8 0"/>
+                                                                                        <TextBlock Style="{StaticResource buttonText}"
+                                                                                                           Text="{Binding donGia, Converter={StaticResource NumberFormatConverter}}"
+                                                                                                           FontSize="16"/>
+                                                                                    </StackPanel>
+
+                                                                                    <StackPanel Orientation="Horizontal"
+                                                                                                    Width="180">
+                                                                                        <TextBlock Style="{StaticResource buttonText}"
+                                                                                                           Text="Thành tiền:"
+                                                                                                           FontSize="16"
+                                                                                                           Margin="0 0 8 0"/>
 
                                                                                         <TextBlock Style="{StaticResource buttonText}"
-                                                                                                       Text="{Binding thanhTien, Converter={StaticResource NumberFormatConverter}}"
-                                                                                                       FontSize="16"/>
+                                                                                                           Text="{Binding thanhTien, Converter={StaticResource NumberFormatConverter}}"
+                                                                                                           FontSize="16"/>
                                                                                     </StackPanel>
+
+                                                                                    <Button Command="{Binding DataContext.RemovePartDetailCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                                CommandParameter="{Binding}"
+                                                                                Style="{StaticResource darkButtonStyle}"
+                                                                                Padding="4"
+                                                                                Visibility="{Binding DataContext.PhieuSuaChua.IsReadOnly, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource InvertedBoolToVis}}">
+                                                                                        <fa:IconImage Icon="TrashCan" 
+                                                                                                      Style="{StaticResource normalIconButton}"
+                                                                                                      Foreground="{StaticResource lightFont}"
+                                                                                                      Margin="0"/>
+                                                                                    </Button>
                                                                                 </StackPanel>
                                                                             </DataTemplate>
                                                                         </ItemsControl.ItemTemplate>
@@ -747,7 +864,7 @@
                                                                Margin="0 0 8 0"/>
 
                                                     <TextBlock Style="{StaticResource buttonText}"
-                                                               Text="{Binding PhieuSuaChua.tongTienSuaChua, Converter={StaticResource NumberFormatConverter}}"
+                                                               Text="{Binding PhieuSuaChua.tongTienSuaChua, Converter={StaticResource NumberFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
                                                                FontSize="16"/>
                                                 </StackPanel>
 
@@ -759,7 +876,7 @@
                                                                Margin="0 0 8 0"/>
 
                                                     <TextBlock Style="{StaticResource buttonText}"
-                                                               Text="{Binding PhieuSuaChua.tongTienVTPT, Converter={StaticResource NumberFormatConverter}}"
+                                                               Text="{Binding PhieuSuaChua.tongTienVTPT, Converter={StaticResource NumberFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
                                                                FontSize="16"/>
                                                 </StackPanel>
 
@@ -772,21 +889,68 @@
                                                                Margin="0 0 8 0"/>
 
                                                     <TextBlock Style="{StaticResource buttonText}"
-                                                               Text="{Binding PhieuSuaChua.tongTien, Converter={StaticResource NumberFormatConverter}}"
+                                                               Text="{Binding PhieuSuaChua.tongTien, Converter={StaticResource NumberFormatConverter}, UpdateSourceTrigger=PropertyChanged}"
                                                                FontSize="16"
                                                                FontWeight="Bold"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Border>
                                     </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Visibility="{Binding PhieuSuaChua.IsReadOnly, Converter={StaticResource InvertedBoolToVis}}">
+                                        <Button Style="{StaticResource darkButtonStyle}"
+                                                Padding="8 4"
+                                                Margin="8 16"
+                                                Command="{Binding SaveRepairCommand}"
+                                                HorizontalAlignment="Right"
+                                                Grid.Column="2">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="Check"
+                                                              Style="{StaticResource normalIconButton}"
+                                                              Foreground="{StaticResource lightFont}"/>
+                                                <TextBlock Text="Xác nhận"
+                                                           Style="{StaticResource buttonText}"
+                                                           Foreground="{StaticResource lightFont}"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        <Button Style="{StaticResource darkButtonStyle}"
+                                                Padding="8 4"
+                                                Margin="8 16"
+                                                Command="{Binding CancelRepairCommand}"
+                                                HorizontalAlignment="Right"
+                                                Grid.Column="2">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:IconImage Icon="Xmark"
+                                                              Style="{StaticResource normalIconButton}"
+                                                              Foreground="{StaticResource lightFont}"/>
+                                                <TextBlock Text="Hủy bỏ"
+                                                           Style="{StaticResource buttonText}"
+                                                           Foreground="{StaticResource lightFont}"/>
+                                            </StackPanel>
+                                        </Button>                                        
+                                    </StackPanel>
                                 </StackPanel>
                             </Grid>
 
-                            <ListBox ItemsSource="{Binding DanhSachPhieuThu}"
-                             HorizontalContentAlignment="Stretch"
-                             VerticalContentAlignment="Top"
-                             VerticalAlignment="Top"
-                             Grid.Column="1">
+                            <StackPanel Grid.Column="1">
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0 0 0 16">
+                                    <TextBlock Style="{StaticResource buttonText}"
+                                           Text="Tổng nợ:"
+                                           FontSize="20"/>
+
+                                    <TextBlock Style="{StaticResource buttonText}"
+                                           Text="{Binding SelectingCar.tienNo, Converter={StaticResource NumberFormatConverter}}"
+                                           FontSize="20"
+                                           Margin="8 0"/>
+                                </StackPanel>
+                                
+                                <ListBox ItemsSource="{Binding DanhSachPhieuThu}"
+                                     HorizontalContentAlignment="Stretch"
+                                     VerticalContentAlignment="Top"
+                                     VerticalAlignment="Top">
                                 <ListBox.Template>
                                     <ControlTemplate>
                                         <Border Background="{StaticResource darkButtonBackground}"
@@ -907,14 +1071,238 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+                            </StackPanel>
                         </Grid>                        
                     </StackPanel>
                 </Grid>
 
                 <Grid Grid.Row="2"
-                      Visibility="{Binding CurrentView, Converter={StaticResource ViewToVisibilityConverter}, ConverterParameter=2}"
-                      Background="AntiqueWhite">
-                    <!-- Grid 3 content -->
+                      Visibility="{Binding CurrentView, Converter={StaticResource ViewToVisibilityConverter}, ConverterParameter=2}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Button Grid.Column="0"
+                            Style="{StaticResource transparentButtonStyle}"
+                            VerticalAlignment="Top"
+                            Command="{Binding BackToView}"
+                            Margin="0 0 8 0">
+                        <fa:IconImage Icon="ArrowLeft" 
+                                      Style="{StaticResource normalIconButton}"
+                                      Margin="0"
+                                      Width="28"
+                                      Height="20"/>
+                    </Button>
+                    
+                    <StackPanel Margin="8 0"
+                                Grid.Column="1">
+                        <TextBox Style="{StaticResource iconTextBox}"
+                                 Tag="Search"
+                                 Width="280"
+                                 helpers:TextBoxHelper.HintText="Tìm tên nội dung"
+                                 Text="{Binding SearchInfoKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 HorizontalAlignment="Left"
+                                 Margin="0 0 0 24"/>
+
+                        <TextBlock Text="Sắp xếp theo"
+                                   Style="{StaticResource buttonText}"
+                                   FontWeight="Bold"
+                                   Margin="0 0 0 8"/>
+
+                        <Border Padding="8 4 4 4"
+                                BorderBrush="{StaticResource darkBorder}"
+                                BorderThickness="2"
+                                CornerRadius="5">
+                            <StackPanel>                                
+                                <Grid Margin="0 0 0 8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Tên nội dung"
+                                Style="{StaticResource buttonText}"/>
+
+                                    <StackPanel Grid.Column="1"
+                                 Orientation="Horizontal">
+                                        <RadioButton Style="{StaticResource sortButton}"
+                                      Tag="SortAmountDown"
+                                      GroupName="sortInfoGroup"
+                                      Margin="8 0"
+                                      IsChecked="True"
+                                      Command="{Binding SortInfoCommand}"
+                                      CommandParameter="1"/>
+
+                                        <RadioButton Style="{StaticResource sortButton}"
+                                      Tag="SortAmountUp"
+                                      GroupName="sortInfoGroup"
+                                      Command="{Binding SortInfoCommand}"
+                                      CommandParameter="2"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Giá tiền"
+                                       Style="{StaticResource buttonText}"/>
+
+                                    <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal">
+                                        <RadioButton Style="{StaticResource sortButton}"
+                                             Tag="SortAmountDown"
+                                             GroupName="sortInfoGroup"
+                                             Margin="8 0"
+                                             Command="{Binding SortInfoCommand}"
+                                             CommandParameter="3"/>
+
+                                        <RadioButton Style="{StaticResource sortButton}"
+                                             Tag="SortAmountUp"
+                                             GroupName="sortInfoGroup"
+                                             Command="{Binding SortInfoCommand}"
+                                             CommandParameter="4"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Width="800"
+                                Margin="32 0"
+                                Grid.Column="2"
+                                HorizontalAlignment="Left">
+                        <TextBlock Text="Danh sách nội dung sửa chữa"
+                                   Style="{StaticResource buttonText}"
+                                   FontSize="20"
+                                   Grid.Row="0"
+                                   Margin="0 0 0 8"/>
+                        <Border CornerRadius="10"
+                                BorderThickness="2"
+                                BorderBrush="{StaticResource darkBorder}"
+                                VerticalAlignment="Top"
+                                Padding="12">
+                            <StackPanel>
+                                <Button Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Margin="0 0 0 8"
+                                        Command="{Binding AddRepairInfoCommand}"
+                                        HorizontalAlignment="Left"
+                                        Visibility="{Binding PhieuSuaChua.IsReadOnly, Converter={StaticResource InvertedBoolToVis}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconImage Icon="Add"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                        <TextBlock Text="Thêm nội dung sửa chữa"
+                                                   Style="{StaticResource buttonText}"
+                                                   Foreground="{StaticResource lightFont}"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <ItemsControl ItemsSource="{Binding DanhSachNoiDung}"
+                                              VerticalAlignment="Top">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <Border CornerRadius="5"
+                                                        BorderThickness="2"
+                                                        BorderBrush="{StaticResource darkBorder}"
+                                                        VerticalAlignment="Top"
+                                                        Padding="16 0"
+                                                        Margin="0 0 0 8">
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0 4">
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Width="400">
+                                                            <TextBlock Style="{StaticResource buttonText}"
+                                                                       Text="Nội dung sửa chữa:"
+                                                                       FontSize="16"
+                                                                       Margin="0 0 8 0"/>
+
+                                                            <TextBox Text="{Binding TenNDSC}"
+                                                                     Style="{StaticResource aLineTextBox}"
+                                                                     IsReadOnly="{Binding IsReadOnly}"
+                                                                     Margin="0 0 0 8"
+                                                                     Width="240"
+                                                                     FontWeight="Bold"/>
+                                                        </StackPanel>
+
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Width="240">
+                                                            <TextBlock Style="{StaticResource buttonText}"
+                                                                       Text="Giá tiền:"
+                                                                       FontSize="16"
+                                                                       Margin="0 0 8 0"/>
+
+                                                            <TextBox Text="{Binding giaTien, Converter={StaticResource NumberFormatConverter}}"
+                                                                     Style="{StaticResource aLineTextBox}"
+                                                                     IsReadOnly="{Binding IsReadOnly}"
+                                                                     Margin="0 0 0 8"
+                                                                     Width="120"
+                                                                     FontWeight="Bold"/>
+                                                        </StackPanel>
+
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Margin="8 0 0 0">
+                                                            <Button Command="{Binding DataContext.EditRepairInfoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    Style="{StaticResource darkButtonStyle}"
+                                                                    Padding="4"
+                                                                    Margin="8 0 0 0"
+                                                                    Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVis}, Mode=TwoWay}">
+                                                                <fa:IconImage Icon="Edit" 
+                                                                              Style="{StaticResource normalIconButton}"
+                                                                              Foreground="{StaticResource lightFont}"
+                                                                              Margin="0"/>
+                                                            </Button>
+
+                                                            <Button Command="{Binding DataContext.RemoveRepairInfoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    Style="{StaticResource darkButtonStyle}"
+                                                                    Padding="4"
+                                                                    Margin="8 0 0 0"
+                                                                    Visibility="{Binding IsReadOnly, Converter={StaticResource BoolToVis}, Mode=TwoWay}">
+                                                                <fa:IconImage Icon="TrashCan" 
+                                                                              Style="{StaticResource normalIconButton}"
+                                                                              Foreground="{StaticResource lightFont}"
+                                                                              Margin="0"/>
+                                                            </Button>
+
+                                                            <Button Command="{Binding DataContext.SaveRepairInfoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    Style="{StaticResource darkButtonStyle}"
+                                                                    Padding="4"
+                                                                    Margin="8 0 0 0"
+                                                                    Visibility="{Binding IsReadOnly, Converter={StaticResource InvertedBoolToVis}, Mode=TwoWay}"
+                                                                    CommandParameter="{Binding}">
+                                                                <fa:IconImage Icon="Check" 
+                                                                              Style="{StaticResource normalIconButton}"
+                                                                              Foreground="{StaticResource lightFont}"
+                                                                              Margin="0"/>
+                                                            </Button>
+
+                                                            <Button Command="{Binding DataContext.CancelRepairInfoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    Style="{StaticResource darkButtonStyle}"
+                                                                    Padding="4"
+                                                                    Margin="8 0 0 0"
+                                                                    Visibility="{Binding IsReadOnly, Converter={StaticResource InvertedBoolToVis}, Mode=TwoWay}">
+                                                                <fa:IconImage Icon="Xmark" 
+                                                                               Style="{StaticResource normalIconButton}"
+                                                                               Foreground="{StaticResource lightFont}"
+                                                                               Margin="0"/>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Border>

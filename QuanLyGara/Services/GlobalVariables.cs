@@ -28,6 +28,7 @@ namespace QuanLyGara.Services
         public List<PhieuNhapVTPTModel> danhSachPhieuNhap { get; set; }
         public List<NoiDungSuaChuaModel> danhSachNDSC { get; set; }
         public List<PhieuSuaChuaModel> danhSachPhieuSC { get; set; }
+        public List<CTPhieuSuaChuaModel> danhSachCTPhieuSC { get; set; }
         public List<XeModel> danhSachXe { get; set; }
         public List<PhieuThuTienModel> danhSachPhieuThuTien { get; set; }
 
@@ -200,16 +201,16 @@ namespace QuanLyGara.Services
 
             danhSachNDSC = new List<NoiDungSuaChuaModel>
             {
-                new NoiDungSuaChuaModel { maNDSC = 1, tenNDSC = "Thay nhớt", giaTien = 50000 },
-                new NoiDungSuaChuaModel { maNDSC = 2, tenNDSC = "Thay bình xăng", giaTien = 20000 },
-                new NoiDungSuaChuaModel { maNDSC = 3, tenNDSC = "Thay lốp xe", giaTien = 100000 },
-                new NoiDungSuaChuaModel { maNDSC = 4, tenNDSC = "Thay bóng đèn", giaTien = 5000 },
-                new NoiDungSuaChuaModel { maNDSC = 5, tenNDSC = "Thay động cơ", giaTien = 500000 },
-                new NoiDungSuaChuaModel { maNDSC = 6, tenNDSC = "Thay dây xích", giaTien = 100000 },
-                new NoiDungSuaChuaModel { maNDSC = 7, tenNDSC = "Thay phanh", giaTien = 200000 },
-                new NoiDungSuaChuaModel { maNDSC = 8, tenNDSC = "Thay dây ga", giaTien = 50000 },
-                new NoiDungSuaChuaModel { maNDSC = 9, tenNDSC = "Thay kính", giaTien = 150000 },
-                new NoiDungSuaChuaModel { maNDSC = 10, tenNDSC = "Rửa xe", giaTien = 200000 },
+                new() { maNDSC = 1, TenNDSC = "Thay nhớt", giaTien = 50000 },
+                new() { maNDSC = 2, TenNDSC = "Thay bình xăng", giaTien = 20000 },
+                new() { maNDSC = 3, TenNDSC = "Thay lốp xe", giaTien = 100000 },
+                new() { maNDSC = 4, TenNDSC = "Thay bóng đèn", giaTien = 5000 },
+                new() { maNDSC = 5, TenNDSC = "Thay động cơ", giaTien = 500000 },
+                new() { maNDSC = 6, TenNDSC = "Thay dây xích", giaTien = 100000 },
+                new() { maNDSC = 7, TenNDSC = "Thay phanh", giaTien = 200000 },
+                new() { maNDSC = 8, TenNDSC = "Thay dây ga", giaTien = 50000 },
+                new() { maNDSC = 9, TenNDSC = "Thay kính", giaTien = 150000 },
+                new() { maNDSC = 10, TenNDSC = "Rửa xe", giaTien = 200000 },
             };
 
             danhSachXe = new List<XeModel>
@@ -222,16 +223,9 @@ namespace QuanLyGara.Services
                 new() { bienSo = "36A-52535", HieuXe = danhSachHieuXe[5], tenXe = "Exciter", tienNo = 0 },
             };
 
-            danhSachPhieuSC = new List<PhieuSuaChuaModel>
+            danhSachCTPhieuSC = new List<CTPhieuSuaChuaModel>
             {
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 1,
-                    xe = danhSachXe[0],
-                    ngayLap = new DateTime(2023, 5, 1),
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 1,
                             maCTPSC = 1,
@@ -252,7 +246,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 1,
                             maCTPSC = 2,
@@ -273,7 +267,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 1,
                             maCTPSC = 3,
@@ -294,16 +288,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                    }
-                },
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 2,
-                    xe = danhSachXe[0],
-                    ngayLap = new DateTime(2024, 3, 5),
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 2,
                             maCTPSC = 4,
@@ -324,7 +309,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 2,
                             maCTPSC = 5,
@@ -345,7 +330,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 2,
                             maCTPSC = 6,
@@ -366,16 +351,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                    }
-                },
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 3,
-                    xe = danhSachXe[1],
-                    ngayLap = new DateTime(2024, 5, 10),
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 3,
                             maCTPSC = 7,
@@ -396,7 +372,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 3,
                             maCTPSC = 8,
@@ -417,7 +393,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 3,
                             maCTPSC = 9,
@@ -438,16 +414,7 @@ namespace QuanLyGara.Services
                                 },
                             }
                         },
-                    }
-                },
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 4,
-                    xe = danhSachXe[2],
-                    ngayLap = new DateTime(2024, 5, 15),
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        new CTPhieuSuaChuaModel
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 4,
                             maCTPSC = 10,
@@ -467,17 +434,8 @@ namespace QuanLyGara.Services
                                     SoLuong = 1,
                                 },
                             }
-                        }
-                    }
-                },
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 5,
-                    xe = danhSachXe[0],
-                    ngayLap = new DateTime(2024, 3, 20),
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        new CTPhieuSuaChuaModel
+                        },
+                new CTPhieuSuaChuaModel
                         {
                             maPSC = 5,
                             maCTPSC = 11,
@@ -498,6 +456,69 @@ namespace QuanLyGara.Services
                                 },
                             }
                         }
+            };
+
+            danhSachPhieuSC = new List<PhieuSuaChuaModel>
+            {
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 1,
+                    xe = danhSachXe[0],
+                    ngayLap = new DateTime(2023, 5, 1),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                       danhSachCTPhieuSC[0],
+                       danhSachCTPhieuSC[1],
+                       danhSachCTPhieuSC[2]
+                    }
+                },
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 2,
+                    xe = danhSachXe[0],
+                    ngayLap = new DateTime(2024, 3, 5),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                        danhSachCTPhieuSC[3],
+                        danhSachCTPhieuSC[4],
+                        danhSachCTPhieuSC[5]
+                    }
+                },
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 3,
+                    xe = danhSachXe[1],
+                    ngayLap = new DateTime(2024, 5, 10),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                        danhSachCTPhieuSC[6],
+                        danhSachCTPhieuSC[7],
+                        danhSachCTPhieuSC[8]
+                    }
+                },
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 4,
+                    xe = danhSachXe[2],
+                    ngayLap = new DateTime(2024, 5, 15),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                        danhSachCTPhieuSC[9]
+                    }
+                },
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 5,
+                    xe = danhSachXe[0],
+                    ngayLap = new DateTime(2024, 3, 20),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                        danhSachCTPhieuSC[10]
                     }
                 }
             };
