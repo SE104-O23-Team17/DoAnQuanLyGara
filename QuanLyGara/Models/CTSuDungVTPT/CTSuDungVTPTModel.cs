@@ -18,7 +18,7 @@ namespace QuanLyGara.Models.CTSuDungVTPT
 
         public CTSuDungVTPTModel() {
             maCTPSC = 0;
-            soLuong = 0;
+            soLuong = 1;
             VTPT = new VTPTModel();
         }
         public int maCTPSC { get; set; }
