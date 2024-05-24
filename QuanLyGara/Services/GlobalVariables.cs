@@ -564,8 +564,8 @@ namespace QuanLyGara.Services
 
                     maBCDS = 1,
                     thang = 1,
-                    nam = 2023,
-                    tongDoanhThu = 500000,
+                    nam = 2024,
+                    tongDoanhThu = 1000000,
                     DanhSachCT = new List<CTBaoCaoDoanhSoModel>
                     {
                         new CTBaoCaoDoanhSoModel
@@ -581,7 +581,7 @@ namespace QuanLyGara.Services
                             maBCDS = 1,
                             hieuXe = danhSachHieuXe[1],
                             soLuotSua = 4,
-                            thanhTien = 30000,
+                            thanhTien = 300000,
                             tiLe = 30,
                         },
                         new CTBaoCaoDoanhSoModel
@@ -589,7 +589,7 @@ namespace QuanLyGara.Services
                             maBCDS = 1,
                             hieuXe = danhSachHieuXe[2],
                             soLuotSua = 2,
-                            thanhTien = 20000,
+                            thanhTien = 200000,
                             tiLe = 20,
                         },
                     }
@@ -598,7 +598,7 @@ namespace QuanLyGara.Services
                 {
                     maBCDS = 2,
                     thang = 2,
-                    nam = 2023,
+                    nam = 2024,
                     tongDoanhThu = 200000,
                     DanhSachCT = new List<CTBaoCaoDoanhSoModel>
                     {

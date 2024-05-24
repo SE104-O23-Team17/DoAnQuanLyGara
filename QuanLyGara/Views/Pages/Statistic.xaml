@@ -113,7 +113,7 @@
 
                         <Button Style="{StaticResource darkButtonStyle}"
                                 Margin="30 0"
-                                Command="{Binding}">
+                                Command="{Binding TruyXuatCommand}">
                             <TextBlock Text="Truy xuất" 
                             Style="{StaticResource buttonText}" 
                             Foreground="{StaticResource lightFont}"
@@ -136,7 +136,7 @@
                                     <DataGridTextColumn Header="Hiệu xe" IsReadOnly="True" Width="600" Binding="{Binding hieuXe.tenHieuXe}"/>
                                     <DataGridTextColumn Header="Số lượt sửa" IsReadOnly="True" Width="300" Binding="{Binding soLuotSua}"/>
                                     <DataGridTextColumn Header="Thành tiền" IsReadOnly="True" Width="400" Binding="{Binding thanhTien}"/>
-                                    <DataGridTextColumn Header="Tỉ lệ" IsReadOnly="True" Width="300" Binding="{Binding tiLe}"/>
+                                    <DataGridTextColumn Header="Tỉ lệ (%)" IsReadOnly="True" Width="300" Binding="{Binding tiLe}"/>
                                 </DataGrid.Columns>
 
                             </DataGrid>
@@ -159,10 +159,11 @@
 
                 <StackPanel Grid.Row="3" Margin="0 20 0 20" HorizontalAlignment="Right">
                     <TextBlock Width="500"
-                               Text="Tổng doanh thu"
                                Style="{StaticResource buttonText}"
                                Margin="30 0"
-                               Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"/>
+                               Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"
+                               Text="{Binding BaoCaoDoanhSo.tongDoanhThu, StringFormat='Tổng doanh thu: {0}'}"/>
+                    
                 </StackPanel>
 
             </Grid>
