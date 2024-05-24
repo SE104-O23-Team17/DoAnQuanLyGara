@@ -8,7 +8,7 @@
              xmlns:services="clr-namespace:QuanLyGara.Services"
              xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="1600">
 
     <UserControl.DataContext>
         <viewmodel:StatisticViewModel/>
@@ -31,6 +31,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Margin="0 0 0 0">
@@ -105,39 +106,64 @@
                                   DisplayMemberPath="tenThang"
                                   Style="{StaticResource lightComboBoxStyle}"/>
                         <ComboBox Width="100"
-                                  Margin="20 0 0 0"
+                                  Margin="10 0 0 0"
                                   ItemsSource="{Binding DanhSachNam}"
                                   SelectedItem="{Binding SelectedNam, UpdateSourceTrigger=PropertyChanged}"
                                   Style="{StaticResource lightComboBoxStyle}"/>
+
+                        <Button Style="{StaticResource darkButtonStyle}"
+                                Margin="30 0"
+                                Command="{Binding TruyXuatCommand}">
+                            <TextBlock Text="Truy xuất" 
+                            Style="{StaticResource buttonText}" 
+                            Foreground="{StaticResource lightFont}"
+                            Margin="0 0 5 0"/>
+                        </Button>
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Margin="0 20 0 0">
-                    <Border Background="{StaticResource darkBorder}"
-                            CornerRadius="10"
-                            VerticalAlignment="Top">
-                        <DataGrid Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"
-                                  x:Name="BaoCaoThang"
-                                  ItemsSource="{Binding BaoCaoDoanhSo.DanhSachCT, Mode=TwoWay}"
-                                  Style="{StaticResource NoScrollDataGridStyle}"
-                                  CellStyle="{StaticResource DataGridCellStyle}" 
-                                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                  RowStyle="{StaticResource DataGridRowStyle}"
-                                  VerticalAlignment="Top">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Hiệu xe" IsReadOnly="True" Width="*" Binding="{Binding hieuXe}"/>
+                        <Border Grid.Row="0" Margin="0 20 0 0" Background="{StaticResource darkBorder}" CornerRadius="10" Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}">
+                            <DataGrid x:Name="BaoCaoThang" ItemsSource="{Binding BaoCaoDoanhSo.DanhSachCT, Mode=TwoWay}" Style="{StaticResource NoScrollDataGridStyle}" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" RowStyle="{StaticResource DataGridRowStyle}" VerticalAlignment="Top">
 
-                                <DataGridTextColumn Header="Số lượt sửa" IsReadOnly="True" Width="*" Binding="{Binding soLuotSua}"/>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Hiệu xe" IsReadOnly="True" Width="600" Binding="{Binding hieuXe.tenHieuXe}"/>
+                                    <DataGridTextColumn Header="Số lượt sửa" IsReadOnly="True" Width="300" Binding="{Binding soLuotSua}"/>
+                                    <DataGridTextColumn Header="Thành tiền" IsReadOnly="True" Width="400" Binding="{Binding thanhTien}"/>
+                                    <DataGridTextColumn Header="Tỉ lệ (%)" IsReadOnly="True" Width="300" Binding="{Binding tiLe}"/>
+                                </DataGrid.Columns>
 
-                                <DataGridTextColumn Header="Thành tiền" IsReadOnly="True" Width="*" Binding="{Binding thanhTien}"/>
+                            </DataGrid>
+                        </Border>
 
-                                <DataGridTextColumn Header="Tỉ lệ" IsReadOnly="True" Width="*" Binding="{Binding tiLe}"/>
+                        <Border Grid.Row="1" Margin="0 20 0 0" Background="{StaticResource darkBorder}" CornerRadius="10" Visibility="{Binding IsSwitching, Converter={StaticResource BoolToVis}}">
+                            <DataGrid x:Name="BaoCaoTon" ItemsSource="{Binding BaoCaoTon, Mode=TwoWay}" Style="{StaticResource NoScrollDataGridStyle2}" CellStyle="{StaticResource DataGridCellStyle2}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}" RowStyle="{StaticResource DataGridRowStyle2}" VerticalAlignment="Top">
 
-                            </DataGrid.Columns>
-                            
-                        </DataGrid>
-                    </Border>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Vật tư phụ tùng" IsReadOnly="True" Width="700" Binding="{Binding vtpt.tenVTPT}"/>
+                                    <DataGridTextColumn Header="Tồn đầu" IsReadOnly="True" Width="300" Binding="{Binding tonDau}"/>
+                                    <DataGridTextColumn Header="Phát sinh" IsReadOnly="True" Width="300" Binding="{Binding phatSinh}"/>
+                                    <DataGridTextColumn Header="Tồn cuối" IsReadOnly="True" Width="300" Binding="{Binding tonCuoi}"/>
+                                </DataGrid.Columns>
+
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3" Margin="0 20 0 20" HorizontalAlignment="Right">
+                    <TextBlock Width="500"
+                               Style="{StaticResource buttonText}"
+                               Margin="30 0"
+                               Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"
+                               Text="{Binding BaoCaoDoanhSo.tongDoanhThu, StringFormat='Tổng doanh thu: {0}'}"/>
+                    
                 </StackPanel>
 
             </Grid>
