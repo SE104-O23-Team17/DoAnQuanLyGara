@@ -39,7 +39,7 @@
             Background="{StaticResource lightBackground}">
         <Grid>
             <Grid 
-                Visibility="{Binding IsLogin, Converter={StaticResource BoolToVis}}">
+                Visibility="{Binding IsLogin, Converter={StaticResource InvertedBoolToVis}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -140,7 +140,7 @@
             </Grid>
 
             <Grid
-                Visibility="{Binding IsLogin, Converter={StaticResource InvertedBoolToVis}}">
+                Visibility="{Binding IsLogin, Converter={StaticResource BoolToVis}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="2*"/>

@@ -50,19 +50,20 @@ namespace QuanLyGara.Services
                 return instance;
             }
         }
+
         private Global()
         {
-            garaHienTai = new GaraModel();
-            tiLeTinhDonGiaBan = 105;
-            soXeSuaChuaToiDa = 30;
-            apDungQDKiemTraSoTienThu = true;
-
             danhSachGara = new List<GaraModel> {
                 new GaraModel { ID = 1, TaiKhoan = "Gara 1", TenGara = "Gara1", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
                 new GaraModel { ID = 2, TaiKhoan = "Gara 2", TenGara = "Gara2", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1" },
                 new GaraModel { ID = 3, TaiKhoan = "Gara 3", TenGara = "Gara3", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
                 new GaraModel { ID = 4, TaiKhoan = "Gara 4", TenGara = "Gara4", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
             };
+
+            garaHienTai = danhSachGara.FirstOrDefault(g => g.ID == 1);
+            tiLeTinhDonGiaBan = 105;
+            soXeSuaChuaToiDa = 30;
+            apDungQDKiemTraSoTienThu = true;
 
             danhSachHieuXe = new List<HieuXeModel>{
                 new HieuXeModel { maHieuXe = 1, TenHieuXe = "Toyota" },
@@ -699,7 +700,43 @@ namespace QuanLyGara.Services
                     phatSinh = 80,
                     tonCuoi = 70,
                 },
-               
+                new BaoCaoTonModel
+                {
+                    thang = 2,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[2],
+                    tonDau = 30,
+                    phatSinh = 70,
+                    tonCuoi = 50
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 2,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[5],
+                    tonDau = 70,
+                    phatSinh = 40,
+                    tonCuoi = 80
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 2,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[1],
+                    tonDau = 30,
+                    phatSinh = 70,
+                    tonCuoi = 20
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 2,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[7],
+                    tonDau = 80,
+                    phatSinh = 30,
+                    tonCuoi = 40,
+                },
+
             };
         }
     }

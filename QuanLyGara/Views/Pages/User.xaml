@@ -4,13 +4,24 @@
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
           xmlns:local="clr-namespace:QuanLyGara.Views.Pages"
+          xmlns:services="clr-namespace:QuanLyGara.Services"
+          xmlns:helper="clr-namespace:QuanLyGara.Helpers"
           xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Pages"
           mc:Ignorable="d" 
-          d:DesignHeight="1600" d:DesignWidth="800">
+          d:DesignHeight="800" d:DesignWidth="800">
 
     <UserControl.DataContext>
         <viewmodel:UserViewModel/>
     </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <services:NumberFormatConverter x:Key="NumberFormatConverter"/>
+        <services:DecimalSeparatorConverter x:Key="DecimalSeparatorConverter"/>
+        <services:InvertedBooleanToVisibilityConverter x:Key="InvertedBoolToVis"/>
+        <services:ModelAndTextConverter x:Key="ModelAndTextConverter"/>
+        <services:InvertedBool x:Key="InvertedBool"/>
+    </UserControl.Resources>
 
     <Grid Background="{StaticResource darkBackground}">
         <Grid.ColumnDefinitions>
@@ -20,18 +31,167 @@
 
         <Border Grid.Column="0"
             Background="{StaticResource lightBackground}"
-            Margin="50"
+            Margin="10"
             CornerRadius="15">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Tài khoản: "
+                                   Margin="10"
+                                   FontSize="16"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+
+                        <TextBlock Name="accountTextBox" 
+                                   Text="{Binding getGara.TaiKhoan}"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="10"
+                                   FontSize="24"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1">
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Tên Gara: "
+                                   Margin="10"
+                                   FontSize="16"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+
+                        <TextBlock Name="garanameTextBox" 
+                                   Text="{Binding getGara.TenGara}"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="10"
+                                   FontSize="24"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2">
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Số điện thoại:"
+                                   Margin="10"
+                                   FontSize="16"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+
+                        <TextBlock Name="phoneTextBox" 
+                                   Text="{Binding getGara.Sdt}"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="10"
+                                   FontSize="24"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3">
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Địa chỉ: "
+                                   Margin="10"
+                                   FontSize="16"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+
+                        <TextBlock Name="locationTextBox" 
+                                   Text="{Binding getGara.DiaChi}"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="10"
+                                   FontSize="24"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="4" Margin="20">
+                <Button
+                        Content="Đăng xuất" 
+                        Style="{StaticResource darkButtonStyle}"
+                        FontSize="16"
+                        FontFamily="Monsterat"
+                        Command="{Binding LogOut}" 
+                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                </StackPanel>
+
+            </Grid>
+            
         </Border>
 
         <Border Grid.Column="1"
             Background="{StaticResource lightBackground}"
-            Margin="50"
+            Margin="10"
             CornerRadius="15">
 
             <Grid>
-                
+                <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Margin="50">
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Mật khẩu cũ"
+                                   Margin="10"
+                                   FontSize="16"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+
+                        <PasswordBox helper:PasswordBoxHelper.Password="{Binding OldPassword, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     Style="{StaticResource aLinePasswordBox}"
+                                     Margin="20 10 20 20"/>
+                    </StackPanel>
+                    <StackPanel Margin="20 0">
+                        <TextBlock Text="Mật khẩu mới"
+                                   Margin="10"
+                                   FontSize="16"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+
+                        <PasswordBox helper:PasswordBoxHelper.Password="{Binding NewPassword, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     Style="{StaticResource aLinePasswordBox}"
+                                     Margin="20 10 20 20"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="20 20">
+                        <TextBlock Text="Xác nhận mật khẩu mới"
+                                   Margin="10"
+                                   FontSize="16"
+                                   FontFamily="Monsterat"
+                                   Foreground="{StaticResource darkFont}"/>
+
+                        <PasswordBox helper:PasswordBoxHelper.Password="{Binding ConfirmPass, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     Style="{StaticResource aLinePasswordBox}"
+                                     Margin="20 10"/>
+                    </StackPanel>
+
+                    <Button Grid.Row="1"
+                            Margin="0 0 0 50"
+                            Content="Đổi mật khẩu" 
+                            Style="{StaticResource darkButtonStyle}"
+                            FontSize="16"
+                            FontFamily="Monsterat"
+                            Command="{Binding ChangePasswordCommand}" 
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                </StackPanel>
+
             </Grid>
+            
         </Border>
     </Grid>
 </UserControl>

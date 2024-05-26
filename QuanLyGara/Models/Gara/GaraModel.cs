@@ -7,6 +7,19 @@ namespace QuanLyGara.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private GaraModel garaHienTai;
+
+        public GaraModel GaraHienTai
+        {
+            get { return garaHienTai; }
+            set
+            {
+                garaHienTai = value;
+                OnPropertyChanged(nameof(GaraHienTai));
+            }
+        }
+
+
         private int _id;
         private string _taiKhoan;
         private string _tenGara;
