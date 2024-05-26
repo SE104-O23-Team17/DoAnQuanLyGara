@@ -12,9 +12,26 @@
         <viewmodel:UserViewModel/>
     </UserControl.DataContext>
 
-    <ScrollViewer Style="{StaticResource customScrollViewer}">
-        <Border Background="Aqua">
-            <Button Margin="0 1500 0 0" Content="Test" Style="{StaticResource darkButtonStyle}"/>
+    <Grid Background="{StaticResource darkBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0"
+            Background="{StaticResource lightBackground}"
+            Margin="50"
+            CornerRadius="15">
         </Border>
-    </ScrollViewer>
+
+        <Border Grid.Column="1"
+            Background="{StaticResource lightBackground}"
+            Margin="50"
+            CornerRadius="15">
+
+            <Grid>
+                
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>

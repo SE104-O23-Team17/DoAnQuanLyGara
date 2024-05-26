@@ -6,17 +6,60 @@ namespace QuanLyGara.Models
     public class GaraModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private int _id;
+        private string _taiKhoan;
+        private string _tenGara;
+        private string _matKhau;
+        private string _sdt;
+        private string _diaChi;
+        private string _email;
+
+        public int ID
+        {
+            get { return _id; }
+            set { _id = value; OnPropertyChanged(); }
+        }
+
+        public string TaiKhoan
+        {
+            get { return _taiKhoan; }
+            set { _taiKhoan = value; OnPropertyChanged(); }
+        }
+
+        public string TenGara
+        {
+            get { return _tenGara; }
+            set { _tenGara = value; OnPropertyChanged(); }
+        }
+
+        public string MatKhau
+        {
+            get { return _matKhau; }
+            set { _matKhau = value; OnPropertyChanged(); }
+        }
+
+        public string Sdt
+        {
+            get { return _sdt; }
+            set { _sdt = value; OnPropertyChanged(); }
+        }
+
+        public string DiaChi
+        {
+            get { return _diaChi; }
+            set { _diaChi = value; OnPropertyChanged(); }
+        }
+
+        public string Email
+        {
+            get { return _email; }
+            set { _email = value; OnPropertyChanged(); }
+        }
+
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public GaraModel() { }
-        public int ID { get; set; }
-        public string TaiKhoan { get; set; }
-        public string TenGara { get; set; }
-        public string MatKhau { get; set; }
-        public string Sdt { get; set; }
-        public string DiaChi { get; set; }
-        public string Email { get; set; }
     }
 }
