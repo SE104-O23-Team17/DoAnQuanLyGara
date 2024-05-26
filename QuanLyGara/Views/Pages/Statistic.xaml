@@ -133,7 +133,7 @@
                             <DataGrid x:Name="BaoCaoThang" ItemsSource="{Binding BaoCaoDoanhSo.DanhSachCT, Mode=TwoWay}" Style="{StaticResource NoScrollDataGridStyle}" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" RowStyle="{StaticResource DataGridRowStyle}" VerticalAlignment="Top">
 
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Hiệu xe" IsReadOnly="True" Width="600" Binding="{Binding hieuXe.tenHieuXe}"/>
+                                    <DataGridTextColumn Header="Hiệu xe" IsReadOnly="True" Width="600" Binding="{Binding hieuXe.TenHieuXe}"/>
                                     <DataGridTextColumn Header="Số lượt sửa" IsReadOnly="True" Width="300" Binding="{Binding soLuotSua}"/>
                                     <DataGridTextColumn Header="Thành tiền" IsReadOnly="True" Width="400" Binding="{Binding thanhTien}"/>
                                     <DataGridTextColumn Header="Tỉ lệ (%)" IsReadOnly="True" Width="300" Binding="{Binding tiLe}"/>
