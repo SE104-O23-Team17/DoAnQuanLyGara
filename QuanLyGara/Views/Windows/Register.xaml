@@ -38,98 +38,95 @@
             BorderThickness="2"
             Background="{StaticResource lightBackground}">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
             <Grid 
-                Visibility="{Binding IsLogin, Converter={StaticResource InvertedBoolToVis}}">
+                Visibility="{Binding IsLogin, Converter={StaticResource BoolToVis}}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <Button Grid.Row="0"
+                        Style="{StaticResource transparentButtonStyle}"
+                        HorizontalAlignment="Left"
+                        Command="{Binding SwitchToLoginView}"
+                        Margin="0 8">
+                    <fa:IconImage Icon="ArrowLeft" 
+                                  Style="{StaticResource normalIconButton}"
+                                  Margin="0"
+                                  Width="28"
+                                  Height="20"/>
+                </Button>
 
                 <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-                    <Image Source="C:\Users\Admin\Downloads\garage-icon.png" 
-                           Width="36" 
-                           Height="36" 
-                           Margin="0,0,8,8"/>
+                            HorizontalAlignment="Center"
+                            Grid.Row="1">
+                    <fa:IconImage Icon="Warehouse"
+                                  Style="{StaticResource normalIconButton}"
+                                  Height="50"
+                                  Width="50"
+                                  Margin="0 0 16 8"
+                                  Foreground="{StaticResource darkBorder}"/>
+                    
                     <TextBlock
-                               Text="Đăng ký Gara"
+                               Text="Đăng ký"
                                Style="{StaticResource buttonText}"
-                               FontSize="36"/>
+                               FontSize="36"
+                        Foreground="{StaticResource darkBorder}"/>
                 </StackPanel>
 
-
-
                 <StackPanel Grid.Row="2"
-                            Margin="60,20,60,20">
+                            Width="400">
 
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel>
                         <TextBlock Text="Tên Gara:"
                                    Style="{StaticResource buttonText}"
                                    Margin="0 0 8 0"/>
 
                         <TextBox Style="{StaticResource aLineTextBox}"
-                                 Width="395"
+                                 Width="400"
                                  Text="{Binding GaraMoi.TenGara, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0 16">
+                    <StackPanel Margin="0 16">
                         <TextBlock Text="Mật khẩu:"
                                    Style="{StaticResource buttonText}"
                                    Margin="0 0 8 0"/>
                         <TextBox Style="{StaticResource aLineTextBox}"
                                  Text="{Binding GaraMoi.MatKhau, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 Width="396">
-                        </TextBox>
+                                 Width="400"/>
+
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0 0 0 16">
+                    <StackPanel Margin="0 0 0 16">
                         <TextBlock Text="Số điện thoại:"
                                    Style="{StaticResource buttonText}"
                                    Margin="0 0 8 0"/>
 
                         <TextBox Style="{StaticResource aLineTextBox}"
                                  Text="{Binding GaraMoi.Sdt, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 Width="369">
-                        </TextBox>
+                                 Width="400"/>
+
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0 0 0 16">
+                    <StackPanel Margin="0 0 0 16">
                         <TextBlock Text="Địa chỉ:"
                                    Style="{StaticResource buttonText}"
                                    Margin="0 0 8 0"/>
 
                         <TextBox Style="{StaticResource aLineTextBox}"
                                  Text="{Binding GaraMoi.DiaChi, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 Width="415">
-                        </TextBox>
+                                 Width="400"/>
+
                     </StackPanel>
+                </StackPanel>
 
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0 0 0 16">
-                        <TextBlock Text="Email:"
-                                   Style="{StaticResource buttonText}"
-                                   Margin="0 0 8 0"/>
-
-                        <TextBox Style="{StaticResource aLineTextBox}"
-                                 Text="{Binding GaraMoi.Email, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 Width="426">
-                        </TextBox>
-                    </StackPanel>
-
+                <StackPanel Grid.Row="3">
                     <Button Content="Đăng ký"
                             Style="{StaticResource darkButtonStyle}"
+                            FontSize="20"
+                            Padding="12 6"
                             Command="{Binding SaveCommand}"
-                            Width="480"
                             Margin="0 0 0 16"/>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Bạn đã có tài khoản? "
@@ -138,18 +135,17 @@
                         <Button Content="Đăng nhập"
                                 Style="{StaticResource textButton}"
                                 Command="{Binding SwitchToLoginView}"/>
-
                     </StackPanel>
                 </StackPanel>
             </Grid>
 
             <Grid
-                Visibility="{Binding IsLogin, Converter={StaticResource BoolToVis}}">
+                Visibility="{Binding IsLogin, Converter={StaticResource InvertedBoolToVis}}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
                 <Button x:Name="winCloseButton"
@@ -158,64 +154,127 @@
                           Command="{Binding CloseCommand}"
                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                           Grid.Row="0"
-                          HorizontalAlignment="Right"
-                          Margin="0,0,0,220">
+                          HorizontalAlignment="Right">
                     <fa:IconImage Icon="Xmark"
-                                  Style="{StaticResource winCtrIcon}" Height="32"/>
+                                  Style="{StaticResource winCtrIcon}"   Height="32"/>
                 </Button>
-
+                
                 <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                    <Image Source="C:\Users\Admin\Downloads\garage-icon.png" 
-                       Width="36" 
-                       Height="36" 
-                       Margin="0,0,8,8"/>
-                    <TextBlock Grid.Row="2"
-                           Text="Đăng nhập"
-                           HorizontalAlignment="Center"
-                           Style="{StaticResource buttonText}"
-                           FontSize="36"/>
+                        HorizontalAlignment="Center"
+                            Grid.Row="1">
+                    <fa:IconImage Icon="Warehouse"
+                                  Style="{StaticResource normalIconButton}"
+                                  Height="50"
+                                  Width="50"
+                                  Margin="0 0 16 8"
+                                  Foreground="{StaticResource darkBorder}"/>
+                    
+                    <TextBlock Text="Đăng nhập"
+                               Style="{StaticResource buttonText}"
+                               FontSize="36"
+                               Foreground="{StaticResource darkBorder}"/>
                 </StackPanel>
 
-
-
-                <StackPanel Grid.Row="2"
-                        Margin="60,20,60,20">
-
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Tên Gara:"
-                               Style="{StaticResource buttonText}"
-                               Margin="0 0 8 0"/>
-
-                        <TextBox Style="{StaticResource aLineTextBox}"
-                             Width="395"
-                             Text="{Binding GaraMoi.TenGara, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal"
-                            Margin="0 16">
-                        <TextBlock Text="Mật khẩu:"
-                               Style="{StaticResource buttonText}"
-                               Margin="0 0 8 0"/>
-                        <TextBox Style="{StaticResource aLineTextBox}"
-                             Text="{Binding GaraMoi.MatKhau, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Width="396">
-                        </TextBox>
-                    </StackPanel>
+                <StackPanel Grid.Row="2" Width="360">
                     <StackPanel>
-                        <Button Content="Đăng nhập"
-                        Style="{StaticResource darkButtonStyle}"
-                        Command="{Binding LoginCommand}"
-                        Width="476"
-                        Margin="0 0 0 16"/>
+                        <TextBlock Text="Tên đăng nhập"
+                                       Margin="0, 20, 0, 5"
+                                       FontSize="20"
+                                       FontFamily="Monsterat"
+                                       Foreground="{StaticResource darkFont}"/>
 
-                        <Button Content="Đăng kí tài khoản mới"
-                        Style="{StaticResource lightButtonStyle}"
-                        Command="{Binding SwitchToResgiterView}"
-                        Width="476"
-                        Margin="0 0 0 16"/>
+                            <Border 
+                                    BorderThickness="1"
+                                    Width="360"
+                                    CornerRadius="5"
+                                    BorderBrush="{StaticResource darkBorder}">
 
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <fa:IconImage Icon="UserAlt"
+              Style="{StaticResource normalIconButton}"
+              Height="30"
+              Width="30"
+              Margin="8 8 4 8"
+              Foreground="{StaticResource darkBorder}"/>
+
+                                    <TextBox x:Name="tb_email"
+                                             Text="{Binding TaiKhoan}"
+                                             Style="{StaticResource usernameTextBox}"/>     
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+
+                    <StackPanel Margin="0 16 0 0">
+                            <TextBlock Text="Mật khẩu"
+                                       Margin="0, 20, 0, 5"
+                                       FontSize="20"
+                                       FontFamily="Monsterat"
+                                       Foreground="{StaticResource darkFont}"/>
+
+                        <Border BorderThickness="1"
+                                    Width="360"
+                                    CornerRadius="5"
+                                    BorderBrush="{StaticResource darkBorder}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <fa:IconImage Icon="Lock"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Height="30"
+                                                      Width="30"
+                                                      Margin="8 8 4 8"
+                                                      Foreground="{StaticResource darkBorder}"/>
+
+                                <PasswordBox helpers:PasswordBoxHelper.Password="{Binding MatKhau, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                             Style="{StaticResource passBox}"
+                                             Grid.Column="1"
+                                             Visibility="{Binding IsChecked, ElementName=ShowPasswordCheckBox, Converter={StaticResource InvertedBoolToVis}}"/>
+
+                                <TextBox Text="{Binding MatKhau, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   
+                                         Visibility="{Binding IsChecked, ElementName=ShowPasswordCheckBox, Converter={StaticResource BoolToVis}}"
+                                         Grid.Column="1"
+                                         Style="{StaticResource usernameTextBox}"/>
+                            </Grid>
+                        </Border>
+
+                        <StackPanel Orientation="Horizontal"
+                                                Margin="16 8 0 20">
+                            <CheckBox x:Name="ShowPasswordCheckBox"
+                                      Margin="0 0 8 0"
+                                      Style="{StaticResource RoundCheckBoxStyle}"/>
+                            <TextBlock Text="Hiển thị mật khẩu"
+                                                   Style="{StaticResource buttonText}"
+                                                   Margin="0 0 0 0"/>
+                        </StackPanel>
                     </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3">
+                    <Button Content="Đăng nhập"
+                            Style="{StaticResource darkButtonStyle}"
+                            Command="{Binding LoginCommand}"
+                            FontSize="20"
+                            Padding="12 6"/>
+
+                    <TextBlock Text="-Hoặc-"
+   Style="{StaticResource buttonText}"
+   HorizontalAlignment="Center"
+   Margin="0 16"/>
+
+                    <Button Content="Đăng kí tài khoản mới"
+        FontSize="20"
+        Style="{StaticResource textButton}"
+        Command="{Binding SwitchToResgiterView}"/>
                 </StackPanel>
             </Grid>
         </Grid>

@@ -29,28 +29,6 @@ namespace QuanLyGara.ViewModels.Windows
 
         private IDialogService dialogService;
 
-        private string id;
-        public string ID
-        {
-            get => id;
-            set
-            {
-                id = value;
-                OnPropertyChanged(nameof(ID));
-
-            }
-        }
-        private string tengara;
-        public string TenGara
-        {
-            get => tengara;
-            set
-            {
-                tengara = value;
-                OnPropertyChanged(nameof(TenGara));
-
-            }
-        }
         private string taikhoan;
         public string TaiKhoan
         {
@@ -63,7 +41,6 @@ namespace QuanLyGara.ViewModels.Windows
         }
 
         private string matkhau;
-
         public string MatKhau
         {
             get => matkhau;
@@ -71,39 +48,6 @@ namespace QuanLyGara.ViewModels.Windows
             {
                 matkhau = value;
                 OnPropertyChanged(nameof(MatKhau));
-            }
-        }
-
-        private string sdt;
-        public string Sdt
-        {
-            get => sdt;
-            set
-            {
-                sdt = value;
-                OnPropertyChanged(nameof(Sdt));
-            }
-        }
-
-        private string diachi;
-        public string DiaChi
-        {
-            get => diachi;
-            set
-            {
-                sdt = value;
-                OnPropertyChanged(nameof(DiaChi));
-            }
-        }
-
-        private string email;
-        public string Email
-        {
-            get => email;
-            set
-            {
-                sdt = value;
-                OnPropertyChanged(nameof(Email));
             }
         }
 
@@ -129,10 +73,10 @@ namespace QuanLyGara.ViewModels.Windows
             dialogService = new DialogService();
             GaraMoi = new GaraModel();
             danhSachGara = new List<GaraModel> {
-                new GaraModel { ID = 1, TaiKhoan = "Gara 1", TenGara = "Gara1", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1", Email = "abc@gmail.com" },
-                new GaraModel { ID = 2, TaiKhoan = "Gara 2", TenGara = "Gara2", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1", Email = "abc@gmail.com" },
-                new GaraModel { ID = 3, TaiKhoan = "Gara 3", TenGara = "Gara3", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1", Email = "abc@gmail.com" },
-                new GaraModel { ID = 4, TaiKhoan = "Gara 4", TenGara = "Gara4", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1", Email = "abc@gmail.com" },
+                new GaraModel { ID = 1, TaiKhoan = "Gara 1", TenGara = "Gara1", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1",},
+                new GaraModel { ID = 2, TaiKhoan = "Gara 2", TenGara = "Gara2", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
+                new GaraModel { ID = 3, TaiKhoan = "Gara 3", TenGara = "Gara3", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
+                new GaraModel { ID = 4, TaiKhoan = "Gara 4", TenGara = "Gara4", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
             };
 
 
@@ -188,8 +132,7 @@ namespace QuanLyGara.ViewModels.Windows
                     TenGara = GaraMoi.TenGara,
                     MatKhau = GaraMoi.MatKhau,
                     Sdt = GaraMoi.Sdt,
-                    DiaChi = GaraMoi.DiaChi,
-                    Email = GaraMoi.Email
+                    DiaChi = GaraMoi.DiaChi
                 });
 
                 dialogService.ShowInfoDialog(
