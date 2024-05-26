@@ -1,9 +1,11 @@
-﻿using QuanLyGara.Models;
+﻿using QuanLyGara.Helpers;
+using QuanLyGara.Models;
 using QuanLyGara.Services;
 using QuanLyGara.Views.Windows;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,36 +53,76 @@ namespace QuanLyGara.ViewModels.Windows
             }
         }
 
+        private string nhapLaiMatKhau;
+        public string NhapLaiMatKhau
+        {
+            get => nhapLaiMatKhau;
+            set
+            {
+                nhapLaiMatKhau = value;
+                OnPropertyChanged(nameof(NhapLaiMatKhau));
+                UpdatePasswordConfirmationError();
+            }
+        }
+
         private GaraModel garaMoi;
         public GaraModel GaraMoi
         {
             get => garaMoi;
             set
             {
+                if (garaMoi != null)
+                {
+                    garaMoi.PropertyChanged -= GaraMoi_PropertyChanged;
+                }
+
                 garaMoi = value;
+
+                if (garaMoi != null)
+                {
+                    garaMoi.PropertyChanged += GaraMoi_PropertyChanged;
+                }
+
                 OnPropertyChanged(nameof(GaraMoi));
             }
         }
-        public List<GaraModel> danhSachGara { get; set; }
 
+        private void GaraMoi_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(GaraModel.Sdt))
+            {
+                UpdatePhoneNumberLengthError();
+            }
+            else
+            {
+                if (e.PropertyName == nameof(GaraModel.MatKhau))
+                {
+                    UpdatePasswordConfirmationError();
+                }
+            }            
+        }
+
+        private List<GaraModel> danhSachGara { get; set; }
         public ICommand CloseCommand { get; }
         public ICommand SaveCommand { get; set; }
         public ICommand LoginCommand { get; set; }
         public ICommand SwitchToLoginView { get; set; }
         public ICommand SwitchToResgiterView { get; set; }
+
+        private void init()
+        {
+            isLogin = true;
+            GaraMoi = new GaraModel();
+            taikhoan = "";
+        }
+
         public RegisterViewModel()
         {
             dialogService = new DialogService();
-            GaraMoi = new GaraModel();
-            danhSachGara = new List<GaraModel> {
-                new GaraModel { ID = 1, TaiKhoan = "Gara 1", TenGara = "Gara1", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1",},
-                new GaraModel { ID = 2, TaiKhoan = "Gara 2", TenGara = "Gara2", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
-                new GaraModel { ID = 3, TaiKhoan = "Gara 3", TenGara = "Gara3", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
-                new GaraModel { ID = 4, TaiKhoan = "Gara 4", TenGara = "Gara4", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
-            };
+            danhSachGara = Global.Instance.danhSachGara;
+            PasswordConfirmationError = "";
+            init();
 
-
-            isLogin = true;
             CloseCommand = new ViewModelCommand(ExecuteCloseCommand);
             SaveCommand = new ViewModelCommand(ExecuteSaveCommand);
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand);
@@ -91,59 +133,92 @@ namespace QuanLyGara.ViewModels.Windows
 
         private void ExecuteLoginCommand(object obj)
         {
-            bool isLoginSuccessful = danhSachGara.Any(gara => gara.TenGara == GaraMoi.TenGara && gara.MatKhau == GaraMoi.MatKhau);
-
-            if (isLoginSuccessful)
+            if (String.IsNullOrEmpty(taikhoan) || String.IsNullOrEmpty(matkhau))
             {
                 dialogService.ShowInfoDialog(
-                    "",
-                    "Đăng nhập thành công!",
+                    "Thông báo",
+                    "Vui lòng nhập đầy đủ thông tin!",
                     () => { }
                 );
+                return;
+            }
+
+            if (danhSachGara.Any(gara => gara.TaiKhoan == taikhoan && gara.MatKhau == matkhau))
+            {
+                GaraModel login = danhSachGara.First(gara => gara.TaiKhoan == taikhoan && gara.MatKhau == matkhau);
+                Global.Instance.garaHienTai = login;
+
+                var loginWindow = obj as Window;
+                loginWindow.Hide();
+
+                MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
+                MainWindow mainWindow = new MainWindow { DataContext = mainWindowViewModel };
+                System.Windows.Application.Current.MainWindow = mainWindow;
+                mainWindow.Show();
+
+                loginWindow.Close();
             }
             else
             {
                 dialogService.ShowInfoDialog(
-                    "",
-                    "Đăng nhập thất bại: sai tên tài khoản hoặc mật khẩu",
+                    "Thông báo",
+                    "Đăng nhập thất bại. Vui lòng kiểm tra tên đăng nhập và mật khẩu.",
                     () => { }
                 );
             }
         }
 
-
         private void ExecuteSaveCommand(object obj)
         {
-            bool exists = danhSachGara.Any(gara => gara.TenGara == GaraMoi.TenGara);
-
-            if (exists)
+            if (String.IsNullOrEmpty(GaraMoi.TaiKhoan) || String.IsNullOrEmpty(GaraMoi.MatKhau) || String.IsNullOrEmpty(GaraMoi.TenGara) || String.IsNullOrEmpty(GaraMoi.Sdt) || String.IsNullOrEmpty(GaraMoi.DiaChi))
             {
                 dialogService.ShowInfoDialog(
-                    "",
-                    "Gara đã tồn tại!",
+                    "Thông báo",
+                    "Vui lòng nhập đầy đủ thông tin!",
                     () => { }
                 );
+                return;
             }
-            else
-            {
-                danhSachGara.Add(new GaraModel
-                {
-                    TaiKhoan = GaraMoi.TaiKhoan,
-                    TenGara = GaraMoi.TenGara,
-                    MatKhau = GaraMoi.MatKhau,
-                    Sdt = GaraMoi.Sdt,
-                    DiaChi = GaraMoi.DiaChi
-                });
 
+            if (GaraMoi.Sdt.Length != 10)
+            {
                 dialogService.ShowInfoDialog(
-                    "",
-                    "Đăng ký thành công!",
+                    "Thông báo",
+                    "Số điện thoại phải bao gồm 10 số!",
                     () => { }
                 );
-                IsLogin = true;
-                OnPropertyChanged(nameof(IsLogin));
-                GaraMoi = new GaraModel();
+                return;
             }
+
+            if (GaraMoi.MatKhau != nhapLaiMatKhau)
+            {
+                dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Mật khẩu nhập lại không khớp! Vui lòng nhập lại mật khẩu.",
+                    () => { }
+                );
+                return;
+            }
+
+            if (danhSachGara.Any(gara => gara.TaiKhoan == GaraMoi.TaiKhoan))
+            {
+                dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Tên đăng nhập đã tồn tại",
+                    () => { }
+                );
+                return;
+            }
+
+            danhSachGara.Add(GaraMoi);
+            
+            dialogService.ShowInfoDialog(
+                "Thông báo",
+                "Đăng ký thành công!",
+                () => { }
+                );
+            init();
+            OnPropertyChanged(nameof(IsLogin));            
         }
 
         private void ExecuteCloseCommand(object obj)
@@ -151,23 +226,58 @@ namespace QuanLyGara.ViewModels.Windows
             if (obj is Window window)
             {
                 dialogService.ShowYesNoDialog(
-                    "Close",
-                    "Do you want to close this window?",
+                    "Xác nhận",
+                    "Bạn có muốn thoát ứng dụng không?",
                     () => window.Close(),
                     () => { }
                     );
             }
         }
+
         private void ExecuteSwitchToLoginView(object obj)
         {
             IsLogin = true;
-            OnPropertyChanged(nameof(IsLogin));
-        }
-        private void ExecuteSwitchToResgiterView(object obj)
-        {
-            IsLogin = false;
+            garaMoi.MatKhau = "";
+            nhapLaiMatKhau = "";
+            UpdatePasswordConfirmationError();
+            OnPropertyChanged(nameof(NhapLaiMatKhau));
             OnPropertyChanged(nameof(IsLogin));
         }
 
+        private void ExecuteSwitchToResgiterView(object obj)
+        {
+            IsLogin = false;
+            matkhau = "";
+            OnPropertyChanged(nameof(MatKhau));
+            OnPropertyChanged(nameof(IsLogin));
+        }
+
+        public string PhoneNumberLengthError { get; private set; }
+        private void UpdatePhoneNumberLengthError()
+        {
+            if (!string.IsNullOrEmpty(GaraMoi.Sdt) && GaraMoi.Sdt.Length != 10)
+            {
+                PhoneNumberLengthError = "Số điện thoại phải bao gồm 10 số!";
+            }
+            else
+            {
+                PhoneNumberLengthError = "";
+            }
+            OnPropertyChanged("PhoneNumberLengthError");
+        }
+
+        public string PasswordConfirmationError { get; private set; }
+        private void UpdatePasswordConfirmationError()
+        {
+            if (nhapLaiMatKhau != null && nhapLaiMatKhau.Length > 0)
+            {
+                PasswordConfirmationError = GaraMoi.MatKhau == nhapLaiMatKhau ? "" : "Mật khẩu không khớp!";
+            }
+            else
+            {
+                PasswordConfirmationError = "";
+            }
+            OnPropertyChanged("PasswordConfirmationError");
+        }
     }
 }

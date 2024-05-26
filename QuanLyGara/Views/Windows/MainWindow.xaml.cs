@@ -22,18 +22,7 @@ namespace QuanLyGara
     {
         public MainWindow()
         {
-            //InitializeComponent();
-            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-        }
-        
-        private void winMinButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
-        private void winCloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
+            InitializeComponent();
         }
     }
 }

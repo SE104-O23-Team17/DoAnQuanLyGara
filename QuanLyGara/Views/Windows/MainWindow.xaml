@@ -74,7 +74,7 @@
                         x:Name="winCloseButton"
                         Style="{StaticResource winCtrButton}"
                         Tag="{StaticResource redUI}"
-                        Click="winCloseButton_Click">
+                        Command="{Binding CloseCommand}">
                         <fa:IconImage Icon="Xmark"
                                       Style="{StaticResource winCtrIcon}"/>
                     </Button>
@@ -83,7 +83,7 @@
                         x:Name="winMinButton"
                         Style="{StaticResource winCtrButton}"
                         Tag="{StaticResource darkFont}"
-                        Click="winMinButton_Click">
+                        Command="{Binding MinimizeCommand}">
                         <fa:IconImage Icon="WindowMinimize"
                                       Style="{StaticResource winCtrIcon}"/>
                     </Button>
