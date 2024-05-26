@@ -415,8 +415,7 @@ namespace QuanLyGara.ViewModels.Pages
                     OnPropertyChanged(nameof(DanhSachVTPT));
                 },
                 () => { }
-                );
-            
+                );            
         }
 
         private void ExecuteAddDVTCommand(object obj)
@@ -431,7 +430,7 @@ namespace QuanLyGara.ViewModels.Pages
 
             dvt = new()
             {
-                maDVT = DanhSachDVT.Count + 1,
+                maDVT = danhSachDVT.Count == 0 ? 1 : danhSachDVT.Max(d => d.maDVT) + 1,
                 isReadOnly = false
             };
             danhSachDVT.Insert(0, dvt);
@@ -448,7 +447,7 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 DonViTinhModel dvt = DanhSachDVT.FirstOrDefault(d => d.isReadOnly == false);
                 ExecuteCancelDVTCommand(dvt);
-
+                
                 dvt = obj as DonViTinhModel;
                 dvt.isReadOnly = false;
                 previousDVT = dvt.tenDVT;
@@ -460,6 +459,7 @@ namespace QuanLyGara.ViewModels.Pages
             if (obj is DonViTinhModel)
             {
                 DonViTinhModel dvt = obj as DonViTinhModel;
+
                 if (DanhSachDVT.Any(existingDvt => existingDvt != dvt && existingDvt.tenDVT == dvt.tenDVT))
                 {
                     dialogService.ShowInfoDialog(
@@ -470,7 +470,8 @@ namespace QuanLyGara.ViewModels.Pages
                     ExecuteCancelDVTCommand(dvt);
                     return;
                 }
-                if (dvt.tenDVT == "")
+
+                if (string.IsNullOrEmpty(dvt.tenDVT))
                 {
                     dialogService.ShowInfoDialog(
                         "Lỗi",
@@ -495,8 +496,8 @@ namespace QuanLyGara.ViewModels.Pages
             if (obj is DonViTinhModel)
             {
                 DonViTinhModel dvt = obj as DonViTinhModel;
-                dvt.isReadOnly = true;
                 dvt.tenDVT = previousDVT;
+                dvt.isReadOnly = true;
                 OnPropertyChanged(nameof(DanhSachDVT));
             }
         }

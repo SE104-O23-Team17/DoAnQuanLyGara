@@ -20,6 +20,7 @@ namespace QuanLyGara.Models.DonViTinh
             tenDVT = "";
             isReadOnly = true;
         }
+
         public int maDVT { get; set; }
 
         private string _tenDVT;

@@ -13,7 +13,7 @@
               d:DataContext="{d:DesignInstance Type=viewmodel:PartViewModel}"
               xmlns:components="clr-namespace:QuanLyGara.Components"
               mc:Ignorable="d" 
-              d:DesignHeight="600" d:DesignWidth="1200">
+              d:DesignHeight="700" d:DesignWidth="1800">
 
     <UserControl.DataContext>
         <viewmodel:PartViewModel/>
@@ -83,10 +83,9 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0"
-                            Margin="0 0 24 0"
+                            Margin="0 0 32 0"
                             Width="240">
-                            <StackPanel Visibility="{Binding IsViewing, Converter={StaticResource BoolToVis}}"
-                                Margin="0 0 0 24">
+                            <StackPanel Visibility="{Binding IsViewing, Converter={StaticResource BoolToVis}}">
                                 <StackPanel>
                                     <TextBlock Text="Tỉ lệ giá bán so với giá nhập"
                                        Style="{StaticResource buttonText}"/>
@@ -144,19 +143,26 @@
 
                                 <StackPanel Margin="0 24">
                                     <TextBlock Text="Sắp xếp theo"
-                                       Style="{StaticResource buttonText}"/>
+                                       Style="{StaticResource buttonText}"
+                                               FontWeight="Bold"
+                                               Margin="0 0 0 8"/>
 
-                                    <Grid Margin="0 8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="  Tên"
+                                    <Border Padding="8 4 4 4"
+                                            BorderBrush="{StaticResource darkBorder}"
+                                            BorderThickness="2"
+                                            CornerRadius="5">
+                                        <StackPanel>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Tên vật tư"
                                            Style="{StaticResource buttonText}"/>
 
-                                        <StackPanel Grid.Column="1"
+                                                <StackPanel Grid.Column="1"
                                             Orientation="Horizontal">
-                                            <RadioButton Style="{StaticResource sortButton}"
+                                                    <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountDown"
                                                  GroupName="sortGroup"
                                                  Margin="8 0"
@@ -164,97 +170,65 @@
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="1"/>
 
-                                            <RadioButton Style="{StaticResource sortButton}"
+                                                    <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountUp"
                                                  GroupName="sortGroup"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="2"/>
-                                        </StackPanel>
-                                    </Grid>
+                                                </StackPanel>
+                                            </Grid>
 
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="  Số lượng tồn"
+                                            <Grid Margin="0 8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Số lượng tồn"
                                            Style="{StaticResource buttonText}"/>
 
-                                        <StackPanel Grid.Column="1"
+                                                <StackPanel Grid.Column="1"
                                             Orientation="Horizontal">
-                                            <RadioButton Style="{StaticResource sortButton}"
+                                                    <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountDown"
                                                  GroupName="sortGroup"
                                                  Margin="8 0"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="3"/>
 
-                                            <RadioButton Style="{StaticResource sortButton}"
+                                                    <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountUp"
                                                  GroupName="sortGroup"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="4"/>
-                                        </StackPanel>
-                                    </Grid>
+                                                </StackPanel>
+                                            </Grid>
 
-                                    <Grid Margin="0 8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="  Giá tiền"
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Giá tiền"
                                            Style="{StaticResource buttonText}"/>
 
-                                        <StackPanel Grid.Column="1"
+                                                <StackPanel Grid.Column="1"
                                             Orientation="Horizontal">
-                                            <RadioButton Style="{StaticResource sortButton}"
+                                                    <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountDown"
                                                  GroupName="sortGroup"
                                                  Margin="8 0"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="5"/>
 
-                                            <RadioButton Style="{StaticResource sortButton}"
+                                                    <RadioButton Style="{StaticResource sortButton}"
                                                  Tag="SortAmountUp"
                                                  GroupName="sortGroup"
                                                  Command="{Binding SortCommand}"
                                                  CommandParameter="6"/>
+                                                </StackPanel>
+                                            </Grid>
                                         </StackPanel>
-                                    </Grid>
-                                </StackPanel>
-
-                                <StackPanel>
-                                    <Button Style="{StaticResource darkButtonStyle}"
-                                    Padding="0 4"
-                                    Margin="10 0"
-                                    HorizontalAlignment="Stretch"
-                                    Command="{Binding NewImportCommand}">
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Center">
-                                            <fa:IconImage Icon="FilePen"
-                                                          Style="{StaticResource normalIconButton}"
-                                                          Foreground="{StaticResource lightFont}"/>
-                                            <TextBlock Text="Tạo phiếu nhập mới" 
-                                                       Style="{StaticResource buttonText}" 
-                                                       Foreground="{StaticResource lightFont}"/>
-                                        </StackPanel>
-                                    </Button>
-
-                                    <Button Style="{StaticResource darkButtonStyle}"
-                                    Padding="0 4"
-                                    Margin="10 8"
-                                    HorizontalAlignment="Stretch"
-                                    Command="{Binding ViewImportCommand}">
-                                        <StackPanel Orientation="Horizontal"
-                                            HorizontalAlignment="Center">
-                                            <fa:IconImage Icon="RectangleList"
-                                                  Style="{StaticResource normalIconButton}"
-                                                  Foreground="{StaticResource lightFont}"/>
-                                            <TextBlock Text="Danh sách phiếu nhập" 
-                                               Style="{StaticResource buttonText}" 
-                                               Foreground="{StaticResource lightFont}"/>
-                                        </StackPanel>
-                                    </Button>
+                                    </Border>
                                 </StackPanel>
                             </StackPanel>
 
@@ -313,11 +287,7 @@
                                              Grid.Column="0"
                                              Style="{StaticResource middleTextBox}"
                                              IsReadOnly="{Binding isReadOnly, Mode=TwoWay}"
-                                             helpers:FocusExtension.IsFocused="{Binding isReadOnly, Converter={StaticResource InvertedBool}}">
-                                                <i:Interaction.Behaviors>
-                                                    <behaviors:TextChangedBehavior Command="{Binding DataContext.TextChangeCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"/>
-                                                </i:Interaction.Behaviors>
-                                            </TextBox>
+                                             helpers:FocusExtension.IsFocused="{Binding isReadOnly, Converter={StaticResource InvertedBool}}"/>
 
                                             <StackPanel Orientation="Horizontal"
                                                 Grid.Column="1">
@@ -392,6 +362,8 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
@@ -425,7 +397,40 @@
                                         </StackPanel>
                                     </Button>
 
-                                    <TextBox Grid.Column="3"
+                                    <Button Style="{StaticResource darkButtonStyle}"
+                                            Padding="8 4"
+                                            Margin="10 0"
+                                            HorizontalAlignment="Stretch"
+                                            Command="{Binding NewImportCommand}"
+                                            Grid.Column="2">
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center">
+                                            <fa:IconImage Icon="FilePen"
+                          Style="{StaticResource normalIconButton}"
+                          Foreground="{StaticResource lightFont}"/>
+                                            <TextBlock Text="Tạo phiếu nhập mới" 
+                       Style="{StaticResource buttonText}" 
+                       Foreground="{StaticResource lightFont}"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Style="{StaticResource darkButtonStyle}"
+                                            Padding="8 4"
+                                            HorizontalAlignment="Stretch"
+                                            Command="{Binding ViewImportCommand}"
+                                            Grid.Column="3">
+                                        <StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Center">
+                                            <fa:IconImage Icon="RectangleList"
+                  Style="{StaticResource normalIconButton}"
+                  Foreground="{StaticResource lightFont}"/>
+                                            <TextBlock Text="Danh sách phiếu nhập" 
+               Style="{StaticResource buttonText}" 
+               Foreground="{StaticResource lightFont}"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <TextBox Grid.Column="5"
                                          Style="{StaticResource iconTextBox}"
                                          Tag="Search"
                                          Width="300"
@@ -434,8 +439,8 @@
                                 </Grid>
 
                                 <Border Background="{StaticResource darkBorder}"
-                                    CornerRadius="10"
-                                    VerticalAlignment="Top">
+                                        CornerRadius="10"
+                                        VerticalAlignment="Top">
                                     <DataGrid x:Name="BangVTPT"
                                     ItemsSource="{Binding DanhSachVTPT, Mode=TwoWay}"
                                     Style="{StaticResource NoScrollDataGridStyle}"
@@ -474,7 +479,11 @@
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
 
-                                            <DataGridTextColumn Header="Tồn" IsReadOnly="True" Width="*" Binding="{Binding soLuongTon}"/>
+                                            <DataGridTextColumn Header="Tồn"
+                                                                IsReadOnly="True"
+                                                                Width="*"
+                                                                Binding="{Binding soLuongTon}"
+                                                                FontSize="16"/>
 
                                             <DataGridTemplateColumn Header="Đơn vị" Width="*">
                                                 <DataGridTemplateColumn.CellTemplate>
@@ -503,7 +512,11 @@
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
 
-                                            <DataGridTextColumn Header="Giá bán" IsReadOnly="True" Width="*" Binding="{Binding giaBan, Converter={StaticResource NumberFormatConverter}}"/>
+                                            <DataGridTextColumn Header="Giá bán" 
+                                                                IsReadOnly="True" 
+                                                                Width="*"
+                                                                FontSize="16"
+                                                                Binding="{Binding giaBan, Converter={StaticResource NumberFormatConverter}}"/>
 
                                             <DataGridTemplateColumn Width="*">
                                                 <DataGridTemplateColumn.CellTemplate>
@@ -688,7 +701,7 @@
                                        Margin="0 8"/>
 
                             <DatePicker Style="{StaticResource DatePickerStyle}"
-                                        Width="200"
+                                        Width="130"
                                         HorizontalAlignment="Left"
                                         SelectedDate="{Binding PhieuNhapVTPT.NgayNhap}"
                                         Margin="0 0 0 16"/>
@@ -960,15 +973,17 @@
                                                    FontSize="16"
                                                    Margin="0 16 0 8"/>
 
-                                        <Border Background="{StaticResource darkBorder}"
-                                                CornerRadius="10">
+                                        <Border Background="Transparent"
+                                                BorderBrush="{StaticResource darkBorder}"
+                                                BorderThickness="2">
                                             <DataGrid x:Name="PhieuNhap"
                                                       ItemsSource="{Binding PhieuNhapVTPT.DanhSachCT}"
                                                       Style="{StaticResource NoScrollDataGridStyle}"
                                                       CellStyle="{StaticResource DataGridCellStyle}" 
                                                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                                                       RowStyle="{StaticResource DataGridRowStyle}"
-                                                      VerticalAlignment="Top">
+                                                      VerticalAlignment="Top"
+                                                      Padding="0">
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Vật tư phụ tùng"
                                                                 IsReadOnly="True"

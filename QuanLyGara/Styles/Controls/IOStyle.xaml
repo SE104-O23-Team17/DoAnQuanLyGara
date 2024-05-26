@@ -284,6 +284,8 @@
         </Style.Resources>
     </Style>
 
+    <Style x:Key="NoScrollDataGridStyle2" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource NoScrollDataGridStyle}"/>
+    
     <!--Data Grid Cell Style-->
     <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
         <Setter Property="Background" Value="Transparent"/>
@@ -303,6 +305,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style x:Key="DataGridCellStyle2" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle}"/>
 
     <!--Data Grid Column Header Style-->
     <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
@@ -340,6 +344,8 @@
         </Setter>
     </Style>
 
+    <Style x:Key="DataGridColumnHeaderStyle2" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}"/>
+    
     <!--Data Grid Row Style-->
     <Style x:Key="DataGridRowStyle" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="{StaticResource lightBackground}"/>
@@ -413,6 +419,8 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="DataGridRowStyle2" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DataGridRowStyle}"/>
+    
     <!--Icon text box style-->
     <Style x:Key="iconTextBox" TargetType="TextBox">
         <Setter Property="Background" Value="Transparent"/>
@@ -523,7 +531,7 @@
         <Setter Property="Foreground" Value="{StaticResource darkFont}"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="FontFamily" Value="Montserrat"/>
-        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="BorderThickness" Value="0 0 0 1"/>
         <Setter Property="BorderBrush" Value="{StaticResource darkBorderShadow}"/>
         <Setter Property="Padding" Value="0"/>
@@ -578,6 +586,7 @@
 
                         <Trigger Property="IsReadOnly" Value="True">
                             <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="IsHitTestVisible" Value="False"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -682,6 +691,7 @@
         <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="FontFamily" Value="Montserrat"/>
+        <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="IsEditable" Value="True"/>
         <Setter Property="IsTextSearchEnabled" Value="False"/>
         <Setter Property="IsTextSearchCaseSensitive" Value="False"/>
@@ -757,6 +767,119 @@
                             <Setter Property="KeyboardNavigation.IsTabStop" Value="False"/>
                             <Setter Property="UIElement.Visibility" TargetName="PART_EditableTextBox" Value="Visible"/>
                             <Setter Property="UIElement.Visibility" TargetName="ContentSite" Value="Hidden"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ToggleCheckboxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid Background="Transparent"
+                          SnapsToDevicePixels="True"
+                          Height="28">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Grid  x:Name="markGrid" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Rectangle Fill="Transparent"
+                                       Height="20"
+                                       x:Name="moveEllipse">
+                                <Rectangle.Style>
+                                    <Style TargetType="Rectangle">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                         Value="True">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation From="0" To="20"
+                                                                             Duration="0:0:0.1" 
+                                                                             Storyboard.TargetProperty="Width"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation To="0" 
+                                                                             Duration="0:0:0.1" 
+                                                                             Storyboard.TargetProperty="Width"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Rectangle.Style>
+                            </Rectangle>
+                            
+                            <Rectangle RadiusX="10" 
+                                       RadiusY="10" 
+                                       Grid.ColumnSpan="2"
+                                       Name="line"
+                                       StrokeThickness=".8"
+                                       IsHitTestVisible="False"
+                                       Margin="1,4,1,4">
+                                <Rectangle.Style>
+                                    <Style TargetType="{x:Type Rectangle}">
+                                        <Setter Property="Fill" Value="{StaticResource lightBorderShadow}"/>
+                                    </Style>
+                                </Rectangle.Style>
+                            </Rectangle>
+                            
+                            <Ellipse Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                     Height="20"
+                                     Name="spot"
+                                     Grid.Column="1"
+                                     HorizontalAlignment="Left">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="{StaticResource lightBorder}"/>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+
+                        </Grid>
+                        <ContentPresenter x:Name="contentPresenter" 
+                                          ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                          Content="{TemplateBinding Content}" 
+                                          Grid.Column="1" 
+                                          ContentStringFormat="{TemplateBinding ContentStringFormat}" 
+                                          Focusable="False" 
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                          Margin="{TemplateBinding Padding}" 
+                                          RecognizesAccessKey="True" 
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Stroke" TargetName="line" Value="{StaticResource darkBorderShadow}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity"  Value=".5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Stroke" TargetName="line" Value="{StaticResource darkBackground}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Fill" TargetName="line" Value="{StaticResource lightBorder}"/>
+                            <Setter Property="Fill" TargetName="spot" Value="{StaticResource darkBorder}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter Property="Fill" TargetName="line" Value="{StaticResource lightBorderShadow}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
