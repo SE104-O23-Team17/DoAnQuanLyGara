@@ -50,10 +50,10 @@ namespace QuanLyGara.Services
             apDungQDKiemTraSoTienThu = true;
 
             danhSachGara = new List<GaraModel> {
-                new GaraModel { ID = 1, TaiKhoan = "Gara 1", MatKhau = "aggs424y2", Sdt = "0123456789" },
-                new GaraModel { ID = 2, TaiKhoan = "Gara 2", MatKhau = "aggs424y2", Sdt = "0123456789" },
-                new GaraModel { ID = 3, TaiKhoan = "Gara 3", MatKhau = "aggs424y2", Sdt = "0123456789" },
-                new GaraModel { ID = 4, TaiKhoan = "Gara 4", MatKhau = "aggs424y2", Sdt = "0123456789" },
+                new GaraModel { ID = 1, TaiKhoan = "Gara 1", TenGara = "Gara1", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1", Email = "abc@gmail.com" },
+                new GaraModel { ID = 2, TaiKhoan = "Gara 2", TenGara = "Gara2", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1", Email = "abc@gmail.com" },
+                new GaraModel { ID = 3, TaiKhoan = "Gara 3", TenGara = "Gara3", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1", Email = "abc@gmail.com" },
+                new GaraModel { ID = 4, TaiKhoan = "Gara 4", TenGara = "Gara4", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1", Email = "abc@gmail.com" },
             };
 
             danhSachHieuXe = new List<HieuXeModel>{

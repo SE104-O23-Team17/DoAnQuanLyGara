@@ -7,22 +7,102 @@
         xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Windows"
         xmlns:behaviors="clr-namespace:QuanLyGara.Behaviors"
         xmlns:services="clr-namespace:QuanLyGara.Services"
-        xmlns:helpers="clr-namespace:QuanLyGara.Helpers"
+        xmlns:helpers="clr-namespace:QuanLyGara.Helpers" 
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized"
         WindowStyle="None"
-        ResizeMode="NoResize"
         AllowsTransparency="True"
+        ResizeMode="NoResize"
         Background="Transparent"
-        Height="720" Width="640"
+        Height="720" Width="600"
         Title="Quản lý Gara">
-    
+
     <Window.DataContext>
         <viewmodel:LoginViewModel/>
     </Window.DataContext>
 
-    <Grid>
+    <Border CornerRadius="10"
+            BorderBrush="{StaticResource darkBorder}"
+            BorderThickness="2"
+            Background="{StaticResource lightBackground}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-    </Grid>
+            <Button x:Name="winCloseButton"
+                    Style="{StaticResource winCtrButton}"
+                    Tag="{StaticResource redUI}"
+                    Command="{Binding CloseCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                    Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,0,220">
+                <fa:IconImage Icon="Xmark"
+                              Style="{StaticResource winCtrIcon}"/>
+            </Button>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Image Source="C:\Users\Admin\Downloads\garage-icon.png" 
+                       Width="36" 
+                       Height="36" 
+                       Margin="0,0,8,8"/>
+                <TextBlock Grid.Row="2"
+                           Text="Đăng nhập"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource buttonText}"
+                           FontSize="36"/>
+            </StackPanel>
+
+
+
+            <StackPanel Grid.Row="2"
+                        Margin="60,20,60,20">
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Họ và tên:"
+                               Style="{StaticResource buttonText}"
+                               Margin="0 0 8 0"/>
+
+                    <TextBox Style="{StaticResource aLineTextBox}"
+                             Width="395"
+                             Text="{Binding GaraMoi.TaiKhoan, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 16">
+                    <TextBlock Text="Mật khẩu:"
+                               Style="{StaticResource buttonText}"
+                               Margin="0 0 8 0"/>
+                    <TextBox Style="{StaticResource aLineTextBox}"
+                             Text="{Binding GaraMoi.MatKhau}"
+                             Width="396">
+                        <i:Interaction.Behaviors>
+                            <behaviors:NumericInputBehavior/>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </StackPanel>
+            <StackPanel>
+                <Button Content="Đăng nhập"
+                        Style="{StaticResource darkButtonStyle}"
+                        Command="{Binding SaveCommand}"
+                        Width="476"
+                        Margin="0 0 0 16"/>
+                
+                <Button Content="Đăng kí tài khoản mới"
+                        Style="{StaticResource lightButtonStyle}"
+                        Command="{Binding SaveCommand}"
+                        Width="476"
+                        Margin="0 0 0 16"/>
+
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>
