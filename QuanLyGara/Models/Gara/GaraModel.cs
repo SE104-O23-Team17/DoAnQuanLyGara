@@ -13,7 +13,6 @@ namespace QuanLyGara.Models
         private string _matKhau;
         private string _sdt;
         private string _diaChi;
-        private string _email;
 
         public int ID
         {
@@ -49,12 +48,6 @@ namespace QuanLyGara.Models
         {
             get { return _diaChi; }
             set { _diaChi = value; OnPropertyChanged(); }
-        }
-
-        public string Email
-        {
-            get { return _email; }
-            set { _email = value; OnPropertyChanged(); }
         }
 
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

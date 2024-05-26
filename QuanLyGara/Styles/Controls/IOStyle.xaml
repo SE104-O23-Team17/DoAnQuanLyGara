@@ -785,13 +785,13 @@
                             <ColumnDefinition Width="40" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        
-                        <Grid  x:Name="markGrid" >
+
+                        <Grid x:Name="markGrid" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <Rectangle Fill="Transparent"
                                        Height="20"
                                        x:Name="moveEllipse">
@@ -823,7 +823,7 @@
                                     </Style>
                                 </Rectangle.Style>
                             </Rectangle>
-                            
+
                             <Rectangle RadiusX="10" 
                                        RadiusY="10" 
                                        Grid.ColumnSpan="2"
@@ -837,7 +837,7 @@
                                     </Style>
                                 </Rectangle.Style>
                             </Rectangle>
-                            
+
                             <Ellipse Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
                                      Height="20"
                                      Name="spot"
@@ -863,7 +863,7 @@
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
-                    
+
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Stroke" TargetName="line" Value="{StaticResource darkBorderShadow}"/>
@@ -882,6 +882,55 @@
                             <Setter Property="Fill" TargetName="line" Value="{StaticResource lightBorderShadow}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RoundCheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{StaticResource darkBorder}"/>
+        <Setter Property="Foreground" Value="{StaticResource darkFont}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="checkBoxBorder"
+                                CornerRadius="3"
+                                Padding="1"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="1" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <Grid x:Name="markGrid">
+                                <Path x:Name="optionMark" 
+                                      Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z " Fill="{StaticResource OptionMark.Static.Glyph}" 
+                                      Margin="1" 
+                                      Opacity="0" 
+                                      Stretch="None"/>
+                                <Rectangle x:Name="indeterminateMark" 
+                                           Fill="{StaticResource OptionMark.Static.Glyph}" 
+                                           Margin="2" 
+                                           Opacity="0"/>
+                            </Grid>
+                        </Border>
+                        <ContentPresenter x:Name="contentPresenter" 
+                                          Grid.Column="1" 
+                                          Focusable="False" 
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}" 
+                                          RecognizesAccessKey="True" 
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
