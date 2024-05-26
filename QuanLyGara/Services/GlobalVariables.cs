@@ -38,7 +38,11 @@ namespace QuanLyGara.Services
         public List<BaoCaoDoanhSoModel> danhSachDoanhSo { get; set; }
 
         public List<BaoCaoTonModel> danhSachTon;
-
+        internal List<CTPhieuNhapVTPTModel> danhSachCTPhieuNhapVTPT;
+        internal List<CTPhieuSuaChuaModel> danhSachCTPhieuSuaChua;
+        internal List<PhieuNhapVTPTModel> danhSachPhieuNhapVTPT;
+        internal List<PhieuSuaChuaModel> danhSachPhieuSuaChua;
+        internal List<CTSuDungVTPTModel> danhSachCTSuDungVTPT;
         private static readonly Global instance = new Global();
         public static Global Instance
         {
@@ -506,6 +510,69 @@ namespace QuanLyGara.Services
                                 },
                             }
                         }
+            };
+
+            danhSachPhieuSC = new List<PhieuSuaChuaModel>
+            {
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 1,
+                    xe = danhSachXe[0],
+                    ngayLap = new DateTime(2024, 5, 1),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                       danhSachCTPhieuSC[0],
+                       danhSachCTPhieuSC[1],
+                       danhSachCTPhieuSC[2]
+                    }
+                },
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 2,
+                    xe = danhSachXe[0],
+                    ngayLap = new DateTime(2024, 3, 5),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                        danhSachCTPhieuSC[3],
+                        danhSachCTPhieuSC[4],
+                        danhSachCTPhieuSC[5]
+                    }
+                },
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 3,
+                    xe = danhSachXe[1],
+                    ngayLap = new DateTime(2024, 5, 10),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                        danhSachCTPhieuSC[6],
+                        danhSachCTPhieuSC[7],
+                        danhSachCTPhieuSC[8]
+                    }
+                },
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 4,
+                    xe = danhSachXe[2],
+                    ngayLap = new DateTime(2024, 5, 15),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                        danhSachCTPhieuSC[9]
+                    }
+                },
+                new PhieuSuaChuaModel
+                {
+                    maPSC = 5,
+                    xe = danhSachXe[0],
+                    ngayLap = new DateTime(2024, 3, 20),
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>
+                    {
+                        danhSachCTPhieuSC[10]
                     }
                 }
             };

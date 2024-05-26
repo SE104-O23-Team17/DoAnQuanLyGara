@@ -5,6 +5,13 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows;
 using QuanLyGara.ViewModels.Pages;
+using QuanLyGara.Models.BaoCaoTon;
+using QuanLyGara.Models.CTPhieuSuaChua;
+using QuanLyGara.Models.PhieuNhapVTPT;
+using QuanLyGara.Models.VTPT;
+using QuanLyGara.Models.PhieuSuaChua;
+using QuanLyGara.Models.CTPhieuNhapVTPT;
+using QuanLyGara.Models.CTSuDungVTPT;
 
 namespace QuanLyGara.ViewModels.Windows
 {
@@ -83,6 +90,7 @@ namespace QuanLyGara.ViewModels.Windows
 
             //default
             ExecuteShowDashboardViewCommand(null);
+
         }
 
         private void ExecuteShowDashboardViewCommand(object obj)

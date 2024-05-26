@@ -44,6 +44,9 @@ namespace QuanLyGara.Models.CTPhieuSuaChua
         }
 
         private List<CTSuDungVTPTModel> danhSachSuDung;
+        internal object hieuXe;
+        internal double tongTien;
+
         public List<CTSuDungVTPTModel> DanhSachSuDung
         {
             get { return danhSachSuDung; }
