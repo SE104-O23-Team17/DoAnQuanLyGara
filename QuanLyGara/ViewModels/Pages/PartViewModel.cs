@@ -225,6 +225,7 @@ namespace QuanLyGara.ViewModels.Pages
         public ICommand AddCommand { get; set; }
         public ICommand AddVTPTCommand { get; set; }
         public ICommand SaveVTPTCommand { get; set; }
+        public ICommand CancelVTPTCommand { get; set; }
         public ICommand BackToView { get; set; }
         public ICommand RemoveVTPTCommand { get; set; }
         public ICommand NewImportCommand { get; set; }
@@ -270,6 +271,7 @@ namespace QuanLyGara.ViewModels.Pages
             AddCommand = new ViewModelCommand(ExecuteAddCommand);
             AddVTPTCommand = new ViewModelCommand(ExecuteAddVTPTCommand);
             SaveVTPTCommand = new ViewModelCommand(ExecuteSaveVTPTCommand);
+            CancelVTPTCommand = new ViewModelCommand(ExecuteCancelVTPTCommand);
             BackToView = new ViewModelCommand(ExecuteBackToView);
             RemoveVTPTCommand = new ViewModelCommand(ExecuteRemoveVTPTCommand);
             NewImportCommand = new ViewModelCommand(ExecuteNewImportCommand);
@@ -313,10 +315,20 @@ namespace QuanLyGara.ViewModels.Pages
                 {
                     Global.Instance.tiLeTinhDonGiaBan = ratio;
                     OnPropertyChanged(nameof(DanhSachVTPT));
+                    dialogService.ShowInfoDialog(
+                        "Thông báo",
+                        "Cập nhật tỷ lệ thành công.",
+                        () => { }
+                        );
                 }
             }
             else
             {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Tỷ lệ phải lớn hơn 0. Đặt về giá trị cũ.",
+                    () => { }
+                    );
                 ratio = previousRatio;
             }
             IsReadOnly = true;
@@ -349,14 +361,29 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 if (string.IsNullOrEmpty(vtpt.tenVTPT))
                 {
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Tên vật tư không được để trống.",
+                        () => { }
+                        );
                     return;
                 }
                 if (vtpt.giaNhap <= 0)
                 {
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Giá nhập phải lớn hơn 0.",
+                        () => { }
+                        );
                     return;
                 }
                 if (vtpt.donViTinh == null)
                 {
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Đơn vị tính không được để trống.",
+                        () => { }
+                        );
                     return;
                 }
                 vtpt.isReadOnly = true;
@@ -386,10 +413,11 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 dialogService.ShowYesNoDialog(
                     "Xác nhận",
-                    "Bạn có chắc chắn muốn xóa mục này không?",
+                    "Bạn có chắc chắn muốn xóa vật tư " + vtpt.tenVTPT + " không?",
                     () =>
                     {
                         danhSachVTPT.Remove(vtpt);
+                        Global.Instance.danhSachVTPT.Remove(vtpt);
                         OnPropertyChanged(nameof(DanhSachVTPT));
                     },
                     () => { }
@@ -406,11 +434,12 @@ namespace QuanLyGara.ViewModels.Pages
             }
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
-                "Bạn có chắc chắn muốn xóa " + selectedVTPT.Count + " mục đã chọn không?",
+                "Bạn có chắc chắn muốn xóa " + selectedVTPT.Count + " vật tư đã chọn không?",
                 () => {
                     foreach (VTPTModel vtpt in selectedVTPT)
                     {
                         danhSachVTPT.Remove(vtpt);
+                        Global.Instance.danhSachVTPT.Remove(vtpt);
                     }
                     OnPropertyChanged(nameof(DanhSachVTPT));
                 },
@@ -483,6 +512,16 @@ namespace QuanLyGara.ViewModels.Pages
                 }
 
                 dvt.isReadOnly = true;
+                if (Global.Instance.danhSachDVT.FirstOrDefault(dvtCu => dvt.maDVT == dvtCu.maDVT) == null)
+                {
+                    Global.Instance.danhSachDVT.Add(dvt);
+                    dialogService.ShowInfoDialog(
+                        "Thông báo",
+                        "Đã thêm đơn vị tính mới.",
+                        () => { }
+                        );
+                }
+
                 OnPropertyChanged(nameof(DanhSachDVT));
                 if (isAdding)
                 {
@@ -512,12 +551,21 @@ namespace QuanLyGara.ViewModels.Pages
             
             if (dvt != null)
             {
-                danhSachDVT.Remove(dvt);
-                OnPropertyChanged(nameof(DanhSachDVT));
-                if (isAdding)
-                {
-                    OnPropertyChanged(nameof(ThemVTPT));
-                }
+                dialogService.ShowYesNoDialog(
+                    "Xác nhận",
+                    "Bạn có chắc chắn muốn xóa đơn vị tính " + dvt.tenDVT + " không?",
+                    () =>
+                    {
+                        danhSachDVT.Remove(dvt);
+                        OnPropertyChanged(nameof(DanhSachDVT));
+                        if (isAdding)
+                        {
+                            OnPropertyChanged(nameof(ThemVTPT));
+                        }
+
+                    },
+                    () => { }
+                    );            
             }
         }
 
@@ -553,26 +601,40 @@ namespace QuanLyGara.ViewModels.Pages
         private void ExecuteSaveVTPTCommand(object obj)
         {
             List<VTPTModel> newVTPTs = [];
-            int count = 0;
             foreach (VTPTModel vtpt in themVTPT)
             {
                 if (string.IsNullOrEmpty(vtpt.tenVTPT))
                 {
-                    continue;
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Tên vật tư không được để trống.",
+                        () => { }
+                        );
+                    return;
                 }
                 if (vtpt.giaNhap <= 0)
                 {
-                    continue;
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Giá nhập phải lớn hơn 0.",
+                        () => { }
+                        );
+                    return;
                 }
                 if (vtpt.donViTinh == null)
                 {
-                    continue;
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Đơn vị tính không được để trống.",
+                        () => { }
+                        );
+                    return;
                 }
                 newVTPTs.Add(vtpt);
-                count++;
             }
                         
             danhSachVTPT.AddRange(newVTPTs);
+            Global.Instance.danhSachVTPT.AddRange(newVTPTs);
             themVTPT.Clear();
             OnPropertyChanged(nameof(DanhSachVTPT));
             isAdding = false;
@@ -586,9 +648,28 @@ namespace QuanLyGara.ViewModels.Pages
                 OnPropertyChanged(nameof(IsViewing));
             }
             OnPropertyChanged(nameof(IsAdding));
-            dialogService.ShowInfoDialog(
-                "Thông báo",
-                "Đã thêm thành công " + count + " mục.",
+        }
+
+        private void ExecuteCancelVTPTCommand(object obj)
+        {
+            dialogService.ShowYesNoDialog(
+                "Xác nhận",
+                "Bạn có chắc chắn muốn dừng thêm mới vật tư phụ tùng không?",
+                () =>
+                {
+                    themVTPT.Clear();
+                    isAdding = false;
+                    if (isImporting)
+                    {
+                        OnPropertyChanged(nameof(IsImporting));
+                    }
+                    else
+                    {
+                        isViewing = true;
+                        OnPropertyChanged(nameof(IsViewing));
+                    }
+                    OnPropertyChanged(nameof(IsAdding));
+                },
                 () => { }
                 );
         }
@@ -613,9 +694,9 @@ namespace QuanLyGara.ViewModels.Pages
 
         private void ExecuteRemoveVTPTCommand(object obj)
         {
-            VTPTModel vtpt = obj as VTPTModel;
-            if (vtpt != null)
+            if (obj != null && obj is VTPTModel)
             {
+                VTPTModel vtpt = obj as VTPTModel;
                 themVTPT.Remove(vtpt);
                 OnPropertyChanged(nameof(themVTPT));
             }
@@ -639,38 +720,74 @@ namespace QuanLyGara.ViewModels.Pages
 
         private void ExecuteSaveImportCommand(object obj)
         {
-            
-                var vtptSet = new HashSet<VTPTModel>();
+            if (phieuNhapVTPT.DanhSachCT.Count == 0)
+            {
+                return;
+            }
+
                 foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
                 {
-                    if (!vtptSet.Add(ct.VTPT))
+                    if (ct.SoLuong <= 0)
                     {
                         dialogService.ShowInfoDialog(
                             "Lỗi",
-                            "Có mục bị trùng. Vui lòng kiểm tra lại.",
+                            "Số lượng phải lớn hơn 0.",
                             () => { }
-                        );
+                            );
+                        return;
+                    }
+
+                    if (ct.GiaNhap <= 0)
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Giá nhập phải lớn hơn 0.",
+                            () => { }
+                            );
                         return;
                     }
 
                     if (string.IsNullOrEmpty(ct.VTPT.tenVTPT))
                     {
-                        phieuNhapVTPT.XoaCT(ct);
-                        continue;
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Tên vật tư không được để trống.",
+                            () => { }
+                            );
+                        return;
                     }
-                }
-                
-                foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
-                {
-                    if (ct.GiaNhap != ct.VTPT.giaNhap)
+
+                    if (ct.VTPT.donViTinh == null)
                     {
-                        danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().giaNhap = ct.GiaNhap;
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Đơn vị tính không được để trống.",
+                            () => { }
+                            );
+                        return;
                     }
+
+                    if (danhSachVTPT.Any(vtpt => vtpt == ct.VTPT))
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Vật tư " + ct.VTPT.tenVTPT + " đã tồn tại.",
+                            () => { }
+                            );
+                        return;
+                    }
+
+                if (ct.GiaNhap != ct.VTPT.giaNhap)
+                {
+                    danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().giaNhap = ct.GiaNhap;
+                }
                 danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().NhapThem(ct.SoLuong);
             }
                 danhSachPhieuNhap.Add(phieuNhapVTPT);
-            OnPropertyChanged(nameof(IsImportListNull));
-            OnPropertyChanged(nameof(DanhSachPhieuNhap));
+                Global.Instance.danhSachPhieuNhap.Add(phieuNhapVTPT);
+                OnPropertyChanged(nameof(DanhSachPhieuNhap));
+                OnPropertyChanged(nameof(IsImportListNull));
+                OnPropertyChanged(nameof(DanhSachPhieuNhap));
 
             dialogService.ShowInfoDialog(
                     "Thông báo",

@@ -39,24 +39,44 @@
             Background="{StaticResource lightBackground}">
         <Grid>
             <Grid 
-                Visibility="{Binding IsLogin, Converter={StaticResource BoolToVis}}">
+                Visibility="{Binding IsLogin, Converter={StaticResource InvertedBoolToVis}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0"
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
                         Style="{StaticResource transparentButtonStyle}"
                         HorizontalAlignment="Left"
                         Command="{Binding SwitchToLoginView}"
                         Margin="0 8">
-                    <fa:IconImage Icon="ArrowLeft" 
+                        <fa:IconImage Icon="ArrowLeft" 
                                   Style="{StaticResource normalIconButton}"
                                   Margin="0"
                                   Width="28"
                                   Height="20"/>
-                </Button>
+                    </Button>
+
+                    <Button
+          Style="{StaticResource winCtrButton}"
+          Tag="{StaticResource redUI}"
+          Command="{Binding CloseCommand}"
+          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+          Grid.Column="2"
+          HorizontalAlignment="Right"
+                        Height="35">
+                        <fa:IconImage Icon="Xmark"
+                  Style="{StaticResource winCtrIcon}"   Height="32"/>
+                    </Button>
+                </Grid>
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center"
@@ -77,58 +97,121 @@
 
                 <StackPanel Grid.Row="2"
                             Width="400">
-
-                    <StackPanel>
-                        <TextBlock Text="Tên Gara:"
+                    <StackPanel Margin="0 24">
+                        <TextBlock Text="Tên đăng nhập:"
                                    Style="{StaticResource buttonText}"
-                                   Margin="0 0 8 0"/>
+                                   Margin="0 0 0 8"/>
 
                         <TextBox Style="{StaticResource aLineTextBox}"
                                  Width="400"
-                                 Text="{Binding GaraMoi.TenGara, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                 FontSize="20"
+                                 Text="{Binding GaraMoi.TaiKhoan, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <i:Interaction.Behaviors>
+                                <behaviors:AlphanumericInputBehavior/>
+                            </i:Interaction.Behaviors>
+                        </TextBox>
                     </StackPanel>
+                    
+                    <StackPanel>
+                        <TextBlock Text="Tên Gara:"
+                                   Style="{StaticResource buttonText}"
+                                   Margin="0 0 0 8"/>
 
-                    <StackPanel Margin="0 16">
+                        <TextBox Style="{StaticResource aLineTextBox}"
+                                 Width="400"
+                                 FontSize="20"
+                                 Text="{Binding GaraMoi.TenGara, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>   
+
+                    <StackPanel Margin="0 24">
                         <TextBlock Text="Mật khẩu:"
                                    Style="{StaticResource buttonText}"
-                                   Margin="0 0 8 0"/>
-                        <TextBox Style="{StaticResource aLineTextBox}"
-                                 Text="{Binding GaraMoi.MatKhau, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 Width="400"/>
-
+                                   Margin="0 0 0 8"/>
+                        <PasswordBox Style="{StaticResource aLinePasswordBox}"
+                                     helpers:PasswordBoxHelper.Password="{Binding GaraMoi.MatKhau, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     Width="400"
+                                     FontSize="20"/>
                     </StackPanel>
 
-                    <StackPanel Margin="0 0 0 16">
+                    <StackPanel>
+                        <TextBlock Text="Nhập lại mật khẩu:"
+                                   Style="{StaticResource buttonText}"
+                                   Margin="0 0 0 8"/>
+                        <PasswordBox helpers:PasswordBoxHelper.Password="{Binding NhapLaiMatKhau, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     Width="400"
+                                     FontSize="20">
+                            <PasswordBox.Style>
+                                <Style TargetType="PasswordBox" BasedOn="{StaticResource aLinePasswordBox}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PasswordConfirmationError}"
+                                                     Value="Mật khẩu không khớp!">
+                                            <Setter Property="BorderBrush" Value="{StaticResource redUI}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </PasswordBox.Style>
+                        </PasswordBox>
+
+                        <TextBlock Text="{Binding PasswordConfirmationError}"
+                                   Foreground="{StaticResource redUI}"
+                                   FontSize="12"
+                                   HorizontalAlignment="Right"
+                                   Height="18"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0 8">
                         <TextBlock Text="Số điện thoại:"
                                    Style="{StaticResource buttonText}"
                                    Margin="0 0 8 0"/>
 
-                        <TextBox Style="{StaticResource aLineTextBox}"
-                                 Text="{Binding GaraMoi.Sdt, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 Width="400"/>
+                        <TextBox Text="{Binding GaraMoi.Sdt, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 Width="400"
+                                 FontSize="20">
+                            <i:Interaction.Behaviors>
+                                <behaviors:NumericInputBehavior/>
+                            </i:Interaction.Behaviors>
+                            <TextBox.Style>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource aLineTextBox}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PhoneNumberLengthError}"
+                                                     Value="Số điện thoại phải bao gồm 10 số!">
+                                            <Setter Property="BorderBrush" Value="{StaticResource redUI}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
 
+                        <TextBlock Text="{Binding PhoneNumberLengthError}"
+                                   Foreground="{StaticResource redUI}"
+                                   FontSize="12"
+                                   HorizontalAlignment="Right"
+                                   Height="18"/>
                     </StackPanel>
 
-                    <StackPanel Margin="0 0 0 16">
+                    <StackPanel>
                         <TextBlock Text="Địa chỉ:"
                                    Style="{StaticResource buttonText}"
                                    Margin="0 0 8 0"/>
 
                         <TextBox Style="{StaticResource aLineTextBox}"
                                  Text="{Binding GaraMoi.DiaChi, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                 Width="400"/>
+                                 Width="400"
+                                 FontSize="20"/>
 
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Row="3">
+                <StackPanel Grid.Row="3"
+                            Margin="0 32 0 0">
                     <Button Content="Đăng ký"
                             Style="{StaticResource darkButtonStyle}"
                             FontSize="20"
                             Padding="12 6"
                             Command="{Binding SaveCommand}"
-                            Margin="0 0 0 16"/>
-                    <StackPanel Orientation="Horizontal">
+                            Margin="0 0 0 24"/>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
                         <TextBlock Text="Bạn đã có tài khoản? "
                                    Style="{StaticResource buttonText}"
                                    Margin="0 0 8 0"/>
@@ -140,7 +223,7 @@
             </Grid>
 
             <Grid
-                Visibility="{Binding IsLogin, Converter={StaticResource InvertedBoolToVis}}">
+                Visibility="{Binding IsLogin, Converter={StaticResource BoolToVis}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="2*"/>
@@ -202,10 +285,14 @@
               Margin="8 8 4 8"
               Foreground="{StaticResource darkBorder}"/>
 
-                                    <TextBox x:Name="tb_email"
+                                <TextBox x:Name="tb_email"
                                              Text="{Binding TaiKhoan}"
-                                             Style="{StaticResource usernameTextBox}"/>     
-                                </Grid>
+                                             Style="{StaticResource usernameTextBox}">
+                                    <i:Interaction.Behaviors>
+                                        <behaviors:AlphanumericInputBehavior/>
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </Grid>
                             </Border>
                         </StackPanel>
 
@@ -263,6 +350,7 @@
                     <Button Content="Đăng nhập"
                             Style="{StaticResource darkButtonStyle}"
                             Command="{Binding LoginCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                             FontSize="20"
                             Padding="12 6"/>
 
