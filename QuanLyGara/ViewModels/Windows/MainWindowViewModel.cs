@@ -58,7 +58,6 @@ namespace QuanLyGara.ViewModels.Windows
         }
 
         public ICommand ToggleMaximizeCommand { get; }
-        public ICommand ShowDashboardViewCommand { get; }
         public ICommand ShowServiceViewCommand { get; }
         public ICommand ShowPartViewCommand { get; }
         public ICommand ShowStatisticViewCommand { get; }
@@ -68,11 +67,6 @@ namespace QuanLyGara.ViewModels.Windows
 
         public MainWindowViewModel() 
         {
-            CurrentViewModel = new DashboardViewModel();
-            CurrentCaption = "Tổng quan";
-            CurrentIcon = IconChar.Eye;
-
-            ShowDashboardViewCommand = new ViewModelCommand(ExecuteShowDashboardViewCommand);
             ShowServiceViewCommand = new ViewModelCommand(ExecuteShowServiceViewCommand);
             ShowPartViewCommand = new ViewModelCommand(ExecuteShowPartViewCommand);
             ShowStatisticViewCommand = new ViewModelCommand(ExecuteShowStatisticViewCommand);
@@ -81,18 +75,8 @@ namespace QuanLyGara.ViewModels.Windows
             CloseCommand = new ViewModelCommand(ExecuteCloseCommand);
 
             //default
-            ExecuteShowDashboardViewCommand(null);
-        }
-
-        private void ExecuteShowDashboardViewCommand(object obj)
-        {
-            if (CurrentViewModel is not DashboardViewModel)
-            {
-                CurrentViewModel = new DashboardViewModel();
-                CurrentCaption = "Tổng quan";
-                CurrentIcon = IconChar.Eye;
-            }
-        }
+            ExecuteShowServiceViewCommand(null);
+        }        
 
         private void ExecuteShowServiceViewCommand(object obj)
         {

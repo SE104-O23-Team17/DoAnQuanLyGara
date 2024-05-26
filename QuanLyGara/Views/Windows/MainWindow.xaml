@@ -24,10 +24,6 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <DataTemplate DataType="{x:Type vmPage:DashboardViewModel}">
-            <view:Dashboard/>
-        </DataTemplate>
-
         <DataTemplate DataType="{x:Type vmPage:ServiceViewModel}">
             <view:Service/>
         </DataTemplate>
@@ -90,15 +86,25 @@
                 </StackPanel>
             </Border>
 
-            <TextBlock 
-                Text="Quản lý Gara"
-                 Grid.Row="1"
-                Foreground="{StaticResource darkFont}"
-                FontSize="24"
-                FontFamily="Montserrat"
-                FontWeight="Bold"
-                VerticalAlignment="Center"
-                Margin="30 20"/>
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                    Margin="30 20">
+                <fa:IconImage Icon="Warehouse"
+              Style="{StaticResource normalIconButton}"
+              Height="50"
+              Width="50"
+              Margin="0 0 16 8"
+              Foreground="{StaticResource darkBorder}"/>
+                
+                <TextBlock 
+                    Text="Quản lý Gara"
+                     Grid.Row="1"
+                    Foreground="{StaticResource darkFont}"
+                    FontSize="24"
+                    FontFamily="Montserrat"
+                    FontWeight="Bold"
+                    VerticalAlignment="Center"/>
+            </StackPanel>            
 
             <Border 
                 Background="{StaticResource darkButtonBackground}"
@@ -107,18 +113,9 @@
                 <StackPanel 
                     x:Name="NavigationBar"
                     Orientation="Horizontal">
-                    <RadioButton
-                        IsChecked="True"
-                        Style="{StaticResource menuButton}"
-                        Tag="{StaticResource lightFont}"
-                        Command="{Binding ShowDashboardViewCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="Eye" Style="{StaticResource menuIconButton}"/>
-                                <TextBlock Text="Tổng quan" Style="{StaticResource menuIconText}"/>
-                            </StackPanel>
-                    </RadioButton>
 
                     <RadioButton 
+                        IsChecked="True"
                         Style="{StaticResource menuButton}"
                         Tag="{StaticResource lightFont}"
                         Command="{Binding ShowServiceViewCommand}">

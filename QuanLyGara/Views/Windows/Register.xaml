@@ -105,7 +105,11 @@
                         <TextBox Style="{StaticResource aLineTextBox}"
                                  Width="400"
                                  FontSize="20"
-                                 Text="{Binding GaraMoi.TaiKhoan, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                 Text="{Binding GaraMoi.TaiKhoan, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <i:Interaction.Behaviors>
+                                <behaviors:AlphanumericInputBehavior/>
+                            </i:Interaction.Behaviors>
+                        </TextBox>
                     </StackPanel>
                     
                     <StackPanel>
@@ -281,10 +285,14 @@
               Margin="8 8 4 8"
               Foreground="{StaticResource darkBorder}"/>
 
-                                    <TextBox x:Name="tb_email"
+                                <TextBox x:Name="tb_email"
                                              Text="{Binding TaiKhoan}"
-                                             Style="{StaticResource usernameTextBox}"/>     
-                                </Grid>
+                                             Style="{StaticResource usernameTextBox}">
+                                    <i:Interaction.Behaviors>
+                                        <behaviors:AlphanumericInputBehavior/>
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </Grid>
                             </Border>
                         </StackPanel>
 

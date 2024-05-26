@@ -11,7 +11,7 @@ using System.Windows.Controls;
 
 namespace QuanLyGara.Behaviors
 {
-    public class NumericInputBehavior : Behavior<TextBox>
+    public class AlphanumericInputBehavior : Behavior<TextBox>
     {
         protected override void OnAttached()
         {
@@ -31,16 +31,8 @@ namespace QuanLyGara.Behaviors
 
         private void PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var regex = new Regex("[^0-9]+");
+            var regex = new Regex("[^a-zA-Z0-9]+");
             e.Handled = regex.IsMatch(e.Text);
-
-            TextBox textBox = sender as TextBox;
-            if (e.Text == "0" && string.IsNullOrEmpty(textBox.Text))
-            {
-                textBox.Text = "1";
-                textBox.CaretIndex = textBox.Text.Length;
-                e.Handled = true;
-            }
         }
 
         private void PreviewKeyDown(object sender, KeyEventArgs e)
@@ -66,7 +58,7 @@ namespace QuanLyGara.Behaviors
 
         private Boolean IsTextAllowed(String text)
         {
-            var regex = new Regex("[^0-9]+");
+            var regex = new Regex("[^a-zA-Z0-9]+");
             return !regex.IsMatch(text);
         }
     }

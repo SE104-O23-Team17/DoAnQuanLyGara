@@ -25,8 +25,14 @@ namespace QuanLyGara.Services
                 return 0;
             }
             valueAsString = valueAsString.Replace(".", "");
-            return double.Parse(valueAsString, NumberStyles.Any);
+            if (double.TryParse(valueAsString, NumberStyles.Any, culture, out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
         }
-
     }
 }

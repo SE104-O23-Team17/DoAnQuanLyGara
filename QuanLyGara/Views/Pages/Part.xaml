@@ -27,6 +27,8 @@
         <services:ModelAndTextConverter x:Key="ModelAndTextConverter"/>
         <services:InvertedBool x:Key="InvertedBool"/>
         <services:MultiBoolToVis x:Key="MultiBoolToVis"/>
+        <services:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <services:NullToCollapsedConverter x:Key="NullToCollapsedConverter"/>
 
         <CollectionViewSource x:Key="GroupedImportList" Source="{Binding DanhSachPhieuNhap}">
             <CollectionViewSource.GroupDescriptions>
@@ -37,7 +39,7 @@
 
     <ScrollViewer Style="{StaticResource customScrollViewer}">
         <Border Background="{StaticResource lightBackground}">
-            <Grid>
+            <Grid Margin="8 0 0 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -267,7 +269,17 @@
                                                 </Grid>
                                                 <Border Background="{StaticResource lightBackground}"
                                                 CornerRadius="10">
-                                                    <ItemsPresenter/>
+                                                    <Grid>
+                                                        <ItemsPresenter Visibility="{Binding DataContext.DanhSachDVT, Converter={StaticResource NullToVisibilityConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                                        
+                                                        <TextBlock Text="Không có dữ liệu"
+                                                                   Visibility="{Binding DataContext.DanhSachDVT, Converter={StaticResource NullToCollapsedConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                   Margin="0 20"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Style="{StaticResource buttonText}"
+                                                                   FontSize="20"/>
+                                                    </Grid>
                                                 </Border>
                                             </StackPanel>
                                         </Border>
@@ -440,138 +452,148 @@
 
                                 <Border Background="{StaticResource darkBorder}"
                                         CornerRadius="10"
-                                        VerticalAlignment="Top">
+                                        VerticalAlignment="Top"
+                                        Visibility="{Binding DataContext.DanhSachVTPT, Converter={StaticResource NullToVisibilityConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}">
                                     <DataGrid x:Name="BangVTPT"
-                                    ItemsSource="{Binding DanhSachVTPT, Mode=TwoWay}"
-                                    Style="{StaticResource NoScrollDataGridStyle}"
-                                    CellStyle="{StaticResource DataGridCellStyle}" 
-                                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                    RowStyle="{StaticResource DataGridRowStyle}"
-                                    VerticalAlignment="Top">
+                                                ItemsSource="{Binding DanhSachVTPT, Mode=TwoWay}"
+                                                Style="{StaticResource NoScrollDataGridStyle}"
+                                                CellStyle="{StaticResource DataGridCellStyle}" 
+                                                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                                RowStyle="{StaticResource DataGridRowStyle}"
+                                                VerticalAlignment="Top">
 
-                                        <DataGrid.Columns>
-                                            <DataGridTemplateColumn Width="Auto">
-                                                <DataGridTemplateColumn.Header>
-                                                    <CheckBox x:Name="HeaderCheckBox"
+                                            <DataGrid.Columns>
+                                                <DataGridTemplateColumn Width="Auto">
+                                                    <DataGridTemplateColumn.Header>
+                                                        <CheckBox x:Name="HeaderCheckBox"
                                                       Style="{StaticResource DataGridCheckBoxStyle}"
                                                       IsChecked="{Binding DataContext.isAllChecked, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
                                                       Command="{Binding DataContext.UpdateIsAllSelectedCommand,  RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                       CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                                </DataGridTemplateColumn.Header>
+                                                    </DataGridTemplateColumn.Header>
 
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <CheckBox IsChecked="{Binding isChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox IsChecked="{Binding isChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                           Style="{StaticResource DataGridCheckBoxStyle}"
                                                           Command="{Binding DataContext.UpdateIsAllSelectedCommand,  RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                           CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
 
-                                            <DataGridTemplateColumn Header="Vật tư phụ tùng" Width="3*">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBox Text="{Binding tenVTPT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                <DataGridTemplateColumn Header="Vật tư phụ tùng" Width="3*">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding tenVTPT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                          Style="{StaticResource aLineTextBox}"
                                                          IsReadOnly="{Binding isReadOnly}" />
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
 
-                                            <DataGridTextColumn Header="Tồn"
+                                                <DataGridTextColumn Header="Tồn"
                                                                 IsReadOnly="True"
                                                                 Width="*"
                                                                 Binding="{Binding soLuongTon}"
                                                                 FontSize="16"/>
 
-                                            <DataGridTemplateColumn Header="Đơn vị" Width="*">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <components:FilteredComboBox 
+                                                <DataGridTemplateColumn Header="Đơn vị" Width="*">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <components:FilteredComboBox 
                                                             Style="{StaticResource lightComboBoxStyle}"
                                                             ItemsSource="{Binding DataContext.DanhSachDVTNotNull, RelativeSource={RelativeSource AncestorType=DataGrid}}"  
                                                             SelectedItem="{Binding donViTinh, UpdateSourceTrigger=PropertyChanged}"
                                                             DisplayMemberPath="tenDVT"
                                                             IsEnabled="{Binding isReadOnly, Converter={StaticResource InvertedBool}}"/>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
 
-                                            <DataGridTemplateColumn Header="Giá nhập" Width="*">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBox Text="{Binding giaNhap, Converter={StaticResource NumberFormatConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                <DataGridTemplateColumn Header="Giá nhập" Width="*">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding giaNhap, Converter={StaticResource NumberFormatConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                          Style="{StaticResource aLineTextBox}"
                                                          IsReadOnly="{Binding isReadOnly}">
-                                                            <i:Interaction.Behaviors>
-                                                                <behaviors:NumericInputBehavior/>
-                                                            </i:Interaction.Behaviors>
-                                                        </TextBox>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
+                                                                <i:Interaction.Behaviors>
+                                                                    <behaviors:NumericInputBehavior/>
+                                                                </i:Interaction.Behaviors>
+                                                            </TextBox>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
 
-                                            <DataGridTextColumn Header="Giá bán" 
+                                                <DataGridTextColumn Header="Giá bán" 
                                                                 IsReadOnly="True" 
                                                                 Width="*"
                                                                 FontSize="16"
                                                                 Binding="{Binding giaBan, Converter={StaticResource NumberFormatConverter}}"/>
 
-                                            <DataGridTemplateColumn Width="*">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Button Style="{StaticResource transparentButtonStyle}"
+                                                <DataGridTemplateColumn Width="*">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
                                                             Padding="4"
                                                             Visibility="{Binding isReadOnly, Converter={StaticResource BoolToVis}}">
-                                                                <fa:IconImage Icon="Edit"
+                                                                    <fa:IconImage Icon="Edit"
                                                                       Style="{StaticResource normalIconButton}"
                                                                       Foreground="{StaticResource darkFont}"
                                                                       Margin="0"/>
-                                                            </Button>
+                                                                </Button>
 
-                                                            <Button Style="{StaticResource transparentButtonStyle}"
+                                                                <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
                                                             Padding="4"
                                                             Visibility="{Binding isReadOnly, Converter={StaticResource BoolToVis}}">
-                                                                <fa:IconImage Icon="TrashCan" 
+                                                                    <fa:IconImage Icon="TrashCan" 
                                                                       Style="{StaticResource normalIconButton}"
                                                                       Foreground="{StaticResource darkFont}"
                                                                       Margin="0"/>
-                                                            </Button>
+                                                                </Button>
 
-                                                            <Button Style="{StaticResource transparentButtonStyle}"
+                                                                <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.SaveCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
                                                             Padding="4"
                                                             Visibility="{Binding isReadOnly, Converter={StaticResource InvertedBoolToVis}}">
-                                                                <fa:IconImage Icon="Check"
+                                                                    <fa:IconImage Icon="Check"
                                                                       Style="{StaticResource normalIconButton}"
                                                                       Foreground="{StaticResource darkFont}"
                                                                       Margin="0"/>
-                                                            </Button>
+                                                                </Button>
 
-                                                            <Button Style="{StaticResource transparentButtonStyle}"
+                                                                <Button Style="{StaticResource transparentButtonStyle}"
                                                             Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                             CommandParameter="{Binding}"
                                                             Padding="4"
                                                             Visibility="{Binding isReadOnly, Converter={StaticResource InvertedBoolToVis}}">
-                                                                <fa:IconImage Icon="Xmark" 
+                                                                    <fa:IconImage Icon="Xmark" 
                                                                       Style="{StaticResource normalIconButton}"
                                                                       Foreground="{StaticResource darkFont}"
                                                                       Margin="0"/>
-                                                            </Button>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                            </DataGridTemplateColumn>
-                                        </DataGrid.Columns>
-                                    </DataGrid>
+                                                                </Button>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
                                 </Border>
+
+
+                                <TextBlock Text="Không có dữ liệu"
+                                                   Visibility="{Binding DataContext.DanhSachVTPT, Converter={StaticResource NullToCollapsedConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                   Margin="0 60"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Style="{StaticResource buttonText}"
+                                                   FontSize="20"/>
                             </StackPanel>
 
                             <StackPanel Visibility="{Binding IsAdding, Converter={StaticResource BoolToVis}}"
@@ -674,20 +696,39 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <Button HorizontalAlignment="Left"
+                                <StackPanel Orientation="Horizontal">
+                                    <Button HorizontalAlignment="Center"
                                         Style="{StaticResource darkButtonStyle}"
                                         Padding="8 4"
                                         Margin="10 10"
+                                            Width="140"
                                         Command="{Binding SaveVTPTCommand}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:IconImage Icon="Check"
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="Check"
                                                   Style="{StaticResource normalIconButton}"
                                                   Foreground="{StaticResource lightFont}"/>
-                                        <TextBlock Text="Xác nhận" 
+                                            <TextBlock Text="Xác nhận" 
                                                Style="{StaticResource buttonText}" 
                                                Foreground="{StaticResource lightFont}"/>
-                                    </StackPanel>
-                                </Button>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button HorizontalAlignment="Center"
+                                        Style="{StaticResource darkButtonStyle}"
+                                        Padding="8 4"
+                                        Margin="10 10"
+                                            Width="140"
+                                        Command="{Binding CancelVTPTCommand}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconImage Icon="Xmark"
+                                                      Style="{StaticResource normalIconButton}"
+                                                      Foreground="{StaticResource lightFont}"/>
+                                            <TextBlock Text="Hủy" 
+                                                   Style="{StaticResource buttonText}" 
+                                                   Foreground="{StaticResource lightFont}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </Grid>
