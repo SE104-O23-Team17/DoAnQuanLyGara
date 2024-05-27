@@ -50,13 +50,9 @@ namespace QuanLyGara.Services
                 return instance;
             }
         }
+
         private Global()
         {
-            garaHienTai = new GaraModel();
-            tiLeTinhDonGiaBan = 105;
-            soXeSuaChuaToiDa = 30;
-            apDungQDKiemTraSoTienThu = true;
-
             danhSachGara = new List<GaraModel> {
                 new GaraModel { ID = 1, TaiKhoan = "Gara1", TenGara = "Gara 1", MatKhau = "1234", Sdt = "0123456789", DiaChi = "Đường Tạ Quang Bửu, khu phố 6, Thủ Đức, Thành phố Hồ Chí Minh"},
                 new GaraModel { ID = 2, TaiKhoan = "Gara2", TenGara = "Gara 2", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1" },
@@ -704,7 +700,43 @@ namespace QuanLyGara.Services
                     phatSinh = 80,
                     tonCuoi = 70,
                 },
-               
+                new BaoCaoTonModel
+                {
+                    thang = 2,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[2],
+                    tonDau = 30,
+                    phatSinh = 70,
+                    tonCuoi = 50
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 2,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[5],
+                    tonDau = 70,
+                    phatSinh = 40,
+                    tonCuoi = 80
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 2,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[1],
+                    tonDau = 30,
+                    phatSinh = 70,
+                    tonCuoi = 20
+                },
+                new BaoCaoTonModel
+                {
+                    thang = 2,
+                    nam = 2024,
+                    vtpt = danhSachVTPT[7],
+                    tonDau = 80,
+                    phatSinh = 30,
+                    tonCuoi = 40,
+                },
+
             };
         }
     }
