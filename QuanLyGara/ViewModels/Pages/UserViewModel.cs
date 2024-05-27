@@ -9,6 +9,8 @@ namespace QuanLyGara.ViewModels.Pages
 {
     public class UserViewModel : ViewModelBase
     {
+        private GaraModel gara;
+        public GaraModel getGara
         public UserViewModel()
         {
         }

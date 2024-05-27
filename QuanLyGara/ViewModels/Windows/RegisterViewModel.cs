@@ -239,7 +239,7 @@ namespace QuanLyGara.ViewModels.Windows
             IsLogin = true;
             garaMoi.MatKhau = "";
             nhapLaiMatKhau = "";
-            UpdatePasswordConfirmationError();
+                UpdatePasswordConfirmationError();
             OnPropertyChanged(nameof(NhapLaiMatKhau));
             OnPropertyChanged(nameof(IsLogin));
         }

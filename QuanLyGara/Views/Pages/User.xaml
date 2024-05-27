@@ -6,26 +6,13 @@
           xmlns:local="clr-namespace:QuanLyGara.Views.Pages"
           xmlns:viewmodel="clr-namespace:QuanLyGara.ViewModels.Pages"
           mc:Ignorable="d" 
-          d:DesignHeight="1600" d:DesignWidth="800">
 
     <UserControl.DataContext>
         <viewmodel:UserViewModel/>
     </UserControl.DataContext>
 
     <Grid Background="{StaticResource darkBackground}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
         <Border Grid.Column="0"
-            Background="{StaticResource lightBackground}"
-            Margin="50"
-            CornerRadius="15">
-        </Border>
-
-        <Border Grid.Column="1"
-            Background="{StaticResource lightBackground}"
             Margin="50"
             CornerRadius="15">
 
@@ -34,4 +21,10 @@
             </Grid>
         </Border>
     </Grid>
+
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Grid>
+
 </UserControl>
