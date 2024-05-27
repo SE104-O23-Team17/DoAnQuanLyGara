@@ -7,9 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using QuanLyGara.Models;
-using QuanLyGara.Services;
-using QuanLyGara.Views.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -74,11 +71,6 @@ namespace QuanLyGara.ViewModels.Pages
                 "Đăng xuất",
                 "Bạn có muốn đăng xuất không?", 
                 () => {
-            YesNoDialogViewModel dialogViewModel = new YesNoDialogViewModel("Đăng xuất", "Bạn có muốn đăng xuất không?");
-            dialogViewModel.DialogClosed += result =>
-            {
-                if (result == DialogResult.OK)
-                {
                     Register loginView = new Register();
                     loginView.Show();
 
@@ -87,10 +79,6 @@ namespace QuanLyGara.ViewModels.Pages
                 },
                 () => { }
                 );
-                }
-            };
-            YesNoDialog messageBox = new YesNoDialog { DataContext = dialogViewModel };
-            messageBox.ShowDialog();
         }
 
         private void ExecuteChangePasswordCommand(object obj)
@@ -102,7 +90,6 @@ namespace QuanLyGara.ViewModels.Pages
                     "Vui lòng điền đầy đủ thông tin.",
                     () => { }
                 );
-                MessageBox.Show("Vui lòng điền đầy đủ thông tin.");
                 return;
             }
 
@@ -113,7 +100,6 @@ namespace QuanLyGara.ViewModels.Pages
                     "Mật khẩu cũ không chính xác.",
                     () => { }
                 );
-                MessageBox.Show("Mật khẩu cũ không chính xác.");
                 return;
             }
 
@@ -156,18 +142,6 @@ namespace QuanLyGara.ViewModels.Pages
                 PasswordConfirmationError = "";
             }
             OnPropertyChanged("PasswordConfirmationError");
-                MessageBox.Show("Mật khẩu mới không khớp.");
-                return;
-            }
-
-            // Update the password in your data model or wherever it's stored
-            gara.MatKhau = NewPassword;
-
-            // Assuming you have a method to save changes to the data model
-            // For example:
-            // YourDataService.UpdatePassword(gara);
-
-            MessageBox.Show("Đổi mật khẩu thành công!");
         }
     }
 }
