@@ -17,6 +17,9 @@ namespace QuanLyGara
             Register register = new Register();
             register.Show();
 
+            /*MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();*/
+
             base.OnStartup(e);
         }
     }

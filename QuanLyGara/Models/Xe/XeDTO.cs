@@ -14,11 +14,17 @@ namespace QuanLyGara.Models.Xe
             tenXe = "";
             maHieuXe = 0;
             tienNo = 0;
+            tenChuXe = "";
+            sdt = "";
+            email = "";
         }
         public int maXe { get; set; }
         public string bienSo { get; set; }
         public string tenXe { get; set; }
         public int maHieuXe { get; set; }
         public double tienNo { get; set; }
+        public string tenChuXe { get; set; }
+        public string sdt { get; set; }
+        public string email { get; set; }
     }
 }
