@@ -10,8 +10,9 @@ namespace QuanLyGara
 {
     public class DBconnection
     {
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-6FEF0FT;Initial Catalog=QUANLYGARAOTO;Integrated Security=True;Encrypt=True;TrustServerCertificate=True");
 
+        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-6FEF0FT;Initial Catalog=QUANLYGARAOTO;Integrated Security=True;Encrypt=True;TrustServerCertificate=True");
+        
         // get the connection
         public SqlConnection getConnection
         {
