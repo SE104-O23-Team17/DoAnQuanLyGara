@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuanLyGara.DATA.DAO;
 
 namespace QuanLyGara.Services
 {
@@ -29,7 +30,7 @@ namespace QuanLyGara.Services
         public int soXeSuaChuaToiDa { get; set; }
         public bool apDungQDKiemTraSoTienThu { get; set; }
         public List<HieuXeModel> danhSachHieuXe { get; set; }
-        public List<DonViTinhModel> danhSachDVT { get; set; }
+        public List<DonViTinhModel> danhSachDVT {  get; set; }
         public List<VTPTModel> danhSachVTPT { get; set; }
         public List<PhieuNhapVTPTModel> danhSachPhieuNhap { get; set; }
         public List<NoiDungSuaChuaModel> danhSachNDSC { get; set; }
@@ -51,31 +52,29 @@ namespace QuanLyGara.Services
             }
         }
 
+        private GaraDAO garaDAO; 
         private Global()
         {
-            danhSachGara = new List<GaraModel> {
-                new GaraModel { ID = 1, TaiKhoan = "Gara1", TenGara = "Gara 1", MatKhau = "1234", Sdt = "0123456789", DiaChi = "Đường Tạ Quang Bửu, khu phố 6, Thủ Đức, Thành phố Hồ Chí Minh"},
-                new GaraModel { ID = 2, TaiKhoan = "GaraQuan1", TenGara = "Gara 2", MatKhau = "456", Sdt = "0123456789", DiaChi = "Quận 1" },
-                new GaraModel { ID = 3, TaiKhoan = "Gara3", TenGara = "Gara 3", MatKhau = "abc123", Sdt = "0123456789", DiaChi = "Quận 2 - Thành phố Hồ Chí Minh"},
-                new GaraModel { ID = 4, TaiKhoan = "Gara4", TenGara = "Gara 4", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
-            };
+            garaDAO = new GaraDAO();
+            danhSachGara = garaDAO.DanhSachGara();
 
             garaHienTai = new GaraModel();
+
             tiLeTinhDonGiaBan = 105;
             soXeSuaChuaToiDa = 30;
             apDungQDKiemTraSoTienThu = true;
 
             danhSachHieuXe = new List<HieuXeModel>{
-                new HieuXeModel { maHieuXe = 1, TenHieuXe = "Toyota" },
-                new HieuXeModel { maHieuXe = 2, TenHieuXe = "Honda" },
-                new HieuXeModel { maHieuXe = 3, TenHieuXe = "Suzuki" },
-                new HieuXeModel { maHieuXe = 4, TenHieuXe = "Yamaha" },
-                new HieuXeModel { maHieuXe = 5, TenHieuXe = "Kawasaki" },
-                new HieuXeModel { maHieuXe = 6, TenHieuXe = "SYM" },
-                new HieuXeModel { maHieuXe = 7, TenHieuXe = "Piaggio" },
-                new HieuXeModel { maHieuXe = 8, TenHieuXe = "Vespa" },
-                new HieuXeModel { maHieuXe = 9, TenHieuXe = "Kymco" },
-                new HieuXeModel { maHieuXe = 10, TenHieuXe = "Lambretta" },
+                            new HieuXeModel { maHieuXe = 1, TenHieuXe = "Toyota" },
+                            new HieuXeModel { maHieuXe = 2, TenHieuXe = "Honda" },
+                            new HieuXeModel { maHieuXe = 3, TenHieuXe = "Suzuki" },
+                            new HieuXeModel { maHieuXe = 4, TenHieuXe = "Yamaha" },
+                            new HieuXeModel { maHieuXe = 5, TenHieuXe = "Kawasaki" },
+                            new HieuXeModel { maHieuXe = 6, TenHieuXe = "SYM" },
+                            new HieuXeModel { maHieuXe = 7, TenHieuXe = "Piaggio" },
+                            new HieuXeModel { maHieuXe = 8, TenHieuXe = "Vespa" },
+                            new HieuXeModel { maHieuXe = 9, TenHieuXe = "Kymco" },
+                            new HieuXeModel { maHieuXe = 10, TenHieuXe = "Lambretta" },
             };
 
             danhSachDVT = new List<DonViTinhModel> {
@@ -738,6 +737,16 @@ namespace QuanLyGara.Services
                 },
 
             };
+        }
+
+        public void UpdateDanhSachHieuXe()
+        {
+            danhSachHieuXe = HieuXeDAO.Instance.DanhSachHieuXe();
+        }
+
+        public void UpdateDanhSachDonViTinh()
+        {
+            danhSachDVT = DonViTinhDAO.Instance.DanhSachDonViTinh();
         }
     }
 }

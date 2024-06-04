@@ -8,6 +8,7 @@ using System.Windows;
 using QuanLyGara.Models.PhieuNhapVTPT;
 using QuanLyGara.Models.CTPhieuNhapVTPT;
 using System.Collections.ObjectModel;
+using QuanLyGara.DATA.DAO;
 
 namespace QuanLyGara.ViewModels.Pages
 {
@@ -247,7 +248,9 @@ namespace QuanLyGara.ViewModels.Pages
 
             danhSachVTPT = Global.Instance.danhSachVTPT;
 
+            Global.Instance.UpdateDanhSachDonViTinh();
             danhSachDVT = new ObservableCollection<DonViTinhModel>(Global.Instance.danhSachDVT);
+
             ratio = Global.Instance.tiLeTinhDonGiaBan;
             themVTPT = [];
             phieuNhapVTPT = new PhieuNhapVTPTModel();
@@ -510,6 +513,9 @@ namespace QuanLyGara.ViewModels.Pages
                 }
 
                 dvt.isReadOnly = true;
+
+                DonViTinhDAO.Instance.ThemDonViTinh(dvt);
+
                 if (Global.Instance.danhSachDVT.FirstOrDefault(dvtCu => dvt.maDVT == dvtCu.maDVT) == null)
                 {
                     Global.Instance.danhSachDVT.Add(dvt);
@@ -525,6 +531,7 @@ namespace QuanLyGara.ViewModels.Pages
                 {
                     OnPropertyChanged(nameof(ThemVTPT));
                 }
+               
             }
         }
 
@@ -554,6 +561,7 @@ namespace QuanLyGara.ViewModels.Pages
                     "Bạn có chắc chắn muốn xóa đơn vị tính " + dvt.tenDVT + " không?",
                     () =>
                     {
+                        DonViTinhDAO.Instance.XoaDonViTinh(dvt.maDVT);
                         danhSachDVT.Remove(dvt);
                         OnPropertyChanged(nameof(DanhSachDVT));
                         if (isAdding)

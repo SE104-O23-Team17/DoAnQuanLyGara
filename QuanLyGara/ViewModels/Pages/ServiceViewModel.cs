@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using QuanLyGara.DATA.DAO;
 
 namespace QuanLyGara.ViewModels.Pages
 {
@@ -328,8 +329,12 @@ namespace QuanLyGara.ViewModels.Pages
             dialogService = new DialogService();
             LimitPerDay = Global.Instance.soXeSuaChuaToiDa;
             ApplyCheckPayment = Global.Instance.apDungQDKiemTraSoTienThu;
+
+            Global.Instance.UpdateDanhSachHieuXe();
             danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
+
             danhSachXe = Global.Instance.danhSachXe;
+          
             danhSachPhieuThu = new ObservableCollection<PhieuThuTienModel>(Global.Instance.danhSachPhieuThuTien);
             danhSachCTSC = Global.Instance.danhSachCTPhieuSC;
             danhSachPhieuSua = Global.Instance.danhSachPhieuSC;
@@ -624,14 +629,16 @@ namespace QuanLyGara.ViewModels.Pages
 
             if (danhSachXe.Any(xe => xe.HieuXe == hieuXe))
             {
+                // Hiển thị thông báo lỗi nếu hiệu xe đang được sử dụng
                 dialogService.ShowInfoDialog(
                     "Lỗi",
                     "Không thể xóa hiệu xe đang được sử dụng",
                     () => { }
-                    );
+                );
                 return;
             }
 
+            // Hiển thị hộp thoại xác nhận trước khi xóa
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
                 "Bạn có chắc chắn muốn xóa hiệu xe " + hieuXe.TenHieuXe + " không?",
@@ -640,9 +647,19 @@ namespace QuanLyGara.ViewModels.Pages
                     danhSachHieuXe.Remove(hieuXe);
                     Global.Instance.danhSachHieuXe.Remove(hieuXe);
                     OnPropertyChanged(nameof(DanhSachHieuXe));
+
+                    // Gọi phương thức XoaHieuXe từ lớp DAO để xóa hiệu xe khỏi cơ sở dữ liệu
+                    HieuXeDAO.Instance.XoaHieuXe(hieuXe);
+
+                    // Hiển thị thông báo khi xóa thành công
+                    dialogService.ShowInfoDialog(
+                        "Thông báo",
+                        "Đã xóa hiệu xe.",
+                        () => { }
+                    );
                 },
                 () => { }
-                );
+            );
         }
 
         private void ExecuteSaveBrandCommand(object obj)
@@ -678,6 +695,7 @@ namespace QuanLyGara.ViewModels.Pages
             if (Global.Instance.danhSachHieuXe.FirstOrDefault(hieuXeCu => hieuXeCu.maHieuXe == hieuXe.maHieuXe) == null)
             {
                 Global.Instance.danhSachHieuXe.Add(hieuXe);
+                HieuXeDAO.Instance.ThemHieuXe(hieuXe);
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Đã thêm hiệu xe mới.",
@@ -685,6 +703,7 @@ namespace QuanLyGara.ViewModels.Pages
                     );
             }
             OnPropertyChanged(nameof(DanhSachHieuXe));
+
         }
 
         private void ExecuteCancelBrandCommand(object obj)

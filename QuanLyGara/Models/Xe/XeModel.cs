@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,6 +23,9 @@ namespace QuanLyGara.Models.Xe
             tenXe = "";
             hieuXe = new HieuXeModel();
             tienNo = 0;
+            tenChuXe = "";
+            sdt = "";
+            email = "";
             isChecked = false;
             isReadOnly = true;
         }
@@ -32,6 +36,7 @@ namespace QuanLyGara.Models.Xe
             tenXe = xe.tenXe;
             hieuXe = xe.HieuXe;
             tienNo = xe.tienNo;
+            tenChuXe = xe.tenChuXe;
             isChecked = xe.isChecked;
             isReadOnly = xe.IsReadOnly;
         }
@@ -64,6 +69,9 @@ namespace QuanLyGara.Models.Xe
         }
 
         public double tienNo { get; set; }
+        public string tenChuXe { get; set; }
+        public string sdt { get; set; }
+        public string email { get; set; }
         public bool isChecked { get; set; }
 
         private bool isReadOnly;
