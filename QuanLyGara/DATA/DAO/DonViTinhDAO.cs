@@ -16,10 +16,18 @@ namespace QuanLyGara.DATA.DAO
             get { return gara; }
         }
 
-        public List<DonViTinhDTO> DanhSachDonViTinh()
+        private static readonly DonViTinhDAO instance = new DonViTinhDAO();
+        public static DonViTinhDAO Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+        public List<DonViTinhModel> DanhSachDonViTinh()
         {
             int maGara = gara.ID;
-            List<DonViTinhDTO> danhSachDonViTinh = new List<DonViTinhDTO>();
+            List<DonViTinhModel> danhSachDonViTinh = new List<DonViTinhModel>();
             try
             {
                 openConnection();
@@ -29,7 +37,7 @@ namespace QuanLyGara.DATA.DAO
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    DonViTinhDTO donViTinh = new DonViTinhDTO()
+                    DonViTinhModel donViTinh = new DonViTinhModel()
                     {
                         maDVT = Convert.ToInt32(reader["MADVT"]),
                         tenDVT = reader["TENDVT"].ToString()
@@ -48,7 +56,7 @@ namespace QuanLyGara.DATA.DAO
             return danhSachDonViTinh;
         }
 
-        public void ThemDonViTinh(DonViTinhDTO donViTinh)
+        public void ThemDonViTinh(DonViTinhModel donViTinh)
         {
             int maGara = gara.ID;
             try

@@ -324,16 +324,13 @@ namespace QuanLyGara.ViewModels.Pages
             OnPropertyChanged(nameof(SoXeSuaChuaHomNay));
         }
 
-        private HieuXeDAO hieuXeDAO;
-        private XeDAO xeDAO;
-
         public ServiceViewModel()
         {
             dialogService = new DialogService();
-            hieuXeDAO = new HieuXeDAO();
             LimitPerDay = Global.Instance.soXeSuaChuaToiDa;
             ApplyCheckPayment = Global.Instance.apDungQDKiemTraSoTienThu;
 
+            Global.Instance.UpdateDanhSachHieuXe();
             danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
 
             danhSachXe = Global.Instance.danhSachXe;
@@ -652,7 +649,7 @@ namespace QuanLyGara.ViewModels.Pages
                     OnPropertyChanged(nameof(DanhSachHieuXe));
 
                     // Gọi phương thức XoaHieuXe từ lớp DAO để xóa hiệu xe khỏi cơ sở dữ liệu
-                    hieuXeDAO.XoaHieuXe(hieuXe);
+                    HieuXeDAO.Instance.XoaHieuXe(hieuXe);
 
                     // Hiển thị thông báo khi xóa thành công
                     dialogService.ShowInfoDialog(
@@ -697,8 +694,8 @@ namespace QuanLyGara.ViewModels.Pages
             hieuXe.IsReadOnly = true;
             if (Global.Instance.danhSachHieuXe.FirstOrDefault(hieuXeCu => hieuXeCu.maHieuXe == hieuXe.maHieuXe) == null)
             {
-                hieuXeDAO.ThemHieuXe(hieuXe);
                 Global.Instance.danhSachHieuXe.Add(hieuXe);
+                HieuXeDAO.Instance.ThemHieuXe(hieuXe);
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Đã thêm hiệu xe mới.",
@@ -706,6 +703,7 @@ namespace QuanLyGara.ViewModels.Pages
                     );
             }
             OnPropertyChanged(nameof(DanhSachHieuXe));
+
         }
 
         private void ExecuteCancelBrandCommand(object obj)

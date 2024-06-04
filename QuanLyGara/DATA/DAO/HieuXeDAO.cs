@@ -14,6 +14,16 @@ namespace QuanLyGara.DATA.DAO
     public class HieuXeDAO : DBconnection
     {
         public GaraModel gara = Global.Instance.garaHienTai;
+
+        private static readonly HieuXeDAO instance = new HieuXeDAO();
+        public static HieuXeDAO Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         public GaraModel getGara
         {
             get { return gara; }
