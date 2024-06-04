@@ -5,17 +5,26 @@
     namespace QuanLyGara.Models
     {
         public class BaoCaoDoanhSoModel : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public BaoCaoDoanhSoModel() {
-                maBCDS = 0;
-                thang = 0;
-                nam = 0;
+            public event PropertyChangedEventHandler PropertyChanged;
+                public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+                {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                }
+                public BaoCaoDoanhSoModel() {
+                    maBCDS = 0;
+                    thang = 0;
+                    nam = 0;
+                    tongDoanhThu = 0;
+                    danhSachCT = new List<CTBaoCaoDoanhSoModel>();
+                }
+            public BaoCaoDoanhSoModel(int maBCDS, int thang, int nam)
+            {
+                this.maBCDS = maBCDS;
+                this.thang = thang;
+                this.nam = nam;
                 tongDoanhThu = 0;
+                danhSachCT = new List<CTBaoCaoDoanhSoModel>();
             }
             public int maBCDS { get; set; }
             public int thang { get; set; }

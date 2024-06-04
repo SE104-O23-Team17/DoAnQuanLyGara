@@ -10,6 +10,7 @@ using QuanLyGara.Models;
 using QuanLyGara.Models.BaoCaoTon;
 using System.Reflection.Metadata;
 using System.Collections.ObjectModel;
+using QuanLyGara.Models.CTBaoCaoDoanhSo;
 
 namespace QuanLyGara.ViewModels.Pages
 {
@@ -143,11 +144,52 @@ namespace QuanLyGara.ViewModels.Pages
             
             if (BaoCaoDoanhSo == null)
             {
-                dialogService.ShowInfoDialog(
-                    "Thông báo",
-                    "Không tìm thấy báo cáo doanh số cho tháng và năm được chọn.",
-                    () => { }
+                bool hasMatchingPhieuSuaChua = Global.Instance.danhSachPhieuSC.Any(phieuSuaChua =>
+        phieuSuaChua.ngayLap.Month == SelectedThang.maThang && phieuSuaChua.ngayLap.Year == SelectedNam);
+
+                if (!hasMatchingPhieuSuaChua)
+                {
+                    dialogService.ShowInfoDialog(
+                        "Thông báo",
+                        "Không tìm thấy báo cáo doanh số cho tháng và năm được chọn.",
+                        () => { }
                     );
+                    return;
+                }
+
+                baoCaoDoanhSo = new BaoCaoDoanhSoModel(
+                    Global.Instance.danhSachDoanhSo.Max(baoCao => baoCao.maBCDS) + 1,
+                    SelectedThang.maThang,
+                    SelectedNam
+                    );
+
+                foreach (var phieuSuaChua in Global.Instance.danhSachPhieuSC)
+                {
+                    if (phieuSuaChua.ngayLap.Month == SelectedThang.maThang && phieuSuaChua.ngayLap.Year == SelectedNam)
+                    {
+                        var ctBaoCao = baoCaoDoanhSo.DanhSachCT.FirstOrDefault(ct => ct.hieuXe == phieuSuaChua.xe.HieuXe);
+
+                        if (ctBaoCao == null)
+                        {
+                            ctBaoCao = new CTBaoCaoDoanhSoModel
+                            {
+                                hieuXe = phieuSuaChua.xe.HieuXe
+                            };
+                            baoCaoDoanhSo.DanhSachCT.Add(ctBaoCao);
+                        }
+
+                        ctBaoCao.soLuotSua++;
+                        ctBaoCao.thanhTien += phieuSuaChua.tongTien;
+                    }
+                }
+
+                baoCaoDoanhSo.tongDoanhThu = baoCaoDoanhSo.DanhSachCT.Sum(ct => ct.thanhTien);
+                foreach (var ctBaoCao in baoCaoDoanhSo.DanhSachCT)
+                {
+                    ctBaoCao.tiLe = ctBaoCao.thanhTien / baoCaoDoanhSo.tongDoanhThu * 100;
+                }
+
+                Global.Instance.danhSachDoanhSo.Add(baoCaoDoanhSo);
             }
             OnPropertyChanged(nameof(BaoCaoDoanhSo));
             
