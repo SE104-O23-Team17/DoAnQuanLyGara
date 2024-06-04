@@ -45,11 +45,15 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0" Margin="0 0 0 0">
-                                <TextBlock Text="BÁO CÁO THÁNG"
+                                <TextBlock Text="Báo cáo doanh số"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
                                            Style="{StaticResource buttonText}"
                                            Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}"/>
 
-                                <TextBlock Text="BÁO CÁO TỒN"
+                                <TextBlock Text="Báo cáo tồn"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
                                            Style="{StaticResource buttonText}"
                                            Visibility="{Binding IsSwitching, Converter={StaticResource BoolToVis}}"/>
                             </StackPanel>
@@ -84,7 +88,7 @@
                                                 <fa:IconImage Icon="ArrowCircleLeft"
                                                           Style="{StaticResource normalIconButton}"
                                                           Foreground="{StaticResource lightFont}"/>
-                                                <TextBlock Text="Chuyển sang báo cáo tháng" 
+                                                <TextBlock Text="Chuyển sang báo cáo doanh số" 
                                                        Style="{StaticResource buttonText}" 
                                                        Foreground="{StaticResource lightFont}"
                                                        Margin="0 0 5 0"/>
@@ -112,11 +116,22 @@
 
                         <Button Style="{StaticResource darkButtonStyle}"
                                 Margin="30 0"
-                                Command="{Binding TruyXuatCommand}">
+                                Command="{Binding TruyXuatTonCommand}"
+                                Visibility="{Binding IsSwitching, Converter={StaticResource BoolToVis}}">
                             <TextBlock Text="Truy xuất" 
                             Style="{StaticResource buttonText}" 
                             Foreground="{StaticResource lightFont}"
                             Margin="0 0 5 0"/>
+                        </Button>
+
+                        <Button Style="{StaticResource darkButtonStyle}"
+                                Margin="30 0"
+                                Command="{Binding TruyXuatThangCommand}"
+                                Visibility="{Binding IsSwitching, Converter={StaticResource InvertedBoolToVis}}">
+                            <TextBlock Text="Truy xuất" 
+                                       Style="{StaticResource buttonText}" 
+                                       Foreground="{StaticResource lightFont}"
+                                       Margin="0 0 5 0"/>
                         </Button>
                     </StackPanel>
                 </StackPanel>
@@ -142,7 +157,7 @@
                                        Style="{StaticResource buttonText}"
                                        FontSize="18"
                                        HorizontalAlignment="Center">
-                                <Run Text="Báo cáo tháng "/>
+                                <Run Text="Báo cáo doanh số tháng "/>
                                 <Run Text="{Binding BaoCaoDoanhSo.thang}"/>
                                 <Run Text="/"/>
                                 <Run Text="{Binding BaoCaoDoanhSo.nam}"/>
@@ -178,6 +193,7 @@
                         </StackPanel>
 
                         <Grid Grid.Row="1" Visibility="{Binding IsSwitching, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
                             <TextBlock Text="Không có dữ liệu"
                                        Margin="0 20"
                                        Visibility="{Binding BaoCaoTon, Converter={StaticResource NullToCollapsedConverter}}"
@@ -185,11 +201,29 @@
                                        VerticalAlignment="Center"
                                        Style="{StaticResource buttonText}"
                                        FontSize="20"/>
+
+                            <TextBlock Margin="0 10"
+                                       Visibility="{Binding BaoCaoTon, Converter={StaticResource NullToVisibilityConverter}}"
+                                       Style="{StaticResource buttonText}"
+                                       FontSize="18"
+                                       HorizontalAlignment="Center">
+                                <Run Text="Báo cáo tồn tháng "/>
+                                <Run Text="{Binding TonThang}"/>
+                                <Run Text="/"/>
+                                <Run Text="{Binding TonNam}"/>
+                            </TextBlock>
+                            
                             <Border Margin="0 20 0 0" 
                                     BorderBrush="{StaticResource darkBorder}"
                                     BorderThickness="2"
                                     Visibility="{Binding BaoCaoTon, Converter={StaticResource NullToVisibilityConverter}}">
-                                <DataGrid x:Name="BaoCaoTon" ItemsSource="{Binding BaoCaoTon, Mode=TwoWay}" Style="{StaticResource NoScrollDataGridStyle2}" CellStyle="{StaticResource DataGridCellStyle2}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}" RowStyle="{StaticResource DataGridRowStyle2}" VerticalAlignment="Top"
+                                <DataGrid x:Name="BaoCaoTon" 
+                                          ItemsSource="{Binding BaoCaoTon, Mode=TwoWay}" 
+                                          Style="{StaticResource NoScrollDataGridStyle2}" 
+                                          CellStyle="{StaticResource DataGridCellStyle2}" 
+                                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle2}" 
+                                          RowStyle="{StaticResource DataGridRowStyle2}" 
+                                          VerticalAlignment="Top"
                                           Padding="0">
 
                                     <DataGrid.Columns>
@@ -201,6 +235,7 @@
 
                                 </DataGrid>
                             </Border>
+                            </StackPanel>
                         </Grid>
                     </Grid>
                 </StackPanel>
