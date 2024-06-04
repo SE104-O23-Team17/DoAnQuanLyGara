@@ -327,15 +327,14 @@ namespace QuanLyGara.ViewModels.Pages
         private HieuXeDAO hieuXeDAO;
         private XeDAO xeDAO;
 
-
         public ServiceViewModel()
         {
             dialogService = new DialogService();
+            hieuXeDAO = new HieuXeDAO();
             LimitPerDay = Global.Instance.soXeSuaChuaToiDa;
             ApplyCheckPayment = Global.Instance.apDungQDKiemTraSoTienThu;
 
-            hieuXeDAO = new HieuXeDAO();
-            danhSachHieuXe = new ObservableCollection<HieuXeModel>(hieuXeDAO.DanhSachHieuXe());
+            danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
 
             danhSachXe = Global.Instance.danhSachXe;
           
@@ -698,6 +697,7 @@ namespace QuanLyGara.ViewModels.Pages
             hieuXe.IsReadOnly = true;
             if (Global.Instance.danhSachHieuXe.FirstOrDefault(hieuXeCu => hieuXeCu.maHieuXe == hieuXe.maHieuXe) == null)
             {
+                hieuXeDAO.ThemHieuXe(hieuXe);
                 Global.Instance.danhSachHieuXe.Add(hieuXe);
                 dialogService.ShowInfoDialog(
                     "Thông báo",
@@ -706,8 +706,6 @@ namespace QuanLyGara.ViewModels.Pages
                     );
             }
             OnPropertyChanged(nameof(DanhSachHieuXe));
-
-            hieuXeDAO.ThemHieuXe(hieuXe);
         }
 
         private void ExecuteCancelBrandCommand(object obj)

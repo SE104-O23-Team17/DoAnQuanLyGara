@@ -52,30 +52,20 @@ namespace QuanLyGara.Services
             }
         }
 
-        private GaraDAO garaDAO; 
-
+        //private GaraDAO garaDAO; 
+       // private HieuXeDAO hieuXeDAO;
         private Global()
         {
-            garaDAO = new GaraDAO();
-            danhSachGara = garaDAO.DanhSachGara();
+           // garaDAO = new GaraDAO();
+          //  danhSachGara = garaDAO.DanhSachGara();
 
             garaHienTai = new GaraModel();
             tiLeTinhDonGiaBan = 105;
             soXeSuaChuaToiDa = 30;
             apDungQDKiemTraSoTienThu = true;
 
-            danhSachHieuXe = new List<HieuXeModel>{
-                new HieuXeModel { maHieuXe = 1, TenHieuXe = "Toyota" },
-                new HieuXeModel { maHieuXe = 2, TenHieuXe = "Honda" },
-                new HieuXeModel { maHieuXe = 3, TenHieuXe = "Suzuki" },
-                new HieuXeModel { maHieuXe = 4, TenHieuXe = "Yamaha" },
-                new HieuXeModel { maHieuXe = 5, TenHieuXe = "Kawasaki" },
-                new HieuXeModel { maHieuXe = 6, TenHieuXe = "SYM" },
-                new HieuXeModel { maHieuXe = 7, TenHieuXe = "Piaggio" },
-                new HieuXeModel { maHieuXe = 8, TenHieuXe = "Vespa" },
-                new HieuXeModel { maHieuXe = 9, TenHieuXe = "Kymco" },
-                new HieuXeModel { maHieuXe = 10, TenHieuXe = "Lambretta" },
-            };
+          //  hieuXeDAO = new HieuXeDAO();
+        //    danhSachHieuXe = hieuXeDAO.DanhSachHieuXe();
 
             danhSachDVT = new List<DonViTinhModel> {
                 new DonViTinhModel { maDVT = 1, tenDVT = "Cái" },
