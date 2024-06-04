@@ -748,5 +748,26 @@ namespace QuanLyGara.Services
         {
             danhSachDVT = DonViTinhDAO.Instance.DanhSachDonViTinh();
         }
+
+        public void UpdateDanhSachXe()
+        {
+            List<XeDTO> temp = XeDAO.Instance.DanhSachXe();
+            danhSachXe = new List<XeModel>();
+
+            foreach (XeDTO xe in temp)
+            {
+                danhSachXe.Add(new XeModel
+                {
+                    bienSo = xe.bienSo,
+                    HieuXe = danhSachHieuXe.Find(hx => hx.maHieuXe == xe.maHieuXe),
+                    tenXe = xe.tenXe,
+                    tienNo = xe.tienNo,
+                    email = xe.email,
+                    sdt = xe.sdt,
+                    tenChuXe = xe.tenChuXe,
+                    maXe = xe.maXe
+                });
+            }
+        }
     }
 }

@@ -333,6 +333,7 @@ namespace QuanLyGara.ViewModels.Pages
             Global.Instance.UpdateDanhSachHieuXe();
             danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
 
+            Global.Instance.UpdateDanhSachXe();
             danhSachXe = Global.Instance.danhSachXe;
           
             danhSachPhieuThu = new ObservableCollection<PhieuThuTienModel>(Global.Instance.danhSachPhieuThuTien);
@@ -452,6 +453,9 @@ namespace QuanLyGara.ViewModels.Pages
         {
             XeModel xeMoi = new XeModel()
             {
+                email = "",
+                sdt = "",
+                tenChuXe = "",
                 bienSo = "",
                 tenXe = "",
                 HieuXe = null,
@@ -532,7 +536,7 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 dialogService.ShowInfoDialog(
                     "Lỗi",
-                    "Vui lòng nhập đầy đủ thông tin",
+                    "Vui lòng nhập đầy đủ thông tin.",
                     () => { }
                     );
                 return;
@@ -542,7 +546,17 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 dialogService.ShowInfoDialog(
                     "Lỗi",
-                    "Xe đã tồn tại",
+                    "Biển số xe đã tồn tại.",
+                    () => { }
+                    );
+                return;
+            }
+
+            if (xeLuu.email.Length != 10)
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Số điện thoại phải gồm 10 chữ số.",
                     () => { }
                     );
                 return;

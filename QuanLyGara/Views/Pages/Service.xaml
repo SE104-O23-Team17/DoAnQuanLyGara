@@ -440,6 +440,54 @@
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                     </DataGrid.Columns>
+                                    <DataGrid.RowDetailsTemplate>
+                                        <DataTemplate>
+                                            <Border CornerRadius="5"
+                                                    Background="{StaticResource lightBackground}"
+                                                    Padding="12"
+                                                    Margin="12 8"
+                                                    BorderThickness="2"
+                                                    BorderBrush="{StaticResource darkBorder}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Tên chủ xe: "
+                                                               Style="{StaticResource buttonText}"/>
+
+                                                    <TextBox Text="{Binding tenChuXe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Style="{StaticResource aLineTextBox}"
+                                                             IsReadOnly="{Binding IsReadOnly}"
+                                                             Width="200"/>
+                                                </StackPanel>
+                                                
+                                                <StackPanel Orientation="Horizontal"
+                                                            Margin="20 0">
+                                                    <TextBlock Text="Số điện thoại: "
+                                                               Style="{StaticResource buttonText}"/>
+
+                                                        <TextBox Text="{Binding sdt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Style="{StaticResource aLineTextBox}"
+                                                             IsReadOnly="{Binding IsReadOnly}" 
+                                                             Width="120">
+                                                            <i:Interaction.Behaviors>
+                                                                <behaviors:NumericInputBehavior/>
+                                                            </i:Interaction.Behaviors>
+                                                        </TextBox>
+                                                </StackPanel>
+
+
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Email: "
+                                                               Style="{StaticResource buttonText}"/>
+
+                                                    <TextBox Text="{Binding email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Style="{StaticResource aLineTextBox}"
+                                                             IsReadOnly="{Binding IsReadOnly}" 
+                                                             Width="200"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGrid.RowDetailsTemplate>
                                 </DataGrid>
                             </Border>
 

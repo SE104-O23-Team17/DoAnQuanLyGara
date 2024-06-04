@@ -17,11 +17,20 @@ namespace QuanLyGara.DATA.DAO
             get { return gara; }
         }
 
-        public List<XeModel> DanhSachXe()
+        private static readonly XeDAO instance = new XeDAO();
+        public static XeDAO Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        public List<XeDTO> DanhSachXe()
         {
             int maGara = gara.ID;
 
-            List<XeModel> danhSachXe = new List<XeModel>();
+            List<XeDTO> danhSachXe = new List<XeDTO>();
             try
             {
                 openConnection();
@@ -31,16 +40,16 @@ namespace QuanLyGara.DATA.DAO
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    XeModel xe = new XeModel
+                    XeDTO xe = new XeDTO
                     {
                          bienSo = reader["BIENSO"].ToString(),
                          tenXe = reader["TENXE"].ToString(),
-                         HieuXe = new HieuXeModel()
-                         {
-                             TenHieuXe = reader["TENHIEUXE"].ToString()
-                         },
+                         maHieuXe = Convert.ToInt32(reader["MAHIEUXE"]),
                          tienNo = Convert.ToDouble(reader["TIENNO"]),
-                         
+                         tenChuXe = reader["TENCHUXE"].ToString(),
+                         email = reader["EMAIL"].ToString(),
+                         sdt = reader["SODIENTHOAI"].ToString(),
+                         maXe = Convert.ToInt32(reader["MAXE"]),
                     };
                     danhSachXe.Add(xe);
                 }
@@ -61,11 +70,11 @@ namespace QuanLyGara.DATA.DAO
             try
             {
                 openConnection();
-                string query = "INSERT INTO XE (BIENSO, TENXE, TENHIEUXE, TIENNO, MAGARA) VALUES (@BienSo, @TenXe, @TenHieuXe, @TienNo, @MaGara)";
+                string query = "INSERT INTO XE (BIENSO, TENXE, MAHIEUXE, TIENNO, MAGARA) VALUES (@BienSo, @TenXe, @MaHieuXe, @TienNo, @MaGara)";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@BienSo", xe.bienSo);
                 cmd.Parameters.AddWithValue("@TenXe", xe.tenXe);
-                cmd.Parameters.AddWithValue("@TenHieuXe", xe.HieuXe.TenHieuXe);
+                cmd.Parameters.AddWithValue("@MaHieuXe", xe.HieuXe.maHieuXe);
                 cmd.Parameters.AddWithValue("@TienNo", xe.tienNo);
                 cmd.Parameters.AddWithValue("@MaGara", gara.ID);
                 cmd.ExecuteNonQuery();
@@ -79,14 +88,15 @@ namespace QuanLyGara.DATA.DAO
                 closeConnection();
             }
         }
-        public void XoaXe(string bienSo)
+
+        public void XoaXe(int maXe)
         {
             try
             {
                 openConnection();
-                string query = "DELETE FROM XE WHERE BIENSO = @BienSo AND MAGARA = @MaGara";
+                string query = "DELETE FROM XE WHERE MAXE = @MaXe AND MAGARA = @MaGara";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
-                cmd.Parameters.AddWithValue("@BienSo", bienSo);
+                cmd.Parameters.AddWithValue("@MaXe", maXe);
                 cmd.Parameters.AddWithValue("@MaGara", gara.ID);
                 cmd.ExecuteNonQuery();
             }
@@ -99,7 +109,5 @@ namespace QuanLyGara.DATA.DAO
                 closeConnection();
             }
         }
-
-
     }
 }

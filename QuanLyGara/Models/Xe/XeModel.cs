@@ -19,6 +19,7 @@ namespace QuanLyGara.Models.Xe
         }
 
         public XeModel() {
+            maXe = 0;
             bienSo = "";
             tenXe = "";
             hieuXe = new HieuXeModel();
@@ -32,6 +33,7 @@ namespace QuanLyGara.Models.Xe
 
         public XeModel(XeModel xe)
         {
+            maXe = xe.maXe;
             bienSo = xe.bienSo;
             tenXe = xe.tenXe;
             hieuXe = xe.HieuXe;
@@ -40,6 +42,8 @@ namespace QuanLyGara.Models.Xe
             isChecked = xe.isChecked;
             isReadOnly = xe.IsReadOnly;
         }
+
+        public int maXe { get; set; }
         public string bienSo { get; set; }
         public string tenXe { get; set; }
 
