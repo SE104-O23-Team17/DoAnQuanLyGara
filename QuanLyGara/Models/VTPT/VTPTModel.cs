@@ -96,6 +96,25 @@ namespace QuanLyGara.Models.VTPT
             soLuongTon += soLuong;
         }
 
+        public void SuDung(int soLuong)
+        {
+            soLuongTon -= soLuong;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is VTPTModel other)
+            {
+                return maVTPT == other.maVTPT;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return tenVTPT?.GetHashCode() ?? 0;
+        }
+
         public override string ToString()
         {
             return tenVTPT;

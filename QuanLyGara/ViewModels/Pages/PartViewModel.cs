@@ -233,7 +233,6 @@ namespace QuanLyGara.ViewModels.Pages
         public ICommand SaveImportCommand { get; set; }
         public ICommand RemoveImportCommand { get; set; }
         public ICommand ViewImportCommand { get; set; }
-        public ICommand RemoveListImportCommand { get; set; }
         public ICommand SetListImportCommand { get; set; }
 
         public PartViewModel() {
@@ -279,7 +278,6 @@ namespace QuanLyGara.ViewModels.Pages
             SaveImportCommand = new ViewModelCommand(ExecuteSaveImportCommand);
             RemoveImportCommand = new ViewModelCommand(ExecuteRemoveImportCommand);
             ViewImportCommand = new ViewModelCommand(ExecuteViewImportCommand);
-            RemoveListImportCommand = new ViewModelCommand(ExecuteRemoveListImportCommand);
             SetListImportCommand = new ViewModelCommand(ExecuteSetListImportCommand);
         }
 
@@ -601,6 +599,17 @@ namespace QuanLyGara.ViewModels.Pages
         private void ExecuteSaveVTPTCommand(object obj)
         {
             List<VTPTModel> newVTPTs = [];
+
+            if (themVTPT.Count == 0)
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Cần có ít nhất một vật tư phụ tùng.",
+                    () => { }
+                    );
+                return;
+            }
+
             foreach (VTPTModel vtpt in themVTPT)
             {
                 if (string.IsNullOrEmpty(vtpt.tenVTPT))
@@ -608,15 +617,6 @@ namespace QuanLyGara.ViewModels.Pages
                     dialogService.ShowInfoDialog(
                         "Lỗi",
                         "Tên vật tư không được để trống.",
-                        () => { }
-                        );
-                    return;
-                }
-                if (vtpt.giaNhap <= 0)
-                {
-                    dialogService.ShowInfoDialog(
-                        "Lỗi",
-                        "Giá nhập phải lớn hơn 0.",
                         () => { }
                         );
                     return;
@@ -634,7 +634,6 @@ namespace QuanLyGara.ViewModels.Pages
             }
                         
             danhSachVTPT.AddRange(newVTPTs);
-            Global.Instance.danhSachVTPT.AddRange(newVTPTs);
             themVTPT.Clear();
             OnPropertyChanged(nameof(DanhSachVTPT));
             isAdding = false;
@@ -706,10 +705,17 @@ namespace QuanLyGara.ViewModels.Pages
         {
             IsImporting = true;
             IsViewing = false;
+            isAdding = false;
+            isViewingImport = false;
 
             phieuNhapVTPT = new PhieuNhapVTPTModel(danhSachPhieuNhap.Count + 1);
             phieuNhapVTPT.ThemCT(new CTPhieuNhapVTPTModel());
             OnPropertyChanged(nameof(PhieuNhapVTPT));
+
+            OnPropertyChanged(nameof(IsAdding));
+            OnPropertyChanged(nameof(IsViewing));
+            OnPropertyChanged(nameof(IsImporting));
+            OnPropertyChanged(nameof(IsViewingImport));
         }
 
         private void ExecuteAddImportCommand(object obj)
@@ -722,60 +728,55 @@ namespace QuanLyGara.ViewModels.Pages
         {
             if (phieuNhapVTPT.DanhSachCT.Count == 0)
             {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Cần có ít nhất một vật tư phụ tùng.",
+                    () => { }
+                );
                 return;
             }
 
-                foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
+            foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
+            {
+                if (string.IsNullOrEmpty(ct.VTPT.tenVTPT))
                 {
-                    if (ct.SoLuong <= 0)
-                    {
-                        dialogService.ShowInfoDialog(
-                            "Lỗi",
-                            "Số lượng phải lớn hơn 0.",
-                            () => { }
-                            );
-                        return;
-                    }
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Tên vật tư không được để trống.",
+                        () => { }
+                        );
+                    return;
+                }
 
-                    if (ct.GiaNhap <= 0)
-                    {
-                        dialogService.ShowInfoDialog(
-                            "Lỗi",
-                            "Giá nhập phải lớn hơn 0.",
-                            () => { }
-                            );
-                        return;
-                    }
+                if (ct.SoLuong <= 0)
+                {
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Số lượng của " + ct.VTPT.giaNhap + " phải lớn hơn 0.",
+                        () => { }
+                        );
+                    return;
+                }
 
-                    if (string.IsNullOrEmpty(ct.VTPT.tenVTPT))
-                    {
-                        dialogService.ShowInfoDialog(
-                            "Lỗi",
-                            "Tên vật tư không được để trống.",
-                            () => { }
-                            );
-                        return;
-                    }
+                if (ct.GiaNhap <= 0)
+                {
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Giá nhập của " + ct.VTPT.giaNhap + " phải lớn hơn 0.",
+                        () => { }
+                        );
+                    return;
+                }
 
-                    if (ct.VTPT.donViTinh == null)
-                    {
-                        dialogService.ShowInfoDialog(
-                            "Lỗi",
-                            "Đơn vị tính không được để trống.",
-                            () => { }
-                            );
-                        return;
-                    }
-
-                    if (danhSachVTPT.Any(vtpt => vtpt == ct.VTPT))
-                    {
-                        dialogService.ShowInfoDialog(
-                            "Lỗi",
-                            "Vật tư " + ct.VTPT.tenVTPT + " đã tồn tại.",
-                            () => { }
-                            );
-                        return;
-                    }
+                if (ct.VTPT.donViTinh == null)
+                {
+                    dialogService.ShowInfoDialog(
+                        "Lỗi",
+                        "Đơn vị tính của " + ct.VTPT.giaNhap + " không được để trống.",
+                        () => { }
+                        );
+                    return;
+                }
 
                 if (ct.GiaNhap != ct.VTPT.giaNhap)
                 {
@@ -783,19 +784,32 @@ namespace QuanLyGara.ViewModels.Pages
                 }
                 danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().NhapThem(ct.SoLuong);
             }
-                danhSachPhieuNhap.Add(phieuNhapVTPT);
-                Global.Instance.danhSachPhieuNhap.Add(phieuNhapVTPT);
-                OnPropertyChanged(nameof(DanhSachPhieuNhap));
-                OnPropertyChanged(nameof(IsImportListNull));
-                OnPropertyChanged(nameof(DanhSachPhieuNhap));
 
-            dialogService.ShowInfoDialog(
-                    "Thông báo",
-                    "Đã nhập thành công " + phieuNhapVTPT.DanhSachCT.Count + " loại vật tư.",
+
+            if (phieuNhapVTPT.DanhSachCT.GroupBy(ct => ct.VTPT.tenVTPT).Any(g => g.Count() > 1))
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Có vật tư trùng lặp.",
                     () => { }
-                    );
+                );
+                return;
+            }
 
-            ExecuteBackToView(null);
+            dialogService.ShowYesNoDialog(
+                "Xác nhận",
+                "Sau khi lưu sẽ không thể thay đổi. Lưu phiếu sửa chữa?",
+                () =>
+                {
+                    danhSachPhieuNhap.Add(phieuNhapVTPT);
+                    OnPropertyChanged(nameof(DanhSachPhieuNhap));
+                    OnPropertyChanged(nameof(IsImportListNull));
+                    OnPropertyChanged(nameof(DanhSachPhieuNhap));
+                },
+                () => { }
+                );
+
+            ExecuteViewImportCommand(null);
         }
 
         private void ExecuteRemoveImportCommand(object obj)
@@ -811,6 +825,14 @@ namespace QuanLyGara.ViewModels.Pages
         {
             IsViewing = false;
             IsViewingImport = true;
+            isAdding = false;
+            isImporting = false;
+
+            OnPropertyChanged(nameof(IsAdding));
+            OnPropertyChanged(nameof(IsViewing));
+            OnPropertyChanged(nameof(IsImporting));
+            OnPropertyChanged(nameof(IsViewingImport));
+
             phieuNhapVTPT = danhSachPhieuNhap.LastOrDefault();
             if (phieuNhapVTPT == null)
             {
@@ -820,32 +842,6 @@ namespace QuanLyGara.ViewModels.Pages
             }
             phieuNhapVTPT.IsChecked = true;
             OnPropertyChanged(nameof(PhieuNhapVTPT));
-        }
-
-        private void ExecuteRemoveListImportCommand(object obj)
-        {
-            if (obj is PhieuNhapVTPTModel phieuNhap)
-            {
-                dialogService.ShowYesNoDialog(
-                    "Xác nhận",
-                    "Bạn có chắc chắn muốn xóa phiếu nhập vật tư phụ tùng này không?",
-                    () =>
-                    {
-                        danhSachPhieuNhap.Remove(phieuNhap);
-                        OnPropertyChanged(nameof(DanhSachPhieuNhap));
-                        phieuNhapVTPT = danhSachPhieuNhap.LastOrDefault();
-                        if (phieuNhapVTPT == null)
-                        {
-                            OnPropertyChanged(nameof(PhieuNhapVTPT));
-                            OnPropertyChanged(nameof(IsImportListNull));
-                            return;
-                        }
-                        phieuNhapVTPT.IsChecked = true;
-                        OnPropertyChanged(nameof(PhieuNhapVTPT));
-                    },
-                    () => { }
-                    );
-            }
         }
 
         private void ExecuteSetListImportCommand(object obj)

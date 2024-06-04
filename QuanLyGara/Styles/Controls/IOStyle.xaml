@@ -931,6 +931,24 @@
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+                            <Setter Property="Opacity" TargetName="indeterminateMark" Value="0"/>
+                            <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource lightFont}"/>
+                            <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource lightFont}"/>
+                            <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource darkBorder}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="optionMark" Property="Opacity" Value="0"/>
+                            <Setter TargetName="indeterminateMark" Property="Opacity" Value="0"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="optionMark" Property="Opacity" Value="0"/>
+                            <Setter TargetName="indeterminateMark" Property="Opacity" Value="1"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

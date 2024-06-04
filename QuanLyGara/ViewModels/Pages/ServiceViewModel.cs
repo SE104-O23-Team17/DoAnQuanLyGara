@@ -758,8 +758,8 @@ namespace QuanLyGara.ViewModels.Pages
                     phieuSua.IsChecked = false;
                 }
                 phieuSuaChua.IsChecked = true;
-                OnPropertyChanged(nameof(PhieuSuaChua));
             }
+            OnPropertyChanged(nameof(PhieuSuaChua));
             OnPropertyChanged(nameof(DanhSachPhieuSua));
             OnPropertyChanged(nameof(DanhSachPhieuThu));
             OnPropertyChanged(nameof(SelectingCar));
@@ -937,7 +937,20 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
 
-            foreach(CTPhieuSuaChuaModel ctPhieuSuaChua in phieuSuaChua.DanhSachCT)
+            if (phieuSuaChua.DanhSachCT.GroupBy(ct => ct.NDSC.TenNDSC).Any(g => g.Count() > 1))
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Có nội dung sửa chữa trùng lặp",
+                    () => { }
+                    );
+                return;
+            }
+
+            string error = "Số lượng tồn không đủ:\n";
+            Dictionary<VTPTModel, int> vtptSoLuongDict = new Dictionary<VTPTModel, int>();
+
+            foreach (CTPhieuSuaChuaModel ctPhieuSuaChua in phieuSuaChua.DanhSachCT)
             {
                 if (string.IsNullOrEmpty(ctPhieuSuaChua.NDSC.TenNDSC))
                 {
@@ -951,6 +964,16 @@ namespace QuanLyGara.ViewModels.Pages
 
                 if (ctPhieuSuaChua.DanhSachSuDung.Count != 0)
                 {
+                    if (ctPhieuSuaChua.DanhSachSuDung.GroupBy(ct => ct.VTPT.tenVTPT).Any(g => g.Count() > 1))
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Có vật tư phụ tùng trùng lặp trong " + ctPhieuSuaChua.NDSC.TenNDSC,
+                            () => { }
+                        );
+                        return;
+                    }
+
                     foreach (CTSuDungVTPTModel ctSuDungVTPT in ctPhieuSuaChua.DanhSachSuDung)
                     {
                         if (string.IsNullOrEmpty(ctSuDungVTPT.VTPT.tenVTPT))
@@ -972,8 +995,39 @@ namespace QuanLyGara.ViewModels.Pages
                                 );
                             return;
                         }
+
+                        if (vtptSoLuongDict.ContainsKey(ctSuDungVTPT.VTPT))
+                        {
+                            vtptSoLuongDict[ctSuDungVTPT.VTPT] += ctSuDungVTPT.SoLuong;
+                        }
+                        else
+                        {
+                            vtptSoLuongDict[ctSuDungVTPT.VTPT] = ctSuDungVTPT.SoLuong;
+                        }
                     }
                 }                
+            }
+
+            bool isEnough = true;
+            foreach (KeyValuePair<VTPTModel, int> vtptSoLuong in vtptSoLuongDict)
+            {
+                VTPTModel vtpt = vtptSoLuong.Key;
+                int soLuong = vtptSoLuong.Value;
+                if (vtpt.soLuongTon < soLuong)
+                {
+                    error += vtpt.tenVTPT + " (" + soLuong + "/" + vtpt.soLuongTon + ")\n";
+                    isEnough = false;
+                }
+            }
+
+            if (!isEnough)
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    error,
+                    () => { }
+                    );
+                return;
             }
 
             if (danhSachPhieuSua.Where(phieuSua => phieuSua.ngayLap.Date == phieuSuaChua.ngayLap.Date).Count() >= LimitPerDay)
@@ -994,12 +1048,15 @@ namespace QuanLyGara.ViewModels.Pages
                     phieuSuaChua.IsReadOnly = true;
                     selectingCar.ThemNo(phieuSuaChua.tongTien);
                     danhSachPhieuSua.Add(phieuSuaChua);
-                    Global.Instance.danhSachPhieuSC.Add(phieuSuaChua);
+
+                    foreach (KeyValuePair<VTPTModel, int> vtptSoLuong in vtptSoLuongDict)
+                    {
+                        vtptSoLuong.Key.SuDung(vtptSoLuong.Value);
+                    }
 
                     foreach (CTPhieuSuaChuaModel ctPhieuSuaChua in phieuSuaChua.DanhSachCT)
                     {
                         danhSachCTSC.Add(ctPhieuSuaChua);
-                        Global.Instance.danhSachCTPhieuSC.Add(ctPhieuSuaChua);
                     }
                     ExecuteDetailCarCommand(selectingCar);
                 },
