@@ -27,9 +27,6 @@ namespace QuanLyGara.ViewModels.Pages
     {
         private IDialogService dialogService;
 
-        private HieuXeDAO hieuXeDAO;
-        private XeDAO xeDAO;
-
         private int currentView;
         public int CurrentView
         {
@@ -326,6 +323,10 @@ namespace QuanLyGara.ViewModels.Pages
             OnPropertyChanged(nameof(DanhSachPhieuThu));
             OnPropertyChanged(nameof(SoXeSuaChuaHomNay));
         }
+
+        private HieuXeDAO hieuXeDAO;
+        private XeDAO xeDAO;
+
 
         public ServiceViewModel()
         {

@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using QuanLyGara.DATA.DAO;
 
 namespace QuanLyGara.Services
 {
@@ -51,14 +52,12 @@ namespace QuanLyGara.Services
             }
         }
 
+        private GaraDAO garaDAO; 
+
         private Global()
         {
-            danhSachGara = new List<GaraModel> {
-                new GaraModel { ID = 1, TaiKhoan = "Gara1", TenGara = "Gara 1", MatKhau = "1234", Sdt = "0123456789", DiaChi = "Đường Tạ Quang Bửu, khu phố 6, Thủ Đức, Thành phố Hồ Chí Minh"},
-                new GaraModel { ID = 2, TaiKhoan = "GaraQuan1", TenGara = "Gara 2", MatKhau = "456", Sdt = "0123456789", DiaChi = "Quận 1" },
-                new GaraModel { ID = 3, TaiKhoan = "Gara3", TenGara = "Gara 3", MatKhau = "abc123", Sdt = "0123456789", DiaChi = "Quận 2 - Thành phố Hồ Chí Minh"},
-                new GaraModel { ID = 4, TaiKhoan = "Gara4", TenGara = "Gara 4", MatKhau = "aggs424y2", Sdt = "0123456789", DiaChi = "Quận 1"},
-            };
+            garaDAO = new GaraDAO();
+            danhSachGara = garaDAO.DanhSachGara();
 
             garaHienTai = new GaraModel();
             tiLeTinhDonGiaBan = 105;

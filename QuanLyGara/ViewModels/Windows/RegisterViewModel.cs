@@ -119,7 +119,7 @@ namespace QuanLyGara.ViewModels.Windows
         public RegisterViewModel()
         {
             dialogService = new DialogService();
-            danhSachGara = Global.Instance.danhSachGara;
+            danhSachGara = Global.Instance.danhSachGara ?? new List<GaraModel>(); 
             PasswordConfirmationError = "";
             init();
 

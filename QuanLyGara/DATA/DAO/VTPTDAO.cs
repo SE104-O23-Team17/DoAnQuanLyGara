@@ -32,10 +32,11 @@ namespace QuanLyGara.DATA.DAO
                         tenVTPT = reader["TENVATTUPHUTUNG"].ToString(),
                         soLuongTon = Convert.ToInt32(reader["SOLUONGTON"]),
                         giaNhap = Convert.ToDouble(reader["GIATIENNHAP"]),
-                        
+
                         donViTinh = new DonViTinhModel()
                         {
-                            // Khởi tạo đối tượng DonViTinhModel nếu có các trường cần thiết từ cơ sở dữ liệu
+                            maDVT = Convert.ToInt32(reader["MADVT"]),
+                            tenDVT = reader["TENDVT"].ToString()
                         }
                     };
                     danhSachVTPT.Add(vtpt);
