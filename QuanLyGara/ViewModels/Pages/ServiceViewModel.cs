@@ -513,8 +513,7 @@ namespace QuanLyGara.ViewModels.Pages
                     );
             }
         }
-
-
+        
         private void ExecuteEditCarCommand(object obj)
         {
             if (obj is not XeModel)
@@ -549,21 +548,24 @@ namespace QuanLyGara.ViewModels.Pages
                         dialogService.ShowInfoDialog(
                             "Lỗi",
                             "Không thể xóa xe đang được sử dụng",
-                            () => {
+                            () =>
+                            {
                                 return;
                             }
                             );
                     }
+                    else
+                    {
+                        dialogService.ShowInfoDialog(
+                                "Thông báo",
+                                "Đã xóa xe.",
+                                () => { }
+                                );
 
-                    dialogService.ShowInfoDialog(
-                            "Thông báo",
-                            "Đã xóa xe.",
-                            () => { }
-                            );
-
-                    Global.Instance.UpdateDanhSachXe();
-                    danhSachXe = Global.Instance.danhSachXe;
-                    OnPropertyChanged(nameof(DanhSachXe));
+                        Global.Instance.UpdateDanhSachXe();
+                        danhSachXe = Global.Instance.danhSachXe;
+                        OnPropertyChanged(nameof(DanhSachXe));
+                    }
                 },
                 () => { }
                 );
@@ -607,7 +609,7 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
 
-            if (Global.Instance.danhSachXe.FirstOrDefault(xe => xeLuu == xe) == null)
+            if (Global.Instance.danhSachXe.FirstOrDefault(xe => xeLuu.maXe == xe.maXe && xe.maXe != 0) == null)
             {
                 XeDAO.Instance.ThemXe(xeLuu);
                 Global.Instance.UpdateDanhSachXe();
@@ -712,21 +714,28 @@ namespace QuanLyGara.ViewModels.Pages
                         dialogService.ShowInfoDialog(
                             "Lỗi",
                             "Không thể xóa hiệu xe đang được sử dụng",
-                            () => {
+                            () =>
+                            {
                                 return;
                             }
                         );
                     }
+                    else
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Thông báo",
+                            "Đã xóa hiệu xe.",
+                            () => { }
+                        );
 
-                    dialogService.ShowInfoDialog(
-                        "Thông báo",
-                        "Đã xóa hiệu xe.",
-                        () => { }
-                    );
+                        Global.Instance.UpdateDanhSachHieuXe();
+                        danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
+                        OnPropertyChanged(nameof(DanhSachHieuXe));
 
-                    Global.Instance.UpdateDanhSachHieuXe();
-                    danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
-                    OnPropertyChanged(nameof(DanhSachHieuXe));
+                        Global.Instance.UpdateDanhSachXe();
+                        danhSachXe = Global.Instance.danhSachXe;
+                        OnPropertyChanged(nameof(DanhSachXe));
+                    }
                 },
                 () => { }
             );
@@ -765,8 +774,6 @@ namespace QuanLyGara.ViewModels.Pages
             if (Global.Instance.danhSachHieuXe.FirstOrDefault(hieuXeCu => hieuXeCu.maHieuXe == hieuXe.maHieuXe) == null)
             {
                 HieuXeDAO.Instance.ThemHieuXe(hieuXe);
-                Global.Instance.UpdateDanhSachHieuXe();
-                danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Đã thêm hiệu xe mới.",
@@ -776,16 +783,19 @@ namespace QuanLyGara.ViewModels.Pages
             else
             {
                 HieuXeDAO.Instance.CapNhatHieuXe(hieuXe);
-                Global.Instance.UpdateDanhSachHieuXe();
-                danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Đã cập nhật thông tin hiệu xe.",
                     () => { }
                     );
             }
+            Global.Instance.UpdateDanhSachHieuXe();
+            danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
             OnPropertyChanged(nameof(DanhSachHieuXe));
 
+            Global.Instance.UpdateDanhSachXe();
+            danhSachXe = Global.Instance.danhSachXe;
+            OnPropertyChanged(nameof(DanhSachXe));
         }
 
         private void ExecuteCancelBrandCommand(object obj)

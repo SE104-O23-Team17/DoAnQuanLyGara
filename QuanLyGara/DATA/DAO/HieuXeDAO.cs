@@ -102,6 +102,24 @@ namespace QuanLyGara.DATA.DAO
 
         public void CapNhatHieuXe(HieuXeModel hieuXe)
         {
+            try
+            {
+                openConnection();
+                string query = "UPDATE HIEUXE SET TENHIEUXE = @TenHieuXe WHERE MAHIEUXE = @MaHieuXe AND MAGARA = @MaGara";
+                SqlCommand cmd = new SqlCommand(query, getConnection);
+                cmd.Parameters.AddWithValue("@TenHieuXe", hieuXe.TenHieuXe);
+                cmd.Parameters.AddWithValue("@MaHieuXe", hieuXe.maHieuXe);
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                cmd.ExecuteNonQuery();
+            } 
+            catch (Exception ex) 
+            {
+                // Xử lý ngoại lệ
+            } 
+            finally 
+            {
+                closeConnection();
+            }
 
         }
     }

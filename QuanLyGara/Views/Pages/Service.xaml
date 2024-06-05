@@ -362,7 +362,7 @@
                                                 <DataTemplate>
                                                     <components:FilteredComboBox
                                                     Style="{StaticResource lightComboBoxStyle}"
-                                                    ItemsSource="{Binding DataContext.DanhSachHieuXeNotNull, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    ItemsSource="{Binding DataContext.DanhSachHieuXeNotNull, RelativeSource={RelativeSource AncestorType=DataGrid}, UpdateSourceTrigger=PropertyChanged}"
                                                     SelectedItem="{Binding HieuXe, UpdateSourceTrigger=PropertyChanged}"
                                                     DisplayMemberPath="TenHieuXe"
                                                     IsEnabled="{Binding IsReadOnly, Converter={StaticResource InvertedBool}}"/>
@@ -534,7 +534,7 @@
                                         <Border Background="{StaticResource lightBackground}"
                                                 CornerRadius="10">
                                             <Grid>
-                                                <ItemsPresenter Visibility="{Binding DataContext.DanhSachHieuXe, Converter={StaticResource NullToVisibilityConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                                <ItemsPresenter Visibility="{Binding DataContext.DanhSachHieuXe, Converter={StaticResource NullToVisibilityConverter}, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"/>
                                                 <TextBlock Text="Không có dữ liệu"
                                                            Margin="0 20"
                                                            Visibility="{Binding DataContext.DanhSachHieuXe, Converter={StaticResource NullToCollapsedConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"
