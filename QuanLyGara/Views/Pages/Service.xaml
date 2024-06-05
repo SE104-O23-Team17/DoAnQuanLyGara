@@ -469,7 +469,7 @@
                                                              IsReadOnly="{Binding IsReadOnly}" 
                                                              Width="120">
                                                             <i:Interaction.Behaviors>
-                                                                <behaviors:NumericInputBehavior/>
+                                                                <behaviors:PhoneNumberBehavior/>
                                                             </i:Interaction.Behaviors>
                                                         </TextBox>
                                                 </StackPanel>

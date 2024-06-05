@@ -8,6 +8,15 @@ namespace QuanLyGara.DATA.DAO
 {
     public class GaraDAO : DBconnection
     {
+        private static readonly GaraDAO instance = new GaraDAO();
+        public static GaraDAO Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         public List<GaraModel> DanhSachGara()
         {
             List<GaraModel> danhSachGara = new List<GaraModel>();
@@ -66,20 +75,23 @@ namespace QuanLyGara.DATA.DAO
                 closeConnection();
             }
         }
-        public void ThemGara(GaraModel gara)
+
+        public int ThemGara(GaraModel gara)
         {
+            int newId = 0;
             try
             {
                 openConnection();
                 string query = "INSERT INTO GARA (TAIKHOAN, TENGARA, MATKHAU, SDT, DIACHI) " +
-                               "VALUES (@TaiKhoan, @TenGara, @MatKhau, @Sdt, @DiaChi)";
+                               "VALUES (@TaiKhoan, @TenGara, @MatKhau, @Sdt, @DiaChi); " +
+                               "SELECT SCOPE_IDENTITY()";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@TaiKhoan", gara.TaiKhoan);
                 cmd.Parameters.AddWithValue("@TenGara", gara.TenGara);
                 cmd.Parameters.AddWithValue("@MatKhau", gara.MatKhau);
                 cmd.Parameters.AddWithValue("@Sdt", gara.Sdt);
                 cmd.Parameters.AddWithValue("@DiaChi", gara.DiaChi);
-                cmd.ExecuteNonQuery();
+                newId = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
             {
@@ -89,7 +101,9 @@ namespace QuanLyGara.DATA.DAO
             {
                 closeConnection();
             }
+            return newId;
         }
+
 
         public void XoaGara(int id)
         {

@@ -68,7 +68,9 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 applyCheckPayment = value;
                 OnPropertyChanged(nameof(ApplyCheckPayment));
-                Global.Instance.apDungQDKiemTraSoTienThu = applyCheckPayment;
+                Global.Instance.apDungQDKiemTraSoTienThu = value;
+                Global.Instance.ChangeThamSo();
+                Global.Instance.UpdateThamSo();
             }
         }
 
@@ -327,6 +329,8 @@ namespace QuanLyGara.ViewModels.Pages
         public ServiceViewModel()
         {
             dialogService = new DialogService();
+
+            Global.Instance.UpdateThamSo();
             LimitPerDay = Global.Instance.soXeSuaChuaToiDa;
             ApplyCheckPayment = Global.Instance.apDungQDKiemTraSoTienThu;
 
@@ -429,6 +433,7 @@ namespace QuanLyGara.ViewModels.Pages
             if (limitPerDay != previousLimit)
             {
                 Global.Instance.soXeSuaChuaToiDa = limitPerDay;
+                Global.Instance.ChangeThamSo();
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Cập nhật số xe thành công.",
@@ -475,20 +480,40 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 return;
             }
+            
+            List<string> failedToDelete = new List<string>();
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
-                "Bạn có chắc chắn muốn xóa " + selectedCar.Count + " mục đã chọn không?",
+                "Bạn có chắc chắn muốn xóa " + selectedCar.Count + " xe đã chọn không?",
                 () =>
                 {
-                    foreach (XeModel car in DanhSachXe)
+                    foreach (XeModel car in selectedCar)
                     {
-                        selectedCar.Remove(car);
+                        bool result = XeDAO.Instance.XoaXe(car.maXe);
+                        if (!result)
+                        {
+                            failedToDelete.Add(car.tenXe);
+                        }
                     }
-                    OnPropertyChanged(nameof(DanhSachXe));
+                    Global.Instance.UpdateDanhSachXe();
+                    danhSachXe = Global.Instance.danhSachXe;
+                    OnPropertyChanged(nameof(DanhSachXe));                    
                 },
-                () => { }
+                () => {
+                    return;
+                }
                 );
+
+            if (failedToDelete.Count > 0)
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Không thể xóa các xe sau vì đang được sử dụng: " + string.Join(", ", failedToDelete),
+                    () => { }
+                    );
+            }
         }
+
 
         private void ExecuteEditCarCommand(object obj)
         {
@@ -511,13 +536,33 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
             XeModel xe = obj as XeModel;
+
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
                 "Bạn có chắc chắn muốn xóa xe " + xe.bienSo + " không?",
                 () =>
                 {
-                    danhSachXe.Remove(xe);
-                    Global.Instance.danhSachXe.Remove(xe);
+                    bool result = XeDAO.Instance.XoaXe(xe.maXe);
+
+                    if (!result)
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Không thể xóa xe đang được sử dụng",
+                            () => {
+                                return;
+                            }
+                            );
+                    }
+
+                    dialogService.ShowInfoDialog(
+                            "Thông báo",
+                            "Đã xóa xe.",
+                            () => { }
+                            );
+
+                    Global.Instance.UpdateDanhSachXe();
+                    danhSachXe = Global.Instance.danhSachXe;
                     OnPropertyChanged(nameof(DanhSachXe));
                 },
                 () => { }
@@ -552,7 +597,7 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
 
-            if (xeLuu.email.Length != 10)
+            if (xeLuu.sdt.Length != 10)
             {
                 dialogService.ShowInfoDialog(
                     "Lỗi",
@@ -564,10 +609,23 @@ namespace QuanLyGara.ViewModels.Pages
 
             if (Global.Instance.danhSachXe.FirstOrDefault(xe => xeLuu == xe) == null)
             {
-                Global.Instance.danhSachXe.Add(xeLuu);
+                XeDAO.Instance.ThemXe(xeLuu);
+                Global.Instance.UpdateDanhSachXe();
+                danhSachXe = Global.Instance.danhSachXe;
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Đã thêm xe mới.",
+                    () => { }
+                    );
+            }
+            else
+            {
+                XeDAO.Instance.CapNhatXe(xeLuu);
+                Global.Instance.UpdateDanhSachXe();
+                danhSachXe = Global.Instance.danhSachXe;
+                dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Đã cập nhật thông tin xe.",
                     () => { }
                     );
             }
@@ -595,6 +653,9 @@ namespace QuanLyGara.ViewModels.Pages
             xe.tenXe = previousCar.tenXe;
             xe.HieuXe = previousCar.HieuXe;
             xe.tienNo = previousCar.tienNo;
+            xe.email = previousCar.email;
+            xe.sdt = previousCar.sdt;
+            xe.tenChuXe = previousCar.tenChuXe;
             xe.isChecked = previousCar.isChecked;
             xe.IsReadOnly = true;
             OnPropertyChanged(nameof(DanhSachXe));
@@ -640,37 +701,32 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
             HieuXeModel hieuXe = obj as HieuXeModel;
-
-            if (danhSachXe.Any(xe => xe.HieuXe == hieuXe))
-            {
-                // Hiển thị thông báo lỗi nếu hiệu xe đang được sử dụng
-                dialogService.ShowInfoDialog(
-                    "Lỗi",
-                    "Không thể xóa hiệu xe đang được sử dụng",
-                    () => { }
-                );
-                return;
-            }
-
-            // Hiển thị hộp thoại xác nhận trước khi xóa
+            
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
                 "Bạn có chắc chắn muốn xóa hiệu xe " + hieuXe.TenHieuXe + " không?",
                 () =>
                 {
-                    danhSachHieuXe.Remove(hieuXe);
-                    Global.Instance.danhSachHieuXe.Remove(hieuXe);
-                    OnPropertyChanged(nameof(DanhSachHieuXe));
+                    if (!HieuXeDAO.Instance.XoaHieuXe(hieuXe))
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Không thể xóa hiệu xe đang được sử dụng",
+                            () => {
+                                return;
+                            }
+                        );
+                    }
 
-                    // Gọi phương thức XoaHieuXe từ lớp DAO để xóa hiệu xe khỏi cơ sở dữ liệu
-                    HieuXeDAO.Instance.XoaHieuXe(hieuXe);
-
-                    // Hiển thị thông báo khi xóa thành công
                     dialogService.ShowInfoDialog(
                         "Thông báo",
                         "Đã xóa hiệu xe.",
                         () => { }
                     );
+
+                    Global.Instance.UpdateDanhSachHieuXe();
+                    danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
+                    OnPropertyChanged(nameof(DanhSachHieuXe));
                 },
                 () => { }
             );
@@ -708,11 +764,23 @@ namespace QuanLyGara.ViewModels.Pages
             hieuXe.IsReadOnly = true;
             if (Global.Instance.danhSachHieuXe.FirstOrDefault(hieuXeCu => hieuXeCu.maHieuXe == hieuXe.maHieuXe) == null)
             {
-                Global.Instance.danhSachHieuXe.Add(hieuXe);
                 HieuXeDAO.Instance.ThemHieuXe(hieuXe);
+                Global.Instance.UpdateDanhSachHieuXe();
+                danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Đã thêm hiệu xe mới.",
+                    () => { }
+                    );
+            }
+            else
+            {
+                HieuXeDAO.Instance.CapNhatHieuXe(hieuXe);
+                Global.Instance.UpdateDanhSachHieuXe();
+                danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
+                dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Đã cập nhật thông tin hiệu xe.",
                     () => { }
                     );
             }

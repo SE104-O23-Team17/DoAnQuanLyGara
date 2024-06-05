@@ -10,12 +10,6 @@ namespace QuanLyGara.DATA.DAO
 {
     public class DonViTinhDAO : DBconnection
     {
-        public GaraModel gara = Global.Instance.garaHienTai;
-        public GaraModel getGara
-        {
-            get { return gara; }
-        }
-
         private static readonly DonViTinhDAO instance = new DonViTinhDAO();
         public static DonViTinhDAO Instance
         {
@@ -26,7 +20,7 @@ namespace QuanLyGara.DATA.DAO
         }
         public List<DonViTinhModel> DanhSachDonViTinh()
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
             List<DonViTinhModel> danhSachDonViTinh = new List<DonViTinhModel>();
             try
             {
@@ -58,7 +52,7 @@ namespace QuanLyGara.DATA.DAO
 
         public void ThemDonViTinh(DonViTinhModel donViTinh)
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
             try
             {
                 openConnection();
@@ -80,7 +74,7 @@ namespace QuanLyGara.DATA.DAO
 
         public void XoaDonViTinh(int maDVT)
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
 
             try
             {

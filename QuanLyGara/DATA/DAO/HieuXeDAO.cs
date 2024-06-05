@@ -13,8 +13,6 @@ namespace QuanLyGara.DATA.DAO
 {
     public class HieuXeDAO : DBconnection
     {
-        public GaraModel gara = Global.Instance.garaHienTai;
-
         private static readonly HieuXeDAO instance = new HieuXeDAO();
         public static HieuXeDAO Instance
         {
@@ -24,14 +22,9 @@ namespace QuanLyGara.DATA.DAO
             }
         }
 
-        public GaraModel getGara
-        {
-            get { return gara; }
-        }
-
         public List<HieuXeModel> DanhSachHieuXe()
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
             List<HieuXeModel> danhSachHieuXe = new List<HieuXeModel>();
             try
             {
@@ -63,7 +56,7 @@ namespace QuanLyGara.DATA.DAO
 
         public void ThemHieuXe(HieuXeModel hieuXe)
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
             try
             {
                 openConnection();
@@ -83,26 +76,33 @@ namespace QuanLyGara.DATA.DAO
             }
         }
 
-        public void XoaHieuXe(HieuXeModel hieuXe)
+        public bool XoaHieuXe(HieuXeModel hieuXe)
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
+            bool result = true;
             try
             {
                 openConnection();
                 string query = "DELETE FROM HIEUXE WHERE MAHIEUXE = @MaHieuXe AND MAGARA = @MaGara";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@MaHieuXe", hieuXe.maHieuXe);
-                cmd.Parameters.AddWithValue("@MaGara", maGara); // Thêm tham số cho MAGARA
+                cmd.Parameters.AddWithValue("@MaGara", maGara);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                // Xử lý ngoại lệ
+                result = false;
             }
             finally
             {
                 closeConnection();
             }
+            return result;
+        }
+
+        public void CapNhatHieuXe(HieuXeModel hieuXe)
+        {
+
         }
     }
 }

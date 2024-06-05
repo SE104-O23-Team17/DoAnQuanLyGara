@@ -1,4 +1,5 @@
-﻿using QuanLyGara.Helpers;
+﻿using QuanLyGara.DATA.DAO;
+using QuanLyGara.Helpers;
 using QuanLyGara.Models;
 using QuanLyGara.Services;
 using QuanLyGara.Views.Windows;
@@ -211,6 +212,9 @@ namespace QuanLyGara.ViewModels.Windows
             }
 
             danhSachGara.Add(GaraMoi);
+            garaMoi.ID = GaraDAO.Instance.ThemGara(GaraMoi);
+            ThamSoDAO.Instance.ThemThamSo(garaMoi.ID);
+            Global.Instance.init();
             
             dialogService.ShowInfoDialog(
                 "Thông báo",

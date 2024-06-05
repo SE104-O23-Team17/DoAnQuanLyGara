@@ -168,7 +168,7 @@
                                  Width="400"
                                  FontSize="20">
                             <i:Interaction.Behaviors>
-                                <behaviors:NumericInputBehavior/>
+                                <behaviors:PhoneNumberBehavior/>
                             </i:Interaction.Behaviors>
                             <TextBox.Style>
                                 <Style TargetType="TextBox" BasedOn="{StaticResource aLineTextBox}">

@@ -74,6 +74,7 @@ namespace QuanLyGara.ViewModels.Pages
                     Register loginView = new Register();
                     loginView.Show();
 
+                    Global.Instance.init();
                     var mainWindow = obj as MainWindow;
                     mainWindow.Close();
                 },
@@ -124,6 +125,7 @@ namespace QuanLyGara.ViewModels.Pages
                     Register loginView = new Register();
                     loginView.Show();
 
+                    Global.Instance.init();
                     var mainWindow = obj as MainWindow;
                     mainWindow.Close();
                 }

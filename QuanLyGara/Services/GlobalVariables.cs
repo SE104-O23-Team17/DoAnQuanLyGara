@@ -19,6 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuanLyGara.DATA.DAO;
+using QuanLyGara.Models.ThamSo;
 
 namespace QuanLyGara.Services
 {
@@ -51,17 +52,16 @@ namespace QuanLyGara.Services
                 return instance;
             }
         }
-
-        private GaraDAO garaDAO; 
-        private Global()
+        
+        public void init()
         {
-            garaDAO = new GaraDAO();
-            danhSachGara = garaDAO.DanhSachGara();
+            danhSachGara = new List<GaraModel>();
+            UpdateDanhSachGara();
 
             garaHienTai = new GaraModel();
 
-            tiLeTinhDonGiaBan = 105;
-            soXeSuaChuaToiDa = 30;
+            tiLeTinhDonGiaBan = 110;
+            soXeSuaChuaToiDa = 25;
             apDungQDKiemTraSoTienThu = true;
 
             danhSachHieuXe = new List<HieuXeModel>{
@@ -739,6 +739,15 @@ namespace QuanLyGara.Services
             };
         }
 
+        private Global()
+        {
+            init();
+        }
+
+        public void UpdateDanhSachGara()
+        {
+           danhSachGara = GaraDAO.Instance.DanhSachGara();
+        }
         public void UpdateDanhSachHieuXe()
         {
             danhSachHieuXe = HieuXeDAO.Instance.DanhSachHieuXe();
@@ -768,6 +777,20 @@ namespace QuanLyGara.Services
                     maXe = xe.maXe
                 });
             }
+        }
+
+        public void UpdateThamSo()
+        {
+            ThamSoModel thamSo = ThamSoDAO.Instance.LayThamSo();
+            tiLeTinhDonGiaBan = thamSo.TiLeTinhDonGiaBan;
+            soXeSuaChuaToiDa = thamSo.SoXeSuaChuaToiDa;
+            apDungQDKiemTraSoTienThu = thamSo.ApDungQuyDinhKiemTraSoTienThu;
+        }
+
+        public void ChangeThamSo()
+        {
+            ThamSoDAO.Instance.CapNhatThamSo(tiLeTinhDonGiaBan, soXeSuaChuaToiDa, apDungQDKiemTraSoTienThu);
+            UpdateThamSo();
         }
     }
 }

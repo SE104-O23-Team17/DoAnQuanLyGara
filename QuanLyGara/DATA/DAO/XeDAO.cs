@@ -11,12 +11,6 @@ namespace QuanLyGara.DATA.DAO
 {
     internal class XeDAO : DBconnection
     {
-        public GaraModel gara = Global.Instance.garaHienTai;
-        public GaraModel getGara
-        {
-            get { return gara; }
-        }
-
         private static readonly XeDAO instance = new XeDAO();
         public static XeDAO Instance
         {
@@ -28,7 +22,7 @@ namespace QuanLyGara.DATA.DAO
 
         public List<XeDTO> DanhSachXe()
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
 
             List<XeDTO> danhSachXe = new List<XeDTO>();
             try
@@ -70,13 +64,16 @@ namespace QuanLyGara.DATA.DAO
             try
             {
                 openConnection();
-                string query = "INSERT INTO XE (BIENSO, TENXE, MAHIEUXE, TIENNO, MAGARA) VALUES (@BienSo, @TenXe, @MaHieuXe, @TienNo, @MaGara)";
+                string query = "INSERT INTO XE (BIENSO, TENXE, MAHIEUXE, TIENNO, MAGARA, EMAIL, SODIENTHOAI, TENCHUXE) VALUES (@BienSo, @TenXe, @MaHieuXe, @TienNo, @MaGara, @Email, @SoDienThoai, @TenChuXe)";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@BienSo", xe.bienSo);
                 cmd.Parameters.AddWithValue("@TenXe", xe.tenXe);
                 cmd.Parameters.AddWithValue("@MaHieuXe", xe.HieuXe.maHieuXe);
                 cmd.Parameters.AddWithValue("@TienNo", xe.tienNo);
-                cmd.Parameters.AddWithValue("@MaGara", gara.ID);
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                cmd.Parameters.AddWithValue("@Email", xe.email);
+                cmd.Parameters.AddWithValue("@SoDienThoai", xe.sdt);
+                cmd.Parameters.AddWithValue("@TenChuXe", xe.tenChuXe);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -89,15 +86,47 @@ namespace QuanLyGara.DATA.DAO
             }
         }
 
-        public void XoaXe(int maXe)
+        public bool XoaXe(int maXe)
         {
+            bool result = true;
             try
             {
                 openConnection();
                 string query = "DELETE FROM XE WHERE MAXE = @MaXe AND MAGARA = @MaGara";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@MaXe", maXe);
-                cmd.Parameters.AddWithValue("@MaGara", gara.ID);
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                int rowsAffected = cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+            finally
+            {
+                closeConnection();
+            }
+            return result;
+        }
+
+
+        public void CapNhatXe(XeModel xe)
+        {
+            try
+            {
+                openConnection();
+                string query = "UPDATE XE SET BIENSO = @BienSo, TENXE = @TenXe, MAHIEUXE = @MaHieuXe, TIENNO = @TienNo, EMAIL = @Email, SODIENTHOAI = @SoDienThoai, TENCHUXE = @TenChuXe WHERE MAXE = @MaXe AND MAGARA = @MaGara";
+
+                SqlCommand cmd = new SqlCommand(query, getConnection);
+                cmd.Parameters.AddWithValue("@BienSo", xe.bienSo);
+                cmd.Parameters.AddWithValue("@TenXe", xe.tenXe);
+                cmd.Parameters.AddWithValue("@MaHieuXe", xe.HieuXe.maHieuXe);
+                cmd.Parameters.AddWithValue("@TienNo", xe.tienNo);
+                cmd.Parameters.AddWithValue("@MaXe", xe.maXe);
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                cmd.Parameters.AddWithValue("@Email", xe.email);
+                cmd.Parameters.AddWithValue("@SoDienThoai", xe.sdt);
+                cmd.Parameters.AddWithValue("@TenChuXe", xe.tenChuXe);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
