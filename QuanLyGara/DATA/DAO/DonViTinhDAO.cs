@@ -94,6 +94,29 @@ namespace QuanLyGara.DATA.DAO
                 closeConnection();
             }
         }
+
+        public void SuaDonViTinh(DonViTinhModel donViTinh)
+        {
+            int maGara = Global.Instance.garaHienTai.ID;
+            try
+            {
+                openConnection();
+                string query = "UPDATE DONVITINH SET TENDVT = @TenDVT WHERE MADVT = @MaDVT AND MAGARA = @MaGara";
+                SqlCommand cmd = new SqlCommand(query, getConnection);
+                cmd.Parameters.AddWithValue("@TenDVT", donViTinh.tenDVT);
+                cmd.Parameters.AddWithValue("@MaDVT", donViTinh.maDVT);
+                cmd.Parameters.AddWithValue("@MaGara", maGara);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+            }
+            finally
+            {
+                closeConnection();
+            }
+        }
     }
 
 }

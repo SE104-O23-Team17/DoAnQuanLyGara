@@ -11,14 +11,13 @@ namespace QuanLyGara.DATA.DAO
 {
     public class VTPTDAO : DBconnection
     {
-        public GaraModel gara = Global.Instance.garaHienTai;
         public List<VTPTModel> DanhSachVTPT()
         {
 
             List<VTPTModel> danhSachVTPT = new List<VTPTModel>();
             try
             {
-                int maGara = gara.ID;
+                int maGara = Global.Instance.garaHienTai.ID;
                 openConnection();
                 string query = "SELECT * FROM VATTUPHUTUNG WHERE MaGara = @MaGara";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
@@ -62,7 +61,7 @@ namespace QuanLyGara.DATA.DAO
                 cmd.Parameters.AddWithValue("@TenVTPT", vtpt.tenVTPT);
                 cmd.Parameters.AddWithValue("@SoLuongTon", vtpt.soLuongTon);
                 cmd.Parameters.AddWithValue("@GiaNhap", vtpt.giaNhap);
-                cmd.Parameters.AddWithValue("@MaGara", gara.ID);
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -83,7 +82,31 @@ namespace QuanLyGara.DATA.DAO
                 string query = "DELETE FROM VATTUPHUTUNG WHERE MAVATTUPHUTUNG = @MaVTPT AND MAGARA = @MaGara";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@MaVTPT", maVTPT);
-                cmd.Parameters.AddWithValue("@MaGara", gara.ID);
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ
+            }
+            finally
+            {
+                closeConnection();
+            }
+        }
+
+        public void SuaVTPT(VTPTModel vtpt)
+        {
+            try
+            {
+                openConnection();
+                string query = "UPDATE VATTUPHUTUNG SET TENVATTUPHUTUNG = @TenVTPT, SOLUONGTON = @SoLuongTon, GIATIENNHAP = @GiaNhap WHERE MAVATTUPHUTUNG = @MaVTPT AND MAGARA = @MaGara";
+                SqlCommand cmd = new SqlCommand(query, getConnection);
+                cmd.Parameters.AddWithValue("@TenVTPT", vtpt.tenVTPT);
+                cmd.Parameters.AddWithValue("@SoLuongTon", vtpt.soLuongTon);
+                cmd.Parameters.AddWithValue("@GiaNhap", vtpt.giaNhap);
+                cmd.Parameters.AddWithValue("@MaVTPT", vtpt.maVTPT);
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)

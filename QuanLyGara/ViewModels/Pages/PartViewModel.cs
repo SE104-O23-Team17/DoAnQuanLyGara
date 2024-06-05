@@ -516,7 +516,7 @@ namespace QuanLyGara.ViewModels.Pages
 
                 DonViTinhDAO.Instance.ThemDonViTinh(dvt);
 
-                if (Global.Instance.danhSachDVT.FirstOrDefault(dvtCu => dvt.maDVT == dvtCu.maDVT) == null)
+                if (Global.Instance.danhSachDVT.FirstOrDefault(dvtCu => dvt.maDVT == dvtCu.maDVT && dvt.maDVT != 0) == null)
                 {
                     Global.Instance.danhSachDVT.Add(dvt);
                     dialogService.ShowInfoDialog(
