@@ -77,22 +77,30 @@ namespace QuanLyGara.Services
             };
 
             danhSachDVT = new List<DonViTinhModel> {
-                new DonViTinhModel { maDVT = 1, tenDVT = "Cái" },
-                new DonViTinhModel { maDVT = 2, tenDVT = "Bộ" },
+                new DonViTinhModel { maDVT = 1, tenDVT = "Cặp" },
+                new DonViTinhModel { maDVT = 2, tenDVT = "Cái" },
                 new DonViTinhModel { maDVT = 3, tenDVT = "Lít" },
             };
 
             danhSachVTPT = new List<VTPTModel> {
-                new VTPTModel { maVTPT = 1, tenVTPT = "Dầu nhớt", soLuongTon = 2, giaNhap = 100000, donViTinh = danhSachDVT[2] },
-                new VTPTModel { maVTPT = 2, tenVTPT = "Bình xăng", soLuongTon = 20, giaNhap = 50000, donViTinh = danhSachDVT[2] },
-                new VTPTModel { maVTPT = 3, tenVTPT = "Lốp xe", soLuongTon = 10, giaNhap = 500000, donViTinh = danhSachDVT[0]},
-                new VTPTModel { maVTPT = 4, tenVTPT = "Bóng đèn", soLuongTon = 30, giaNhap = 20000, donViTinh = danhSachDVT[0]},
-                new VTPTModel { maVTPT = 5, tenVTPT = "Động cơ", soLuongTon = 5, giaNhap = 2000000, donViTinh = danhSachDVT[0] },
-                new VTPTModel { maVTPT = 6, tenVTPT = "Dây xích", soLuongTon = 4, giaNhap = 200000, donViTinh = danhSachDVT[0]},
-                new VTPTModel { maVTPT = 7, tenVTPT = "Dây phanh", soLuongTon = 7, giaNhap = 150000, donViTinh = danhSachDVT[0] },
-                new VTPTModel { maVTPT = 8, tenVTPT = "Dây ga", soLuongTon = 12, giaNhap = 50000, donViTinh = danhSachDVT[0]},
-                new VTPTModel { maVTPT = 9, tenVTPT = "Phanh", soLuongTon = 10, giaNhap = 500000, donViTinh = danhSachDVT[1]},
-                new VTPTModel { maVTPT = 10, tenVTPT = "Sơn", soLuongTon = 3, giaNhap = 50000, donViTinh = danhSachDVT[2]},
+                new VTPTModel { maVTPT = 1, tenVTPT = "Đèn Bi Led E-8", soLuongTon = 100, giaNhap = 6500000, donViTinh = danhSachDVT[0] },
+                new VTPTModel { maVTPT = 2, tenVTPT = "Đèn Bi Cản Led 3.0", soLuongTon = 100, giaNhap = 3500000, donViTinh = danhSachDVT[0] },
+                new VTPTModel { maVTPT = 3, tenVTPT = "Lọc gió điều hòa", soLuongTon = 100, giaNhap = 2500000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 4, tenVTPT = "Lọc gió động cơ", soLuongTon = 100, giaNhap = 2000000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 5, tenVTPT = "Lọc nhiên liệu", soLuongTon = 100, giaNhap = 4000000, donViTinh = danhSachDVT[1] },
+                new VTPTModel { maVTPT = 6, tenVTPT = "Lọc nhớt động cơ", soLuongTon = 100, giaNhap = 3300000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 7, tenVTPT = "Đĩa ly hợp", soLuongTon = 100, giaNhap = 3500000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 8, tenVTPT = "Má phanh", soLuongTon = 100, giaNhap = 1500000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 9, tenVTPT = "Chổi gạt nước", soLuongTon = 100, giaNhap = 2500000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 10, tenVTPT = "Bugi", soLuongTon = 100, giaNhap = 500000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 11, tenVTPT = "Bộ khởi động", soLuongTon = 100, giaNhap = 3000000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 12, tenVTPT = "Máy nén", soLuongTon = 100, giaNhap = 6000000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 13, tenVTPT = "Bơm nhiên liệu", soLuongTon = 100, giaNhap = 4000000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 14, tenVTPT = "Đèn pha", soLuongTon = 100, giaNhap = 2500000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 15, tenVTPT = "Đèn xi nhan", soLuongTon = 100, giaNhap = 500000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 16, tenVTPT = "Đèn hậu", soLuongTon = 100, giaNhap = 3000000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 17, tenVTPT = "Đèn sương mù", soLuongTon = 100, giaNhap = 6000000, donViTinh = danhSachDVT[1]},
+                new VTPTModel { maVTPT = 18, tenVTPT = "Bơm nhiên liệu", soLuongTon = 100, giaNhap = 4000000, donViTinh = danhSachDVT[1]},
             };
             
             danhSachPhieuNhap = new List<PhieuNhapVTPTModel>();
