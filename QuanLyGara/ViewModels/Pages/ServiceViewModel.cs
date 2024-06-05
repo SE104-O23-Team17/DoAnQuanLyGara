@@ -176,8 +176,7 @@ namespace QuanLyGara.ViewModels.Pages
                 return 0;
             }
         }
-
-
+        
         private PhieuSuaChuaModel phieuSuaChua;
         public PhieuSuaChuaModel PhieuSuaChua
         {
@@ -212,17 +211,6 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 danhSachVTPT = value;
                 OnPropertyChanged(nameof(DanhSachVTPT));
-            }
-        }
-
-        private List<CTPhieuSuaChuaModel> danhSachCTSC;
-        public List<CTPhieuSuaChuaModel> DanhSachCTSC
-        {
-            get { return danhSachCTSC; }
-            set
-            {
-                danhSachCTSC = value;
-                OnPropertyChanged(nameof(DanhSachCTSC));
             }
         }
 
@@ -334,6 +322,10 @@ namespace QuanLyGara.ViewModels.Pages
             LimitPerDay = Global.Instance.soXeSuaChuaToiDa;
             ApplyCheckPayment = Global.Instance.apDungQDKiemTraSoTienThu;
 
+            Global.Instance.UpdateDanhSachDonViTinh();
+            Global.Instance.UpdateDanhSachVTPT();
+            danhSachVTPT = Global.Instance.danhSachVTPT;
+
             Global.Instance.UpdateDanhSachHieuXe();
             danhSachHieuXe = new ObservableCollection<HieuXeModel>(Global.Instance.danhSachHieuXe);
 
@@ -345,11 +337,10 @@ namespace QuanLyGara.ViewModels.Pages
 
             Global.Instance.UpdateDanhSachPhieuthu();
             danhSachPhieuThu = new ObservableCollection<PhieuThuTienModel>(Global.Instance.danhSachPhieuThuTien);
-
-            danhSachCTSC = Global.Instance.danhSachCTPhieuSC;
+            
+            Global.Instance.UpdateDanhSachPhieuSuaChua();
             danhSachPhieuSua = Global.Instance.danhSachPhieuSC;
             
-            danhSachVTPT = Global.Instance.danhSachVTPT;
             ExecuteBackToView(null);
 
             EditLimitCommand = new ViewModelCommand(ExecuteEditLimitCommand);
@@ -1209,17 +1200,34 @@ namespace QuanLyGara.ViewModels.Pages
                 {
                     phieuSuaChua.IsReadOnly = true;
                     selectingCar.ThemNo(phieuSuaChua.tongTien);
-                    danhSachPhieuSua.Add(phieuSuaChua);
+                    XeDAO.Instance.CapNhatXe(selectingCar);
+
+                    int id = PhieuSuaChuaDAO.Instance.ThemPhieuSuaChua(phieuSuaChua);
+                    phieuSuaChua.maPSC = id;
+                    foreach (CTPhieuSuaChuaModel ctPhieuSuaChua in phieuSuaChua.DanhSachCT)
+                    {
+                        ctPhieuSuaChua.maPSC = id;
+                        int ctId = CTPhieuSuaChuaDAO.Instance.AddCTPhieuSuaChua(ctPhieuSuaChua);
+
+                        ctPhieuSuaChua.maCTPSC = ctId;
+                        foreach (CTSuDungVTPTModel ctSuDungVTPT in ctPhieuSuaChua.DanhSachSuDung)
+                        {
+                            ctSuDungVTPT.maCTPSC = ctId;
+                            CTSuDungVTPTDAO.Instance.AddCTSuDungVTPT(ctSuDungVTPT);
+                        }
+                    }
 
                     foreach (KeyValuePair<VTPTModel, int> vtptSoLuong in vtptSoLuongDict)
                     {
                         vtptSoLuong.Key.SuDung(vtptSoLuong.Value);
+                        VTPTDAO.Instance.SuaVTPT(vtptSoLuong.Key);
                     }
+                    
+                    Global.Instance.UpdateDanhSachPhieuSuaChua();
+                    danhSachPhieuSua = Global.Instance.danhSachPhieuSC;
 
-                    foreach (CTPhieuSuaChuaModel ctPhieuSuaChua in phieuSuaChua.DanhSachCT)
-                    {
-                        danhSachCTSC.Add(ctPhieuSuaChua);
-                    }
+                    OnPropertyChanged(nameof(DanhSachPhieuSua));
+                    OnPropertyChanged(nameof(PhieuSuaChua));
                     ExecuteDetailCarCommand(selectingCar);
                 },
                 () => { }
@@ -1252,7 +1260,7 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
 
-            phieuSuaChua.ThemCT(new CTPhieuSuaChuaModel(), danhSachCTSC.Count == 0 ? 1 : danhSachCTSC.Max(ct => ct.maCTPSC) + 1);
+            phieuSuaChua.ThemCT(new CTPhieuSuaChuaModel(), 0);
             OnPropertyChanged(nameof(PhieuSuaChua));
         }
 

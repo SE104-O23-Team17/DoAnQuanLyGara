@@ -36,7 +36,6 @@ namespace QuanLyGara.Services
         public List<PhieuNhapVTPTModel> danhSachPhieuNhap { get; set; }
         public List<NoiDungSuaChuaModel> danhSachNDSC { get; set; }
         public List<PhieuSuaChuaModel> danhSachPhieuSC { get; set; }
-        public List<CTPhieuSuaChuaModel> danhSachCTPhieuSC { get; set; }
         public List<XeModel> danhSachXe { get; set; }
         public List<PhieuThuTienModel> danhSachPhieuThuTien { get; set; }
         public List<DanhSachThangModel> danhSachThang { get; set; }
@@ -96,7 +95,6 @@ namespace QuanLyGara.Services
                 new VTPTModel { maVTPT = 10, tenVTPT = "Sơn", soLuongTon = 3, giaNhap = 50000, donViTinh = danhSachDVT[2]},
             };
             
-
             danhSachPhieuNhap = new List<PhieuNhapVTPTModel>();
 
             danhSachNDSC = new List<NoiDungSuaChuaModel>
@@ -123,305 +121,7 @@ namespace QuanLyGara.Services
                 new() { bienSo = "36A-52535", HieuXe = danhSachHieuXe[5], tenXe = "Exciter", tienNo = 0 },
             };
 
-            danhSachCTPhieuSC = new List<CTPhieuSuaChuaModel>
-            {
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 1,
-                            maCTPSC = 1,
-                            NDSC = danhSachNDSC[0],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 1,
-                                    VTPT = danhSachVTPT[0],
-                                    SoLuong = 2,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 1,
-                                    VTPT = danhSachVTPT[1],
-                                    SoLuong = 1,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 1,
-                            maCTPSC = 2,
-                            NDSC = danhSachNDSC[1],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 2,
-                                    VTPT = danhSachVTPT[2],
-                                    SoLuong = 4,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 2,
-                                    VTPT = danhSachVTPT[3],
-                                    SoLuong = 2,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 1,
-                            maCTPSC = 3,
-                            NDSC = danhSachNDSC[2],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 3,
-                                    VTPT = danhSachVTPT[4],
-                                    SoLuong = 1,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 3,
-                                    VTPT = danhSachVTPT[5],
-                                    SoLuong = 1,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 2,
-                            maCTPSC = 4,
-                            NDSC = danhSachNDSC[3],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 4,
-                                    VTPT = danhSachVTPT[6],
-                                    SoLuong = 2,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 4,
-                                    VTPT = danhSachVTPT[7],
-                                    SoLuong = 1,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 2,
-                            maCTPSC = 5,
-                            NDSC = danhSachNDSC[4],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 5,
-                                    VTPT = danhSachVTPT[8],
-                                    SoLuong = 4,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 5,
-                                    VTPT = danhSachVTPT[9],
-                                    SoLuong = 2,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 2,
-                            maCTPSC = 6,
-                            NDSC = danhSachNDSC[5],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 6,
-                                    VTPT = danhSachVTPT[0],
-                                    SoLuong = 1,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 6,
-                                    VTPT = danhSachVTPT[1],
-                                    SoLuong = 1,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 3,
-                            maCTPSC = 7,
-                            NDSC = danhSachNDSC[6],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 7,
-                                    VTPT = danhSachVTPT[2],
-                                    SoLuong = 2,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 7,
-                                    VTPT = danhSachVTPT[3],
-                                    SoLuong = 1,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 3,
-                            maCTPSC = 8,
-                            NDSC = danhSachNDSC[7],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 8,
-                                    VTPT = danhSachVTPT[4],
-                                    SoLuong = 4,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 8,
-                                    VTPT = danhSachVTPT[5],
-                                    SoLuong = 2,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 3,
-                            maCTPSC = 9,
-                            NDSC = danhSachNDSC[8],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 9,
-                                    VTPT = danhSachVTPT[6],
-                                    SoLuong = 1,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 9,
-                                    VTPT = danhSachVTPT[7],
-                                    SoLuong = 1,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 4,
-                            maCTPSC = 10,
-                            NDSC = danhSachNDSC[9],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 10,
-                                    VTPT = danhSachVTPT[8],
-                                    SoLuong = 2,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 10,
-                                    VTPT = danhSachVTPT[9],
-                                    SoLuong = 1,
-                                },
-                            }
-                        },
-                new CTPhieuSuaChuaModel
-                        {
-                            maPSC = 5,
-                            maCTPSC = 11,
-                            NDSC = danhSachNDSC[0],
-                            DanhSachSuDung = new List<CTSuDungVTPTModel>
-                            {
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 11,
-                                    VTPT = danhSachVTPT[0],
-                                    SoLuong = 2,
-                                },
-                                new CTSuDungVTPTModel
-                                {
-                                    maCTPSC = 11,
-                                    VTPT = danhSachVTPT[1],
-                                    SoLuong = 1,
-                                },
-                            }
-                        }
-            };
-
-            danhSachPhieuSC = new List<PhieuSuaChuaModel>
-            {
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 1,
-                    xe = danhSachXe[0],
-                    ngayLap = new DateTime(2023, 5, 1),
-                    IsReadOnly = true,
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                       danhSachCTPhieuSC[0],
-                       danhSachCTPhieuSC[1],
-                       danhSachCTPhieuSC[2]
-                    }
-                },
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 2,
-                    xe = danhSachXe[0],
-                    ngayLap = new DateTime(2024, 3, 5),
-                    IsReadOnly = true,
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        danhSachCTPhieuSC[3],
-                        danhSachCTPhieuSC[4],
-                        danhSachCTPhieuSC[5]
-                    }
-                },
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 3,
-                    xe = danhSachXe[1],
-                    ngayLap = new DateTime(2024, 5, 10),
-                    IsReadOnly = true,
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        danhSachCTPhieuSC[6],
-                        danhSachCTPhieuSC[7],
-                        danhSachCTPhieuSC[8]
-                    }
-                },
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 4,
-                    xe = danhSachXe[2],
-                    ngayLap = new DateTime(2024, 5, 15),
-                    IsReadOnly = true,
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        danhSachCTPhieuSC[9]
-                    }
-                },
-                new PhieuSuaChuaModel
-                {
-                    maPSC = 5,
-                    xe = danhSachXe[0],
-                    ngayLap = new DateTime(2024, 3, 20),
-                    IsReadOnly = true,
-                    DanhSachCT = new List<CTPhieuSuaChuaModel>
-                    {
-                        danhSachCTPhieuSC[10]
-                    }
-                }
-            };
+            danhSachPhieuSC = new List<PhieuSuaChuaModel>();
 
             danhSachPhieuThuTien = new List<PhieuThuTienModel>
             {
@@ -734,6 +434,54 @@ namespace QuanLyGara.Services
                 }
 
                 danhSachPhieuNhap.Add(phieuNhapModel);
+            }
+        }
+
+        public void UpdateDanhSachPhieuSuaChua()
+        {
+            danhSachPhieuSC = new List<PhieuSuaChuaModel>();
+            List<PhieuSuaChuaDTO> phieuSuaChua = PhieuSuaChuaDAO.Instance.DanhSachPhieuSuaChua();
+
+            foreach (PhieuSuaChuaDTO phieu in phieuSuaChua)
+            {
+                List<CTPhieuSuaChuaDTO> tempDTO = CTPhieuSuaChuaDAO.Instance.GetCTPhieuSuaChua(phieu.maPSC);
+
+                PhieuSuaChuaModel phieuSuaChuaModel = new PhieuSuaChuaModel
+                {
+                    maPSC = phieu.maPSC,
+                    xe = danhSachXe.Find(xe => xe.maXe == phieu.maXe),
+                    ngayLap = phieu.ngayLap,
+                    IsReadOnly = true,
+                    DanhSachCT = new List<CTPhieuSuaChuaModel>()
+                };
+
+                foreach (CTPhieuSuaChuaDTO ct in tempDTO)
+                {
+                    CTPhieuSuaChuaModel temp = new CTPhieuSuaChuaModel
+                    {
+                        maPSC = ct.maPSC,
+                        maCTPSC = ct.maCTPSC,
+                        NDSC = danhSachNDSC.Find(ndsc => ndsc.maNDSC == ct.maNDSC),
+                        DanhSachSuDung = new List<CTSuDungVTPTModel>()
+                    };
+
+                    List<CTSuDungVTPTDTO> tempSuDung = CTSuDungVTPTDAO.Instance.GetCTSuDungVTPT(ct.maCTPSC);
+
+                    foreach (CTSuDungVTPTDTO suDung in tempSuDung)
+                    {
+                        CTSuDungVTPTModel tempSuDungModel = new CTSuDungVTPTModel
+                        {
+                            maCTPSC = suDung.maCTPSC,
+                            VTPT = danhSachVTPT.Find(vtpt => vtpt.maVTPT == suDung.maVTPT),
+                            SoLuong = suDung.soLuong
+                        };
+
+                        temp.AddSuDung(tempSuDungModel);
+                    }
+
+                    phieuSuaChuaModel.AddCT(temp);
+                }
+                danhSachPhieuSC.Add(phieuSuaChuaModel);
             }
         }
     }

@@ -8,7 +8,15 @@ namespace QuanLyGara.DATA.DAO
 {
     internal class CTSuDungVTPTDAO : DBconnection
     {
-        public List<CTSuDungVTPTDTO> GetCTSuDungVTPTByMaCTPSC(int maCTPSC)
+        private static readonly CTSuDungVTPTDAO instance = new CTSuDungVTPTDAO();
+        public static CTSuDungVTPTDAO Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+        public List<CTSuDungVTPTDTO> GetCTSuDungVTPT(int maCTPSC)
         {
             List<CTSuDungVTPTDTO> danhSachCTSuDungVTPT = new List<CTSuDungVTPTDTO>();
             try
@@ -41,6 +49,32 @@ namespace QuanLyGara.DATA.DAO
                 closeConnection();
             }
             return danhSachCTSuDungVTPT;
+        }
+
+        public void AddCTSuDungVTPT(CTSuDungVTPTModel ctSuDungVTPT)
+        {
+            try
+            {
+                openConnection();
+                string query = "INSERT INTO CT_SUDUNGVATTUPHUTUNG (MACTPHIEUSUACHUA, MAVATTUPHUTUNG, SOLUONG, DONGIABAN, THANHTIEN) " +
+                    "VALUES (@MaCTPSC, @MaVTPT, @SoLuong, @DonGia, @ThanhTien)";
+                SqlCommand cmd = new SqlCommand(query, getConnection);
+                cmd.Parameters.AddWithValue("@MaCTPSC", ctSuDungVTPT.maCTPSC);
+                cmd.Parameters.AddWithValue("@MaVTPT", ctSuDungVTPT.VTPT.maVTPT);
+                cmd.Parameters.AddWithValue("@SoLuong", ctSuDungVTPT.SoLuong);
+                cmd.Parameters.AddWithValue("@DonGia", ctSuDungVTPT.donGia);
+                cmd.Parameters.AddWithValue("@ThanhTien", ctSuDungVTPT.thanhTien);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+            }
+            finally
+            {
+                closeConnection();
+            }
         }
     }
 }

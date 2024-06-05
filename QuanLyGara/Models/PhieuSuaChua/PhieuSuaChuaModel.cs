@@ -123,5 +123,10 @@ namespace QuanLyGara.Models.PhieuSuaChua
             OnPropertyChanged(nameof(tongTienVTPT));
             OnPropertyChanged(nameof(tongTien));
         }
+
+        public void AddCT(CTPhieuSuaChuaModel ct)
+        {
+            danhSachCT.Add(ct);
+        }
     }
 }

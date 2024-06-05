@@ -52,6 +52,7 @@ namespace QuanLyGara.DATA.DAO
             }
             return danhSachPhieuNhapVTPT;
         }
+
         public int ThemPhieuNhapVTPT(PhieuNhapVTPTModel phieuNhap)
         {
             int newId = 0;

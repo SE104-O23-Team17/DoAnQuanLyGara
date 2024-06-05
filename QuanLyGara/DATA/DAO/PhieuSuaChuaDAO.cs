@@ -14,16 +14,19 @@ namespace QuanLyGara.DATA.DAO
 {
     public class PhieuSuaChuaDAO : DBconnection
     {
-        public GaraModel gara = Global.Instance.garaHienTai;
-        public GaraModel getGara
+        private static readonly PhieuSuaChuaDAO instance = new PhieuSuaChuaDAO();
+        public static PhieuSuaChuaDAO Instance
         {
-            get { return gara; }
+            get
+            {
+                return instance;
+            }
         }
 
-        public List<PhieuSuaChuaModel> DanhSachPhieuSuaChua()
+        public List<PhieuSuaChuaDTO> DanhSachPhieuSuaChua()
         {
-            int maGara = gara.ID;
-            List<PhieuSuaChuaModel> danhSachPhieuSuaChua = new List<PhieuSuaChuaModel>();
+            int maGara = Global.Instance.garaHienTai.ID;
+            List<PhieuSuaChuaDTO> danhSachPhieuSuaChua = new List<PhieuSuaChuaDTO>();
             try
             {
                 openConnection();
@@ -34,24 +37,14 @@ namespace QuanLyGara.DATA.DAO
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    PhieuSuaChuaModel phieu = new PhieuSuaChuaModel()
+                    PhieuSuaChuaDTO phieu = new PhieuSuaChuaDTO()
                     {
                         maPSC = Convert.ToInt32(reader["MAPHIEUSUACHUA"]),
-                        xe = new XeModel()
-                        {
-                            bienSo = reader["BIENSO"].ToString(),
-                            tenXe = reader["TENXE"].ToString(),
-                            tienNo = Convert.ToDouble(reader["TIENNO"]),
-                            tenChuXe = reader["TENCHUXE"].ToString(),
-                            sdt = reader["SODIENTHOAI"].ToString(),
-                            email = reader["EMAIL"].ToString(),
-                            HieuXe = new HieuXeModel()
-                            {
-                                maHieuXe = Convert.ToInt32(reader["MAHIEUXE"]),
-                                TenHieuXe = reader["TENHIEUXE"].ToString(),
-                            },
-                        },
+                        maXe = Convert.ToInt32(reader["MAXE"]),
                         ngayLap = Convert.ToDateTime(reader["NGAYLAP"]),
+                        tongTienSuaChua = Convert.ToDouble(reader["TONGTIENSUACHUA"]),
+                        tongTienVTPT = Convert.ToDouble(reader["TONGTIENVATTUPHUTUNG"]),
+                        tongTien = Convert.ToDouble(reader["TONGTIEN"])
                     };
                     danhSachPhieuSuaChua.Add(phieu);
                 }
@@ -66,53 +59,32 @@ namespace QuanLyGara.DATA.DAO
             }
             return danhSachPhieuSuaChua;
         }
-        public void ThemPhieuSuaChua(PhieuSuaChuaModel phieuSuaChua)
-        {
-            try
-            {
-                openConnection();
-                string query = "INSERT INTO PHIEUSUACHUA (BIENSO, TENXE, TIENNO, TENCHUXE, SODIENTHOAI, EMAIL, MAHIEUXE, NGAYLAP, MAGARA) VALUES (@BienSo, @TenXe, @TienNo, @TenChuXe, @SDT, @Email, @MaHieuXe, @NgayLap, @MaGara)";
-                SqlCommand cmd = new SqlCommand(query, getConnection);
-                cmd.Parameters.AddWithValue("@BienSo", phieuSuaChua.xe.bienSo);
-                cmd.Parameters.AddWithValue("@TenXe", phieuSuaChua.xe.tenXe);
-                cmd.Parameters.AddWithValue("@TienNo", phieuSuaChua.xe.tienNo);
-                cmd.Parameters.AddWithValue("@TenChuXe", phieuSuaChua.xe.tenChuXe);
-                cmd.Parameters.AddWithValue("@SDT", phieuSuaChua.xe.sdt);
-                cmd.Parameters.AddWithValue("@Email", phieuSuaChua.xe.email);
-                cmd.Parameters.AddWithValue("@MaHieuXe", phieuSuaChua.xe.HieuXe.maHieuXe);
-                cmd.Parameters.AddWithValue("@NgayLap", phieuSuaChua.ngayLap);
-                cmd.Parameters.AddWithValue("@MaGara", gara.ID);
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý ngoại lệ
-            }
-            finally
-            {
-                closeConnection();
-            }
-        }
-        public void XoaPhieuSuaChua(int maPSC)
-        {
-            try
-            {
-                openConnection();
-                string query = "DELETE FROM PHIEUSUACHUA WHERE MAPHIEUSUACHUA = @MaPSC AND MAGARA = @MaGara";
-                SqlCommand cmd = new SqlCommand(query, getConnection);
-                cmd.Parameters.AddWithValue("@MaPSC", maPSC);
-                cmd.Parameters.AddWithValue("@MaGara", gara.ID);
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý ngoại lệ
-            }
-            finally
-            {
-                closeConnection();
-            }
-        }
 
+        public int ThemPhieuSuaChua(PhieuSuaChuaModel phieuSuaChua)
+        {
+            int newId = 0;
+            try
+            {
+                openConnection();
+                string query = "INSERT INTO PHIEUSUACHUA (MAGARA, MAXE, NGAYLAP, TONGTIENSUACHUA, TONGTIENVATTUPHUTUNG, TONGTIEN) VALUES (@MaGara, @MaXe, @NgayLap, @TongTienSuaChua, @TongTienVTPT, @TongTien); SELECT SCOPE_IDENTITY()";
+                SqlCommand cmd = new SqlCommand(query, getConnection);
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                cmd.Parameters.AddWithValue("@MaXe", phieuSuaChua.xe.maXe);
+                cmd.Parameters.AddWithValue("@NgayLap", phieuSuaChua.ngayLap);
+                cmd.Parameters.AddWithValue("@TongTienSuaChua", phieuSuaChua.tongTienSuaChua);
+                cmd.Parameters.AddWithValue("@TongTienVTPT", phieuSuaChua.tongTienVTPT);
+                cmd.Parameters.AddWithValue("@TongTien", phieuSuaChua.tongTien);
+                newId = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ
+            }
+            finally
+            {
+                closeConnection();
+            }
+            return newId;
+        }
     }
 }
