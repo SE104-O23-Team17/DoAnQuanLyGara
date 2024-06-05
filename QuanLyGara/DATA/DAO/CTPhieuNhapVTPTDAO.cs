@@ -9,7 +9,16 @@ namespace QuanLyGara.DATA.DAO
 {
     public class CTPhieuNhapVTPTDAO : DBconnection
     {
-        public List<CTPhieuNhapVTPTDTO> GetCTPhieuNhapVTPTByMaPhieuNhap(int maPhieuNhap)
+        private static readonly CTPhieuNhapVTPTDAO instance = new CTPhieuNhapVTPTDAO();
+        public static CTPhieuNhapVTPTDAO Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        public List<CTPhieuNhapVTPTDTO> GetCTPhieuNhapVTPT(int maPhieuNhap)
         {
             List<CTPhieuNhapVTPTDTO> danhSachCTPhieuNhapVTPT = new List<CTPhieuNhapVTPTDTO>();
             try
@@ -43,81 +52,29 @@ namespace QuanLyGara.DATA.DAO
             return danhSachCTPhieuNhapVTPT;
         }
 
-        public bool AddCTPhieuNhapVTPT(CTPhieuNhapVTPTDTO ctPhieuNhap)
+        public void AddCTPhieuNhapVTPT(CTPhieuNhapVTPTModel ctPhieuNhap)
         {
             try
             {
                 openConnection();
-                string query = "INSERT INTO CT_PHIEUNHAPVATTUPHUTUNG (MAPHIEUNHAPVATTUPHUTUNG, MAVTPT, GIANHAP, SOLUONG, THANHTIEN) " +
+                string query = "INSERT INTO CT_PHIEUNHAPVATTUPHUTUNG (MAPHIEUNHAPVATTUPHUTUNG, MAVATTUPHUTUNG, GIANHAP, SOLUONG, THANHTIEN) " +
                                "VALUES (@MaPhieuNhap, @MaVTPT, @GiaNhap, @SoLuong, @ThanhTien)";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@MaPhieuNhap", ctPhieuNhap.maPhieuNhapVTPT);
-                cmd.Parameters.AddWithValue("@MaVTPT", ctPhieuNhap.maVTPT);
-                cmd.Parameters.AddWithValue("@GiaNhap", ctPhieuNhap.giaNhap);
-                cmd.Parameters.AddWithValue("@SoLuong", ctPhieuNhap.soLuong);
+                cmd.Parameters.AddWithValue("@MaVTPT", ctPhieuNhap.VTPT.maVTPT);
+                cmd.Parameters.AddWithValue("@GiaNhap", ctPhieuNhap.GiaNhap);
+                cmd.Parameters.AddWithValue("@SoLuong", ctPhieuNhap.SoLuong);
                 cmd.Parameters.AddWithValue("@ThanhTien", ctPhieuNhap.thanhTien);
                 cmd.ExecuteNonQuery();
-                return true;
             }
             catch (Exception ex)
             {
                 // Handle exception
-                return false;
             }
             finally
             {
                 closeConnection();
             }
-        }
-
-        public bool UpdateCTPhieuNhapVTPT(CTPhieuNhapVTPTDTO ctPhieuNhap)
-        {
-            try
-            {
-                openConnection();
-                string query = "UPDATE CT_PHIEUNHAPVATTUPHUTUNG SET GIANHAP = @GiaNhap, SOLUONG = @SoLuong, THANHTIEN = @ThanhTien " +
-                               "WHERE MAPHIEUNHAPVATTUPHUTUNG = @MaPhieuNhap AND MAVTPT = @MaVTPT";
-                SqlCommand cmd = new SqlCommand(query, getConnection);
-                cmd.Parameters.AddWithValue("@MaPhieuNhap", ctPhieuNhap.maPhieuNhapVTPT);
-                cmd.Parameters.AddWithValue("@MaVTPT", ctPhieuNhap.maVTPT);
-                cmd.Parameters.AddWithValue("@GiaNhap", ctPhieuNhap.giaNhap);
-                cmd.Parameters.AddWithValue("@SoLuong", ctPhieuNhap.soLuong);
-                cmd.Parameters.AddWithValue("@ThanhTien", ctPhieuNhap.thanhTien);
-                cmd.ExecuteNonQuery();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // Handle exception
-                return false;
-            }
-            finally
-            {
-                closeConnection();
-            }
-        }
-
-        public bool DeleteCTPhieuNhapVTPT(int maPhieuNhap, int maVTPT)
-        {
-            try
-            {
-                openConnection();
-                string query = "DELETE FROM CT_PHIEUNHAPVATTUPHUTUNG WHERE MAPHIEUNHAPVATTUPHUTUNG = @MaPhieuNhap AND MAVTPT = @MaVTPT";
-                SqlCommand cmd = new SqlCommand(query, getConnection);
-                cmd.Parameters.AddWithValue("@MaPhieuNhap", maPhieuNhap);
-                cmd.Parameters.AddWithValue("@MaVTPT", maVTPT);
-                cmd.ExecuteNonQuery();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // Handle exception
-                return false;
-            }
-            finally
-            {
-                closeConnection();
-            }
-        }
+        }        
     }
 }

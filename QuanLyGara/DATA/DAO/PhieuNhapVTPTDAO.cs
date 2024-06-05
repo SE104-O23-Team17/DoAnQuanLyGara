@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using QuanLyGara.Models;
 using QuanLyGara.Models.PhieuNhapVTPT;
@@ -9,14 +10,18 @@ namespace QuanLyGara.DATA.DAO
 {
     public class PhieuNhapVTPTDAO : DBconnection
     {
-        public GaraModel gara = Global.Instance.garaHienTai;
-        public GaraModel getGara
+        private static readonly PhieuNhapVTPTDAO instance = new PhieuNhapVTPTDAO();
+        public static PhieuNhapVTPTDAO Instance
         {
-            get { return gara; }
+            get
+            {
+                return instance;
+            }
         }
+
         public List<PhieuNhapVTPTDTO> GetAllPhieuNhapVTPT()
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
 
             List<PhieuNhapVTPTDTO> danhSachPhieuNhapVTPT = new List<PhieuNhapVTPTDTO>();
             try
@@ -47,47 +52,28 @@ namespace QuanLyGara.DATA.DAO
             }
             return danhSachPhieuNhapVTPT;
         }
-        public void ThemPhieuNhapVTPT(PhieuNhapVTPTDTO phieuNhap)
+        public int ThemPhieuNhapVTPT(PhieuNhapVTPTModel phieuNhap)
         {
+            int newId = 0;
             try
             {
                 openConnection();
-                string query = "INSERT INTO PHIEUNHAPVATTUPHUTUNG (NGAYNHAP, TONGTIENNHAP, MAGARA) VALUES (@NgayNhap, @TongTienNhap, @MaGara)";
+                string query = "INSERT INTO PHIEUNHAPVATTUPHUTUNG (NGAYNHAP, TONGTIENNHAP, MAGARA) VALUES (@NgayNhap, @TongTienNhap, @MaGara); SELECT SCOPE_IDENTITY();";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
-                cmd.Parameters.AddWithValue("@NgayNhap", phieuNhap.ngayNhap);
+                cmd.Parameters.Add("@NgayNhap", SqlDbType.DateTime).Value = phieuNhap.NgayNhap;
                 cmd.Parameters.AddWithValue("@TongTienNhap", phieuNhap.tongTienNhap);
-                cmd.Parameters.AddWithValue("@MaGara", gara.ID);
-                cmd.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                newId = Convert.ToInt32(cmd.ExecuteScalar());
             }
             catch (Exception ex)
             {
-                // Xử lý ngoại lệ
+                // Handle exception
             }
             finally
             {
                 closeConnection();
             }
+            return newId;
         }
-        public void XoaPhieuNhapVTPT(int maPhieuNhapVTPT)
-        {
-            try
-            {
-                openConnection();
-                string query = "DELETE FROM PHIEUNHAPVATTUPHUTUNG WHERE MAPHIEUNHAPVATTUPHUTUNG = @MaPhieuNhapVTPT AND MAGARA = @MaGara";
-                SqlCommand cmd = new SqlCommand(query, getConnection);
-                cmd.Parameters.AddWithValue("@MaPhieuNhapVTPT", maPhieuNhapVTPT);
-                cmd.Parameters.AddWithValue("@MaGara", gara.ID);
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý ngoại lệ
-            }
-            finally
-            {
-                closeConnection();
-            }
-        }
-
     }
 }

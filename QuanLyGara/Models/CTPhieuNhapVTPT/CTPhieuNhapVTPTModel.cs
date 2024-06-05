@@ -22,6 +22,15 @@ namespace QuanLyGara.Models.CTPhieuNhapVTPT
             giaNhap = VTPT.giaNhap;
             soLuong = 1;
         }
+
+        public CTPhieuNhapVTPTModel(CTPhieuNhapVTPTModel other)
+        {
+            this.maPhieuNhapVTPT = other.maPhieuNhapVTPT;
+            this.VTPT = new VTPTModel(other.VTPT);
+            this.giaNhap = other.giaNhap;
+            this.soLuong = other.soLuong;
+        }
+
         public int maPhieuNhapVTPT { get; set; }
         private VTPTModel vtpt;
         public VTPTModel VTPT

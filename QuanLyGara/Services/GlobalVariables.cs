@@ -95,127 +95,9 @@ namespace QuanLyGara.Services
                 new VTPTModel { maVTPT = 9, tenVTPT = "Phanh", soLuongTon = 10, giaNhap = 500000, donViTinh = danhSachDVT[1]},
                 new VTPTModel { maVTPT = 10, tenVTPT = "Sơn", soLuongTon = 3, giaNhap = 50000, donViTinh = danhSachDVT[2]},
             };
+            
 
-            danhSachPhieuNhap = new List<PhieuNhapVTPTModel> {
-                new PhieuNhapVTPTModel
-                {
-                    maPhieuNhapVTPT = 1,
-                    NgayNhap = new DateTime(2023, 5, 1),
-                    DanhSachCT = new List<CTPhieuNhapVTPTModel>
-                    {
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 1,
-                            VTPT = danhSachVTPT[0],
-                            SoLuong = 5,
-                            GiaNhap = 120000,
-                        },
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 1,
-                            VTPT = danhSachVTPT[2],
-                            SoLuong = 10,
-                        },
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 1,
-                            VTPT = danhSachVTPT[3],
-                            SoLuong = 20,
-                            GiaNhap = 25000,
-                        },
-                    }
-                },
-
-                new PhieuNhapVTPTModel
-                {
-                    maPhieuNhapVTPT = 2,
-                    NgayNhap = new DateTime(2024, 3, 5),
-                    DanhSachCT = new List<CTPhieuNhapVTPTModel>
-                    {
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 2,
-                            VTPT = danhSachVTPT[1],
-                            SoLuong = 5,
-                            GiaNhap = 50000,
-                        },
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 2,
-                            VTPT = danhSachVTPT[4],
-                            SoLuong = 10,
-                            GiaNhap = 1800000,
-                        },
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 2,
-                            VTPT = danhSachVTPT[5],
-                            SoLuong = 5,
-                            GiaNhap = 250000,
-                        },
-                    }
-                },
-
-                new PhieuNhapVTPTModel
-                {
-                    maPhieuNhapVTPT = 3,
-                    NgayNhap = new DateTime(2024, 5, 10),
-                    DanhSachCT = new List<CTPhieuNhapVTPTModel>
-                    {
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 3,
-                            VTPT = danhSachVTPT[6],
-                            SoLuong = 5,
-                            GiaNhap = 150000,
-                        },
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 3,
-                            VTPT = danhSachVTPT[7],
-                            SoLuong = 10,
-                            GiaNhap = 40000,
-                        },
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 3,
-                            VTPT = danhSachVTPT[8],
-                            SoLuong = 5,
-                            GiaNhap = 450000,
-                        },
-                    }
-                },
-
-                new PhieuNhapVTPTModel
-                {
-                    maPhieuNhapVTPT = 4,
-                    NgayNhap = new DateTime(2024, 5, 15),
-                    DanhSachCT = new List<CTPhieuNhapVTPTModel>
-                    {
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 4,
-                            VTPT = danhSachVTPT[9],
-                            SoLuong = 5,
-                            GiaNhap = 50000,
-                        },
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 4,
-                            VTPT = danhSachVTPT[0],
-                            SoLuong = 10,
-                            GiaNhap = 100000,
-                        },
-                        new CTPhieuNhapVTPTModel
-                        {
-                            maPhieuNhapVTPT = 4,
-                            VTPT = danhSachVTPT[1],
-                            SoLuong = 5,
-                            GiaNhap = 45000,
-                        },
-                    }
-                },
-            };
+            danhSachPhieuNhap = new List<PhieuNhapVTPTModel>();
 
             danhSachNDSC = new List<NoiDungSuaChuaModel>
             {
@@ -820,6 +702,39 @@ namespace QuanLyGara.Services
         public void UpdateDanhSachPhieuthu()
         {             
             danhSachPhieuThuTien = PhieuThuTienDAO.Instance.GetAllPhieuThuTien();
+        }
+
+        public void UpdateDanhSachPhieuNhap()
+        {
+            danhSachPhieuNhap = new List<PhieuNhapVTPTModel>();
+            List<PhieuNhapVTPTDTO> phieuNhap = PhieuNhapVTPTDAO.Instance.GetAllPhieuNhapVTPT();
+
+            foreach (PhieuNhapVTPTDTO phieu in phieuNhap)
+            {
+                List<CTPhieuNhapVTPTDTO> tempDTO = CTPhieuNhapVTPTDAO.Instance.GetCTPhieuNhapVTPT(phieu.maPhieuNhapVTPT);
+
+                PhieuNhapVTPTModel phieuNhapModel = new PhieuNhapVTPTModel
+                {
+                    maPhieuNhapVTPT = phieu.maPhieuNhapVTPT,
+                    NgayNhap = phieu.ngayNhap,
+                    DanhSachCT = new List<CTPhieuNhapVTPTModel>()
+                };
+
+                foreach (CTPhieuNhapVTPTDTO ct in tempDTO)
+                {
+                    CTPhieuNhapVTPTModel temp = new CTPhieuNhapVTPTModel
+                    {
+                        maPhieuNhapVTPT = ct.maPhieuNhapVTPT,
+                        VTPT = danhSachVTPT.Find(vtpt => vtpt.maVTPT == ct.maVTPT),
+                        SoLuong = ct.soLuong,
+                        GiaNhap = ct.giaNhap
+                    };
+
+                    phieuNhapModel.AddCT(temp);
+                }
+
+                danhSachPhieuNhap.Add(phieuNhapModel);
+            }
         }
     }
 }

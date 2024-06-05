@@ -255,9 +255,12 @@ namespace QuanLyGara.ViewModels.Pages
             Global.Instance.UpdateThamSo();
             ratio = Global.Instance.tiLeTinhDonGiaBan;
 
+            Global.Instance.UpdateDanhSachPhieuNhap();
+            danhSachPhieuNhap = Global.Instance.danhSachPhieuNhap;
+
             themVTPT = [];
             phieuNhapVTPT = new PhieuNhapVTPTModel();
-            danhSachPhieuNhap = Global.Instance.danhSachPhieuNhap;
+
             UpdateIsAllSelectedCommand = new ViewModelCommand(ExecuteUpdateIsAllSelectedCommand);
             EditRatioCommand = new ViewModelCommand(ExecuteEditRatioCommand);
             SaveRatioCommand = new ViewModelCommand(ExecuteSaveRatioCommand);
@@ -485,9 +488,20 @@ namespace QuanLyGara.ViewModels.Pages
                     Global.Instance.UpdateDanhSachVTPT();
                     danhSachVTPT = Global.Instance.danhSachVTPT;
                     OnPropertyChanged(nameof(DanhSachVTPT));
+                    isAllChecked = false;
+                    OnPropertyChanged(nameof(isAllChecked));
                 },
                 () => { }
-                );            
+                );
+
+            if (failedToDelete.Count > 0)
+            {
+                dialogService.ShowInfoDialog(
+                    "Lỗi",
+                    "Không thể xóa các vật tư sau vì đang được sử dụng: " + string.Join(", ", failedToDelete),
+                    () => { }
+                    );
+            }
         }
 
         private void ExecuteAddDVTCommand(object obj)
@@ -582,6 +596,7 @@ namespace QuanLyGara.ViewModels.Pages
                 Global.Instance.UpdateDanhSachVTPT();
                 danhSachVTPT = Global.Instance.danhSachVTPT;
                 OnPropertyChanged(nameof(DanhSachVTPT));
+                OnPropertyChanged(nameof(DanhSachDVTNotNull));
                 if (isAdding)
                 {
                     OnPropertyChanged(nameof(ThemVTPT));
@@ -618,19 +633,21 @@ namespace QuanLyGara.ViewModels.Pages
                         DonViTinhDAO.Instance.XoaDonViTinh(dvt.maDVT);
                         danhSachDVT.Remove(dvt);
                         OnPropertyChanged(nameof(DanhSachDVT));
+                        OnPropertyChanged(nameof(DanhSachDVTNotNull));
                         if (isAdding)
                         {
                             OnPropertyChanged(nameof(ThemVTPT));
                         }
+                        dialogService.ShowInfoDialog(
+                            "Thông báo",
+                            "Đã xóa đơn vị tính " + dvt.tenDVT,
+                            () => { }
+                            );
 
                     },
                     () => { }
                     );
-                dialogService.ShowInfoDialog(
-                    "Thông báo",
-                    "Đã xóa đơn vị tính " + dvt.tenDVT,
-                    () => { }
-                    );
+
             }
         }
 
@@ -699,10 +716,17 @@ namespace QuanLyGara.ViewModels.Pages
                 }
                 newVTPTs.Add(vtpt);
             }
-                        
-            danhSachVTPT.AddRange(newVTPTs);
+
+            foreach (var vtpt in themVTPT)
+            {
+                VTPTDAO.Instance.ThemVTPT(vtpt);
+            }
             themVTPT.Clear();
+
+            Global.Instance.UpdateDanhSachVTPT();
+            danhSachVTPT = Global.Instance.danhSachVTPT;
             OnPropertyChanged(nameof(DanhSachVTPT));
+
             isAdding = false;
             if (isImporting)
             {
@@ -775,7 +799,7 @@ namespace QuanLyGara.ViewModels.Pages
             isAdding = false;
             isViewingImport = false;
 
-            phieuNhapVTPT = new PhieuNhapVTPTModel(danhSachPhieuNhap.Count + 1);
+            phieuNhapVTPT = new PhieuNhapVTPTModel(0);
             phieuNhapVTPT.ThemCT(new CTPhieuNhapVTPTModel());
             OnPropertyChanged(nameof(PhieuNhapVTPT));
 
@@ -803,56 +827,6 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
 
-            foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
-            {
-                if (string.IsNullOrEmpty(ct.VTPT.tenVTPT))
-                {
-                    dialogService.ShowInfoDialog(
-                        "Lỗi",
-                        "Tên vật tư không được để trống.",
-                        () => { }
-                        );
-                    return;
-                }
-
-                if (ct.SoLuong <= 0)
-                {
-                    dialogService.ShowInfoDialog(
-                        "Lỗi",
-                        "Số lượng của " + ct.VTPT.giaNhap + " phải lớn hơn 0.",
-                        () => { }
-                        );
-                    return;
-                }
-
-                if (ct.GiaNhap <= 0)
-                {
-                    dialogService.ShowInfoDialog(
-                        "Lỗi",
-                        "Giá nhập của " + ct.VTPT.giaNhap + " phải lớn hơn 0.",
-                        () => { }
-                        );
-                    return;
-                }
-
-                if (ct.VTPT.donViTinh == null)
-                {
-                    dialogService.ShowInfoDialog(
-                        "Lỗi",
-                        "Đơn vị tính của " + ct.VTPT.giaNhap + " không được để trống.",
-                        () => { }
-                        );
-                    return;
-                }
-
-                if (ct.GiaNhap != ct.VTPT.giaNhap)
-                {
-                    danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().giaNhap = ct.GiaNhap;
-                }
-                danhSachVTPT.Where(vtpt => vtpt == ct.VTPT).First().NhapThem(ct.SoLuong);
-            }
-
-
             if (phieuNhapVTPT.DanhSachCT.GroupBy(ct => ct.VTPT.tenVTPT).Any(g => g.Count() > 1))
             {
                 dialogService.ShowInfoDialog(
@@ -862,19 +836,82 @@ namespace QuanLyGara.ViewModels.Pages
                 );
                 return;
             }
-
+            
             dialogService.ShowYesNoDialog(
-                "Xác nhận",
-                "Sau khi lưu sẽ không thể thay đổi. Lưu phiếu sửa chữa?",
-                () =>
+            "Xác nhận",
+            "Sau khi lưu sẽ không thể thay đổi. Lưu phiếu sửa chữa?",
+            () =>
+            {
+                foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
                 {
-                    danhSachPhieuNhap.Add(phieuNhapVTPT);
-                    OnPropertyChanged(nameof(DanhSachPhieuNhap));
-                    OnPropertyChanged(nameof(IsImportListNull));
-                    OnPropertyChanged(nameof(DanhSachPhieuNhap));
-                },
-                () => { }
-                );
+                    if (string.IsNullOrEmpty(ct.VTPT.tenVTPT))
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Tên vật tư không được để trống.",
+                            () => { }
+                            );
+                        return;
+                    }
+
+                    if (ct.SoLuong <= 0)
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Số lượng của " + ct.VTPT.giaNhap + " phải lớn hơn 0.",
+                            () => { }
+                            );
+                        return;
+                    }
+
+                    if (ct.GiaNhap <= 0)
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Giá nhập của " + ct.VTPT.giaNhap + " phải lớn hơn 0.",
+                            () => { }
+                            );
+                        return;
+                    }
+
+                    if (ct.VTPT.donViTinh == null)
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Đơn vị tính của " + ct.VTPT.giaNhap + " không được để trống.",
+                            () => { }
+                            );
+                        return;
+                    }
+                }
+
+
+                int id = PhieuNhapVTPTDAO.Instance.ThemPhieuNhapVTPT(phieuNhapVTPT);
+                phieuNhapVTPT.maPhieuNhapVTPT = id;
+
+                foreach (CTPhieuNhapVTPTModel ct in phieuNhapVTPT.DanhSachCT)
+                {
+                    ct.maPhieuNhapVTPT = id;
+                    VTPTModel vtpt = danhSachVTPT.FirstOrDefault(vtpt => vtpt == ct.VTPT);
+
+                    if (ct.GiaNhap != vtpt.giaNhap)
+                    {
+                        vtpt.giaNhap = ct.GiaNhap;
+                    }
+                    vtpt.NhapThem(ct.SoLuong);
+                    VTPTDAO.Instance.SuaVTPT(vtpt);
+                    CTPhieuNhapVTPTDAO.Instance.AddCTPhieuNhapVTPT(ct);
+                }
+
+                Global.Instance.UpdateDanhSachPhieuNhap();
+                danhSachPhieuNhap = Global.Instance.danhSachPhieuNhap;
+
+                OnPropertyChanged(nameof(DanhSachPhieuNhap));
+                OnPropertyChanged(nameof(IsImportListNull));
+                OnPropertyChanged(nameof(DanhSachPhieuNhap));
+            },
+            () => { }
+            );            
 
             ExecuteViewImportCommand(null);
         }

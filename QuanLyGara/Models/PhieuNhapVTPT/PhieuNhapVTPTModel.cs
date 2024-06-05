@@ -27,6 +27,14 @@ namespace QuanLyGara.Models.PhieuNhapVTPT
             isChecked = false;
         }
 
+        public PhieuNhapVTPTModel(PhieuNhapVTPTModel other)
+        {
+            this.maPhieuNhapVTPT = other.maPhieuNhapVTPT;
+            this.ngayNhap = other.ngayNhap;
+            this.danhSachCT = new List<CTPhieuNhapVTPTModel>(other.danhSachCT);
+            this.isChecked = false;
+        }
+
         public int maPhieuNhapVTPT { get; set; }
 
         private DateTime ngayNhap;
@@ -116,6 +124,11 @@ namespace QuanLyGara.Models.PhieuNhapVTPT
                 isChecked = value;
                 OnPropertyChanged(nameof(IsChecked));
             }
+        }
+
+        public void AddCT(CTPhieuNhapVTPTModel ct)
+        {
+            danhSachCT.Add(ct);
         }
     }
 }

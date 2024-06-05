@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using QuanLyGara.DATA.DAO;
 
 namespace QuanLyGara.ViewModels.Pages
 {
@@ -115,8 +116,10 @@ namespace QuanLyGara.ViewModels.Pages
             }
             
             gara.MatKhau = NewPassword;
-            Global.Instance.garaHienTai = gara;
-            Global.Instance.danhSachGara[Global.Instance.danhSachGara.FindIndex(g => g.TaiKhoan == gara.TaiKhoan)] = gara;
+
+            GaraDAO garaDAO = new GaraDAO();
+            garaDAO.CapNhatGara(gara);
+            Global.Instance.danhSachGara = garaDAO.DanhSachGara();
 
             dialogService.ShowInfoDialog(
                 "Thông báo",

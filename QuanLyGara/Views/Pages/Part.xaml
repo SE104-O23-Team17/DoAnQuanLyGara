@@ -1029,7 +1029,7 @@
                                                 <DataGridTextColumn Header="Thành tiền"
                                                                     IsReadOnly="True"
                                                                     Width="*" 
-                                                                    Binding="{Binding thanhTien}"/>
+                                                                    Binding="{Binding thanhTien, Converter={StaticResource NumberFormatConverter}}"/>
                                             </DataGrid.Columns>
                                         </DataGrid>
                                     </Border>
