@@ -11,13 +11,21 @@ namespace QuanLyGara.DATA.DAO
 {
     public class VTPTDAO : DBconnection
     {
-        public List<VTPTModel> DanhSachVTPT()
+        private static readonly VTPTDAO instance = new VTPTDAO();
+        public static VTPTDAO Instance
         {
-
-            List<VTPTModel> danhSachVTPT = new List<VTPTModel>();
-            try
+            get
             {
-                int maGara = Global.Instance.garaHienTai.ID;
+                return instance;
+            }
+        }
+        public List<VTPTDTO> DanhSachVTPT()
+        {
+            int maGara = Global.Instance.garaHienTai.ID;
+
+            List<VTPTDTO> danhSachVTPT = new List<VTPTDTO>();
+            try
+            { 
                 openConnection();
                 string query = "SELECT * FROM VATTUPHUTUNG WHERE MaGara = @MaGara";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
@@ -25,18 +33,13 @@ namespace QuanLyGara.DATA.DAO
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    VTPTModel vtpt = new VTPTModel()
+                    VTPTDTO vtpt = new VTPTDTO()
                     {
                         maVTPT = Convert.ToInt32(reader["MAVATTUPHUTUNG"]),
                         tenVTPT = reader["TENVATTUPHUTUNG"].ToString(),
                         soLuongTon = Convert.ToInt32(reader["SOLUONGTON"]),
                         giaNhap = Convert.ToDouble(reader["GIATIENNHAP"]),
-
-                        donViTinh = new DonViTinhModel()
-                        {
-                            maDVT = Convert.ToInt32(reader["MADVT"]),
-                            tenDVT = reader["TENDVT"].ToString()
-                        }
+                        maDvt  = Convert.ToInt32(reader["MADONVITINH"]),
                     };
                     danhSachVTPT.Add(vtpt);
                 }
@@ -51,7 +54,7 @@ namespace QuanLyGara.DATA.DAO
             }
             return danhSachVTPT;
         }
-        public void ThemVTPT(VTPTModel vtpt)
+        public void ThemVTPT(VTPTDTO vtpt)
         {
             try
             {
@@ -95,7 +98,7 @@ namespace QuanLyGara.DATA.DAO
             }
         }
 
-        public void SuaVTPT(VTPTModel vtpt)
+        public void SuaVTPT(VTPTDTO vtpt)
         {
             try
             {

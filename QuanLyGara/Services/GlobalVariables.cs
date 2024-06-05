@@ -752,6 +752,23 @@ namespace QuanLyGara.Services
         {
             danhSachHieuXe = HieuXeDAO.Instance.DanhSachHieuXe();
         }
+        public void UpdateDanhSachVTPT()
+        {
+            List<VTPTDTO> temp = VTPTDAO.Instance.DanhSachVTPT();
+            danhSachVTPT = new List<VTPTModel>();
+
+            foreach (VTPTDTO vtpt in temp)
+            {
+                danhSachVTPT.Add(new VTPTModel
+                {
+                    maVTPT = vtpt.maVTPT,
+                    tenVTPT = vtpt.tenVTPT,
+                    soLuongTon = vtpt.soLuongTon,
+                    giaNhap = vtpt.giaNhap,
+                    donViTinh = danhSachDVT.Find(dvt => dvt.maDVT == vtpt.maDvt)
+                });
+            }
+        }
 
         public void UpdateDanhSachDonViTinh()
         {

@@ -514,24 +514,35 @@ namespace QuanLyGara.ViewModels.Pages
 
                 dvt.isReadOnly = true;
 
-                DonViTinhDAO.Instance.ThemDonViTinh(dvt);
-
                 if (Global.Instance.danhSachDVT.FirstOrDefault(dvtCu => dvt.maDVT == dvtCu.maDVT && dvt.maDVT != 0) == null)
                 {
-                    Global.Instance.danhSachDVT.Add(dvt);
+                    DonViTinhDAO.Instance.ThemDonViTinh(dvt);
                     dialogService.ShowInfoDialog(
                         "Thông báo",
                         "Đã thêm đơn vị tính mới.",
                         () => { }
                         );
                 }
-
+                else
+                {
+                    DonViTinhDAO.Instance.SuaDonViTinh(dvt);
+                    dialogService.ShowInfoDialog(
+                        "Thông báo",
+                        "Đã cập nhật đơn vị tính.",
+                        () => { }
+                        );
+                }    
                 OnPropertyChanged(nameof(DanhSachDVT));
                 if (isAdding)
                 {
                     OnPropertyChanged(nameof(ThemVTPT));
                 }
-               
+                Global.Instance.UpdateDanhSachDonViTinh();
+                danhSachDVT = new ObservableCollection<DonViTinhModel>(Global.Instance.danhSachDVT);
+                OnPropertyChanged(nameof(DanhSachDVT));
+                Global.Instance.UpdateDanhSachVTPT();
+                danhSachVTPT = new List<VTPTModel>(Global.Instance.danhSachVTPT);
+                OnPropertyChanged(nameof(ThemVTPT));
             }
         }
 
@@ -571,7 +582,12 @@ namespace QuanLyGara.ViewModels.Pages
 
                     },
                     () => { }
-                    );            
+                    );
+                dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Đã xóa đơn vị tính " + dvt.tenDVT,
+                    () => { }
+                    );
             }
         }
 
