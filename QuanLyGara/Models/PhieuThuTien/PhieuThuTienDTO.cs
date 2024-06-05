@@ -11,12 +11,12 @@ namespace QuanLyGara.Models.PhieuThuTien
         public PhieuThuTienDTO()
         {
             maPhieu = 0;
-            bienSo = "";
+            maXe = 0;
             ngayThuTien = DateTime.Now;
             soTienThu = 0;
         }
         public int maPhieu { get; set; }
-        public string bienSo { get; set; }
+        public int maXe { get; set; }
         public DateTime ngayThuTien { get; set; }
         public double soTienThu { get; set; }
     }

@@ -10,7 +10,14 @@ namespace QuanLyGara.DATA.DAO
 {
     internal class PhieuThuTienDAO : DBconnection
     {
-        public GaraModel gara = Global.Instance.garaHienTai;
+        private static readonly PhieuThuTienDAO instance = new PhieuThuTienDAO();
+        public static PhieuThuTienDAO Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
 
         public List<PhieuThuTienModel> GetAllPhieuThuTien()
         {
@@ -28,6 +35,7 @@ namespace QuanLyGara.DATA.DAO
                     maPhieu = Convert.ToInt32(reader["MAPHIEUTHUTIEN"]),
                     ngayThuTien = Convert.ToDateTime(reader["NGAYTHUTIEN"]),
                     soTienThu = Convert.ToDouble(reader["SOTIENTRA"]),
+                    maXe = Convert.ToInt32(reader["MAXE"])
                     };
                     danhSachPhieuThuTien.Add(phieuThuTien);
                 }
@@ -42,15 +50,17 @@ namespace QuanLyGara.DATA.DAO
             }
             return danhSachPhieuThuTien;
         }
+
         public void ThemPhieuThuTien(PhieuThuTienModel phieuThuTien)
         {
             try
             {
                 openConnection();
-                string query = "INSERT INTO PHIEUTHUTIEN (NGAYTHUTIEN, SOTIENTRA) VALUES (@NgayThuTien, @SoTienThu)";
+                string query = "INSERT INTO PHIEUTHUTIEN (NGAYTHUTIEN, SOTIENTRA, MAXE) VALUES (@NgayThuTien, @SoTienThu, @MaXe)";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
-                cmd.Parameters.AddWithValue("@NgayThuTien", phieuThuTien.ngayThuTien);
+                cmd.Parameters.Add("@NgayThuTien", SqlDbType.DateTime).Value = phieuThuTien.ngayThuTien;
                 cmd.Parameters.AddWithValue("@SoTienThu", phieuThuTien.soTienThu);
+                cmd.Parameters.AddWithValue("@MaXe", phieuThuTien.maXe);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -62,8 +72,10 @@ namespace QuanLyGara.DATA.DAO
                 closeConnection();
             }
         }
-        public void XoaPhieuThuTien(int maPhieu)
+
+        public bool XoaPhieuThuTien(int maPhieu)
         {
+            bool result = true;
             try
             {
                 openConnection();
@@ -74,14 +86,36 @@ namespace QuanLyGara.DATA.DAO
             }
             catch (Exception ex)
             {
-                // Xử lý ngoại lệ
+                result = false;
             }
             finally
             {
                 closeConnection();
             }
+            return result;
         }
 
-
+        public void CapNhatPhieuThuTien(PhieuThuTienModel phieuThuTien)
+        {
+            try
+            {
+                openConnection();
+                string query = "UPDATE PHIEUTHUTIEN SET NGAYTHUTIEN = @NgayThuTien, SOTIENTRA = @SoTienThu, MAXE = @MaXe WHERE MAPHIEUTHUTIEN = @MaPhieu";
+                SqlCommand cmd = new SqlCommand(query, getConnection);
+                cmd.Parameters.Add("@NgayThuTien", SqlDbType.DateTime).Value = phieuThuTien.ngayThuTien;
+                cmd.Parameters.AddWithValue("@SoTienThu", phieuThuTien.soTienThu);
+                cmd.Parameters.AddWithValue("@MaPhieu", phieuThuTien.maPhieu);
+                cmd.Parameters.AddWithValue("@MaXe", phieuThuTien.maXe);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ
+            }
+            finally
+            {
+                closeConnection(); 
+            }
+        }
     }
 }

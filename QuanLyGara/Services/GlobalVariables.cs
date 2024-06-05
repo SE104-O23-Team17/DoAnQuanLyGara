@@ -546,28 +546,28 @@ namespace QuanLyGara.Services
                 new PhieuThuTienModel
                 {
                     maPhieu = 1,
-                    bienSo = "30A-12345",
+                    maXe = 0,
                     ngayThuTien = new DateTime(2023, 5, 1),
                     soTienThu = 500000,
                 },
                 new PhieuThuTienModel
                 {
                     maPhieu = 2,
-                    bienSo = "31A-13536",
+                    maXe = 1,
                     ngayThuTien = new DateTime(2024, 3, 5),
                     soTienThu = 200000,
                 },
                 new PhieuThuTienModel
                 {
                     maPhieu = 3,
-                    bienSo = "20A-52736",
+                    maXe = 0,
                     ngayThuTien = new DateTime(2024, 5, 10),
                     soTienThu = 100000,
                 },
                 new PhieuThuTienModel
                 {
                     maPhieu = 4,
-                    bienSo = "30A-12345",
+                    maXe = 1,
                     ngayThuTien = new DateTime(2024, 5, 15),
                     soTienThu = 150000,
                 },
@@ -748,6 +748,7 @@ namespace QuanLyGara.Services
         {
            danhSachGara = GaraDAO.Instance.DanhSachGara();
         }
+
         public void UpdateDanhSachHieuXe()
         {
             danhSachHieuXe = HieuXeDAO.Instance.DanhSachHieuXe();
@@ -808,6 +809,16 @@ namespace QuanLyGara.Services
         {
             ThamSoDAO.Instance.CapNhatThamSo(tiLeTinhDonGiaBan, soXeSuaChuaToiDa, apDungQDKiemTraSoTienThu);
             UpdateThamSo();
+        }
+
+        public void UpdateDanhSachNoiDungSuaChua()
+        {
+            danhSachNDSC = NoiDungSuaChuaDAO.Instance.DanhSachNoiDungSuaChua();
+        }
+
+        public void UpdateDanhSachPhieuthu()
+        {             
+            danhSachPhieuThuTien = PhieuThuTienDAO.Instance.GetAllPhieuThuTien();
         }
     }
 }

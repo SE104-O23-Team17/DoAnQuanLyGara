@@ -141,7 +141,7 @@ namespace QuanLyGara.ViewModels.Pages
             { 
                 if (selectingCar == null) return new ObservableCollection<PhieuThuTienModel>();
 
-                return [.. danhSachPhieuThu.Where(phieuThu => phieuThu.bienSo == selectingCar.bienSo).ToList().OrderByDescending(phieuThu => phieuThu.ngayThuTien)]; 
+                return [.. danhSachPhieuThu.Where(phieuThu => phieuThu.maXe == selectingCar.maXe).ToList().OrderByDescending(phieuThu => phieuThu.ngayThuTien)]; 
             }
             set
             {
@@ -339,11 +339,16 @@ namespace QuanLyGara.ViewModels.Pages
 
             Global.Instance.UpdateDanhSachXe();
             danhSachXe = Global.Instance.danhSachXe;
-          
+
+            Global.Instance.UpdateDanhSachNoiDungSuaChua();
+            danhSachNoiDung = Global.Instance.danhSachNDSC;
+
+            Global.Instance.UpdateDanhSachPhieuthu();
             danhSachPhieuThu = new ObservableCollection<PhieuThuTienModel>(Global.Instance.danhSachPhieuThuTien);
+
             danhSachCTSC = Global.Instance.danhSachCTPhieuSC;
             danhSachPhieuSua = Global.Instance.danhSachPhieuSC;
-            danhSachNoiDung = Global.Instance.danhSachNDSC;
+            
             danhSachVTPT = Global.Instance.danhSachVTPT;
             ExecuteBackToView(null);
 
@@ -677,7 +682,7 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 maHieuXe = danhSachHieuXe.Count == 0 ? 1 : danhSachHieuXe.Max(hieuXe => hieuXe.maHieuXe) + 1,
                 IsReadOnly = false
-            };
+            };      
             danhSachHieuXe.Add(hieuXeMoi);
             OnPropertyChanged(nameof(DanhSachHieuXe));
         }
@@ -899,10 +904,12 @@ namespace QuanLyGara.ViewModels.Pages
             phieuThuMoi = new PhieuThuTienModel()
             {
                 maPhieu = danhSachPhieuThu.Count == 0 ? 1 : danhSachPhieuThu.Max(phieuThu => phieuThu.maPhieu) + 1,
-                bienSo = selectingCar.bienSo,
+                maXe = selectingCar.maXe,
                 ngayThuTien = DateTime.Now,
                 IsReadOnly = false
             };
+            previousPrice = 0;
+            previousDate = DateTime.Now;
             danhSachPhieuThu.Add(phieuThuMoi);
             OnPropertyChanged(nameof(DanhSachPhieuThu));
         }
@@ -934,11 +941,37 @@ namespace QuanLyGara.ViewModels.Pages
                 "Bạn có chắc chắn muốn xóa phiếu thu này không?",
                 () =>
                 {
-                    danhSachPhieuThu.Remove(phieuThu);
-                    Global.Instance.danhSachPhieuThuTien.Remove(phieuThu);
-                    selectingCar.ThemNo(phieuThu.soTienThu);
-                    OnPropertyChanged(nameof(DanhSachPhieuThu));
-                    OnPropertyChanged(nameof(SelectingCar));
+                    bool result = PhieuThuTienDAO.Instance.XoaPhieuThuTien(phieuThu.maPhieu);
+
+                    if (!result)
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Không thể xóa phiếu thu đang được sử dụng",
+                            () =>
+                            {
+                                return;
+                            }
+                            );
+                    }
+                    else
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Thông báo",
+                            "Đã xóa phiếu thu.",
+                            () => { }
+                            );
+
+                        Global.Instance.UpdateDanhSachPhieuthu();
+                        danhSachPhieuThu = new ObservableCollection<PhieuThuTienModel>(Global.Instance.danhSachPhieuThuTien);
+                        selectingCar.ThemNo(phieuThu.soTienThu);
+                        XeDAO.Instance.CapNhatXe(selectingCar);
+                        Global.Instance.UpdateDanhSachXe();
+                        danhSachXe = Global.Instance.danhSachXe;
+                        OnPropertyChanged(nameof(DanhSachXe));
+                        OnPropertyChanged(nameof(DanhSachPhieuThu));
+                        OnPropertyChanged(nameof(SelectingCar));
+                    }
                 },
                 () => { }
                 );
@@ -965,7 +998,7 @@ namespace QuanLyGara.ViewModels.Pages
 
             if (applyCheckPayment)
             {
-                if (selectingCar.tienNo < phieuThu.soTienThu)
+                if (selectingCar.tienNo < phieuThu.soTienThu - previousPrice)
                 {
                     dialogService.ShowInfoDialog(
                         "Lỗi",
@@ -976,12 +1009,25 @@ namespace QuanLyGara.ViewModels.Pages
                 }
             }
 
-            if (Global.Instance.danhSachPhieuThuTien.FirstOrDefault(pt => pt.maPhieu == phieuThu.maPhieu) == null)
+            if (Global.Instance.danhSachPhieuThuTien.FirstOrDefault(pt => pt.maPhieu == phieuThu.maPhieu && phieuThu.maPhieu != 0) == null)
             {
-                Global.Instance.danhSachPhieuThuTien.Add(phieuThu);
+                PhieuThuTienDAO.Instance.ThemPhieuThuTien(phieuThu);
+                Global.Instance.UpdateDanhSachPhieuthu();
+                danhSachPhieuThu = new ObservableCollection<PhieuThuTienModel>(Global.Instance.danhSachPhieuThuTien);
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Đã thêm phiếu thu mới.",
+                    () => { }
+                    );
+            }
+            else
+            {
+                PhieuThuTienDAO.Instance.CapNhatPhieuThuTien(phieuThu);
+                Global.Instance.UpdateDanhSachPhieuthu();
+                danhSachPhieuThu = new ObservableCollection<PhieuThuTienModel>(Global.Instance.danhSachPhieuThuTien);
+                dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Đã cập nhật thông tin phiếu thu.",
                     () => { }
                     );
             }
@@ -989,6 +1035,10 @@ namespace QuanLyGara.ViewModels.Pages
             phieuThu.IsReadOnly = true;
             selectingCar.ThemNo(previousPrice);
             selectingCar.GiamNo(phieuThu.soTienThu);
+            XeDAO.Instance.CapNhatXe(selectingCar);
+            Global.Instance.UpdateDanhSachXe();
+            danhSachXe = Global.Instance.danhSachXe;
+            OnPropertyChanged(nameof(DanhSachXe));
             OnPropertyChanged(nameof(DanhSachPhieuThu));
             OnPropertyChanged(nameof(SelectingCar));
         }
@@ -1009,6 +1059,7 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
 
+            phieuThu.IsReadOnly = true;
             phieuThu.ngayThuTien = previousDate;
             phieuThu.soTienThu = previousPrice;
             OnPropertyChanged(nameof(DanhSachPhieuThu));
@@ -1295,17 +1346,7 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
             NoiDungSuaChuaModel noiDung = obj as NoiDungSuaChuaModel;
-
-            if (danhSachCTSC.Any(ct => ct.NDSC == noiDung))
-            {
-                dialogService.ShowInfoDialog(
-                    "Lỗi",
-                    "Không thể xóa nội dung sửa chữa đang được sử dụng",
-                    () => { }
-                    );
-                return;
-            }
-
+            
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
                 "Bạn có chắc chắn muốn xóa nội dung sửa chữa " + noiDung.TenNDSC + " không?",
@@ -1314,6 +1355,30 @@ namespace QuanLyGara.ViewModels.Pages
                     danhSachNoiDung.Remove(noiDung);
                     Global.Instance.danhSachNDSC.Remove(noiDung);
                     OnPropertyChanged(nameof(DanhSachNoiDung));
+
+                    if (NoiDungSuaChuaDAO.Instance.XoaNoiDungSuaChua(noiDung))
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Lỗi",
+                            "Không thể xóa nội dung sửa chữa đang được sử dụng",
+                            () =>
+                            {
+                                return;
+                            }
+                        );
+                    }
+                    else
+                    {
+                        dialogService.ShowInfoDialog(
+                            "Thông báo",
+                            "Đã xóa nội dung sửa chữa.",
+                            () => { }
+                        );
+
+                        Global.Instance.UpdateDanhSachNoiDungSuaChua();
+                        danhSachNoiDung = Global.Instance.danhSachNDSC;
+                        OnPropertyChanged(nameof(DanhSachNoiDung));
+                    }
                 },
                 () => { }
                 );
@@ -1348,17 +1413,28 @@ namespace QuanLyGara.ViewModels.Pages
                 return;
             }
 
+            noiDung.IsReadOnly = true;
             if (Global.Instance.danhSachNDSC.FirstOrDefault(noiDungCu => noiDungCu.maNDSC == noiDung.maNDSC) == null)
             {
-                Global.Instance.danhSachNDSC.Add(noiDung);
+                NoiDungSuaChuaDAO.Instance.ThemNoiDungSuaChua(noiDung);
                 dialogService.ShowInfoDialog(
                     "Thông báo",
                     "Đã thêm nội dung sửa chữa mới.",
                     () => { }
                     );
             }
+            else
+            {
+                NoiDungSuaChuaDAO.Instance.CapNhatNoiDungSuaChua(noiDung);
+                dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Đã cập nhật thông tin nội dung sửa chữa.",
+                    () => { }
+                    );
+            }
 
-            noiDung.IsReadOnly = true;
+            Global.Instance.UpdateDanhSachNoiDungSuaChua();
+            danhSachNoiDung = Global.Instance.danhSachNDSC;
             OnPropertyChanged(nameof(DanhSachNoiDung));
         }
 
