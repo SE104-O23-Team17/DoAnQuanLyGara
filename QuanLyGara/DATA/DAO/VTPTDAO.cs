@@ -39,7 +39,7 @@ namespace QuanLyGara.DATA.DAO
                         tenVTPT = reader["TENVATTUPHUTUNG"].ToString(),
                         soLuongTon = Convert.ToInt32(reader["SOLUONGTON"]),
                         giaNhap = Convert.ToDouble(reader["GIATIENNHAP"]),
-                        maDvt  = Convert.ToInt32(reader["MADONVITINH"]),
+                        maDvt  = Convert.ToInt32(reader["MADVT"]),
                     };
                     danhSachVTPT.Add(vtpt);
                 }
@@ -54,17 +54,18 @@ namespace QuanLyGara.DATA.DAO
             }
             return danhSachVTPT;
         }
-        public void ThemVTPT(VTPTDTO vtpt)
+        public void ThemVTPT(VTPTModel vtpt)
         {
             try
             {
                 openConnection();
-                string query = "INSERT INTO VATTUPHUTUNG (TENVATTUPHUTUNG, SOLUONGTON, GIATIENNHAP, MAGARA) VALUES (@TenVTPT, @SoLuongTon, @GiaNhap, @MaGara)";
+                string query = "INSERT INTO VATTUPHUTUNG (TENVATTUPHUTUNG, SOLUONGTON, GIATIENNHAP, MAGARA, MADVT) VALUES (@TenVTPT, @SoLuongTon, @GiaNhap, @MaGara, @MaDVT)";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@TenVTPT", vtpt.tenVTPT);
                 cmd.Parameters.AddWithValue("@SoLuongTon", vtpt.soLuongTon);
                 cmd.Parameters.AddWithValue("@GiaNhap", vtpt.giaNhap);
                 cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                cmd.Parameters.AddWithValue("@MaDVT", vtpt.donViTinh.maDVT);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -77,8 +78,9 @@ namespace QuanLyGara.DATA.DAO
             }
         }
 
-        public void XoaVTPT(int maVTPT)
+        public bool XoaVTPT(int maVTPT)
         {
+            bool result = true;
             try
             {
                 openConnection();
@@ -90,26 +92,28 @@ namespace QuanLyGara.DATA.DAO
             }
             catch (Exception ex)
             {
-                // Xử lý ngoại lệ
+                result = false;
             }
             finally
             {
                 closeConnection();
             }
+            return result;
         }
 
-        public void SuaVTPT(VTPTDTO vtpt)
+        public void SuaVTPT(VTPTModel vtpt)
         {
             try
             {
                 openConnection();
-                string query = "UPDATE VATTUPHUTUNG SET TENVATTUPHUTUNG = @TenVTPT, SOLUONGTON = @SoLuongTon, GIATIENNHAP = @GiaNhap WHERE MAVATTUPHUTUNG = @MaVTPT AND MAGARA = @MaGara";
+                string query = "UPDATE VATTUPHUTUNG SET TENVATTUPHUTUNG = @TenVTPT, SOLUONGTON = @SoLuongTon, GIATIENNHAP = @GiaNhap, MADVT = @MaDVT WHERE MAVATTUPHUTUNG = @MaVTPT AND MAGARA = @MaGara";
                 SqlCommand cmd = new SqlCommand(query, getConnection);
                 cmd.Parameters.AddWithValue("@TenVTPT", vtpt.tenVTPT);
                 cmd.Parameters.AddWithValue("@SoLuongTon", vtpt.soLuongTon);
                 cmd.Parameters.AddWithValue("@GiaNhap", vtpt.giaNhap);
                 cmd.Parameters.AddWithValue("@MaVTPT", vtpt.maVTPT);
                 cmd.Parameters.AddWithValue("@MaGara", Global.Instance.garaHienTai.ID);
+                cmd.Parameters.AddWithValue("@MaDVT", vtpt.donViTinh.maDVT);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)

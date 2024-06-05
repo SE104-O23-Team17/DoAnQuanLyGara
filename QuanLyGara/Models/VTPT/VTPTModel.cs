@@ -23,6 +23,7 @@ namespace QuanLyGara.Models.VTPT
             tenVTPT = "";
             soLuongTon = 0;
             giaNhap = 0;
+            donViTinh = new DonViTinhModel();
             isChecked = false;
             isReadOnly = true;
         }

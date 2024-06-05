@@ -39,6 +39,8 @@ namespace QuanLyGara.Models.Xe
             hieuXe = xe.HieuXe;
             tienNo = xe.tienNo;
             tenChuXe = xe.tenChuXe;
+            sdt = xe.sdt;
+            email = xe.email;
             isChecked = xe.isChecked;
             isReadOnly = xe.IsReadOnly;
         }

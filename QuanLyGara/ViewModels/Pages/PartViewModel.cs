@@ -245,13 +245,16 @@ namespace QuanLyGara.ViewModels.Pages
             isAdding = false;
             isImporting = false;
             isViewingImport = false;
-
-            danhSachVTPT = Global.Instance.danhSachVTPT;
-
+            
             Global.Instance.UpdateDanhSachDonViTinh();
             danhSachDVT = new ObservableCollection<DonViTinhModel>(Global.Instance.danhSachDVT);
 
+            Global.Instance.UpdateDanhSachVTPT();
+            danhSachVTPT = Global.Instance.danhSachVTPT;
+
+            Global.Instance.UpdateThamSo();
             ratio = Global.Instance.tiLeTinhDonGiaBan;
+
             themVTPT = [];
             phieuNhapVTPT = new PhieuNhapVTPTModel();
             danhSachPhieuNhap = Global.Instance.danhSachPhieuNhap;
@@ -306,6 +309,7 @@ namespace QuanLyGara.ViewModels.Pages
         {
             IsReadOnly = false;
             previousRatio = ratio;
+            OnPropertyChanged(nameof(IsReadOnly));
         }
 
         private void ExecuteSaveRatioCommand(object obj)
@@ -315,7 +319,7 @@ namespace QuanLyGara.ViewModels.Pages
                 if (ratio != previousRatio)
                 {
                     Global.Instance.tiLeTinhDonGiaBan = ratio;
-                    OnPropertyChanged(nameof(DanhSachVTPT));
+                    Global.Instance.ChangeThamSo();
                     dialogService.ShowInfoDialog(
                         "Thông báo",
                         "Cập nhật tỷ lệ thành công.",
@@ -333,6 +337,7 @@ namespace QuanLyGara.ViewModels.Pages
                 ratio = previousRatio;
             }
             IsReadOnly = true;
+            OnPropertyChanged(nameof(DanhSachVTPT));
             OnPropertyChanged(nameof(Ratio));
         }
 
@@ -341,6 +346,7 @@ namespace QuanLyGara.ViewModels.Pages
             IsReadOnly = true;
             ratio = previousRatio;
             OnPropertyChanged(nameof(Ratio));
+            OnPropertyChanged(nameof(IsReadOnly));
         }
 
         private void ExecuteEditCommand(object obj)
@@ -369,6 +375,7 @@ namespace QuanLyGara.ViewModels.Pages
                         );
                     return;
                 }
+
                 if (vtpt.giaNhap <= 0)
                 {
                     dialogService.ShowInfoDialog(
@@ -378,6 +385,7 @@ namespace QuanLyGara.ViewModels.Pages
                         );
                     return;
                 }
+
                 if (vtpt.donViTinh == null)
                 {
                     dialogService.ShowInfoDialog(
@@ -387,6 +395,14 @@ namespace QuanLyGara.ViewModels.Pages
                         );
                     return;
                 }
+
+                VTPTDAO.Instance.SuaVTPT(vtpt);
+                Global.Instance.UpdateDanhSachVTPT();
+                dialogService.ShowInfoDialog(
+                    "Thông báo",
+                    "Đã cập nhật vật tư phụ tùng.",
+                    () => { }
+                    );
                 vtpt.isReadOnly = true;
             }
             OnPropertyChanged(nameof(DanhSachVTPT));
@@ -417,9 +433,28 @@ namespace QuanLyGara.ViewModels.Pages
                     "Bạn có chắc chắn muốn xóa vật tư " + vtpt.tenVTPT + " không?",
                     () =>
                     {
-                        danhSachVTPT.Remove(vtpt);
-                        Global.Instance.danhSachVTPT.Remove(vtpt);
-                        OnPropertyChanged(nameof(DanhSachVTPT));
+                        bool result = VTPTDAO.Instance.XoaVTPT(vtpt.maVTPT);
+                        if (!result)
+                        {
+                            dialogService.ShowInfoDialog(
+                                "Lỗi",
+                                "Không thể xóa vật tư " + vtpt.tenVTPT + " vì đang được sử dụng.",
+                                () => { }
+                                );
+                            return;
+                        }
+                        else
+                        {
+                            dialogService.ShowInfoDialog(
+                                "Thông báo",
+                                "Đã xóa vật tư " + vtpt.tenVTPT,
+                                () => { }
+                                );
+                            Global.Instance.UpdateDanhSachVTPT();
+                            danhSachVTPT = Global.Instance.danhSachVTPT;
+                            OnPropertyChanged(nameof(DanhSachVTPT));
+
+                        }
                     },
                     () => { }
                     );
@@ -433,15 +468,22 @@ namespace QuanLyGara.ViewModels.Pages
             {
                 return;
             }
+
+            List<string> failedToDelete = new List<string>();
             dialogService.ShowYesNoDialog(
                 "Xác nhận",
                 "Bạn có chắc chắn muốn xóa " + selectedVTPT.Count + " vật tư đã chọn không?",
                 () => {
                     foreach (VTPTModel vtpt in selectedVTPT)
                     {
-                        danhSachVTPT.Remove(vtpt);
-                        Global.Instance.danhSachVTPT.Remove(vtpt);
+                        bool result = VTPTDAO.Instance.XoaVTPT(vtpt.maVTPT);
+                        if (!result)
+                        {
+                            failedToDelete.Add(vtpt.tenVTPT);
+                        }
                     }
+                    Global.Instance.UpdateDanhSachVTPT();
+                    danhSachVTPT = Global.Instance.danhSachVTPT;
                     OnPropertyChanged(nameof(DanhSachVTPT));
                 },
                 () => { }
@@ -514,7 +556,7 @@ namespace QuanLyGara.ViewModels.Pages
 
                 dvt.isReadOnly = true;
 
-                if (Global.Instance.danhSachDVT.FirstOrDefault(dvtCu => dvt.maDVT == dvtCu.maDVT && dvt.maDVT != 0) == null)
+                if (Global.Instance.danhSachDVT.FirstOrDefault(dvtCu => dvt.maDVT == dvtCu.maDVT) == null)
                 {
                     DonViTinhDAO.Instance.ThemDonViTinh(dvt);
                     dialogService.ShowInfoDialog(
@@ -532,17 +574,18 @@ namespace QuanLyGara.ViewModels.Pages
                         () => { }
                         );
                 }    
+
+                Global.Instance.UpdateDanhSachDonViTinh();
+                danhSachDVT = new ObservableCollection<DonViTinhModel>(Global.Instance.danhSachDVT);
                 OnPropertyChanged(nameof(DanhSachDVT));
+
+                Global.Instance.UpdateDanhSachVTPT();
+                danhSachVTPT = Global.Instance.danhSachVTPT;
+                OnPropertyChanged(nameof(DanhSachVTPT));
                 if (isAdding)
                 {
                     OnPropertyChanged(nameof(ThemVTPT));
                 }
-                Global.Instance.UpdateDanhSachDonViTinh();
-                danhSachDVT = new ObservableCollection<DonViTinhModel>(Global.Instance.danhSachDVT);
-                OnPropertyChanged(nameof(DanhSachDVT));
-                Global.Instance.UpdateDanhSachVTPT();
-                danhSachVTPT = new List<VTPTModel>(Global.Instance.danhSachVTPT);
-                OnPropertyChanged(nameof(ThemVTPT));
             }
         }
 

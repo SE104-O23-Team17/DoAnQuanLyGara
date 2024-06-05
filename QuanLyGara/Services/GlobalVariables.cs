@@ -753,6 +753,7 @@ namespace QuanLyGara.Services
         {
             danhSachHieuXe = HieuXeDAO.Instance.DanhSachHieuXe();
         }
+
         public void UpdateDanhSachVTPT()
         {
             List<VTPTDTO> temp = VTPTDAO.Instance.DanhSachVTPT();
