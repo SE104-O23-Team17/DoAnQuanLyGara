@@ -9,14 +9,18 @@ namespace QuanLyGara.DATA.DAO
 {
     public class NoiDungSuaChuaDAO : DBconnection
     {
-        public GaraModel gara = Global.Instance.garaHienTai;
-        public GaraModel getGara
+        private static readonly NoiDungSuaChuaDAO instance = new NoiDungSuaChuaDAO();
+        public static NoiDungSuaChuaDAO Instance
         {
-            get { return gara; }
+            get
+            {
+                return instance;
+            }
         }
+
         public List<NoiDungSuaChuaModel> DanhSachNoiDungSuaChua()
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
 
             List<NoiDungSuaChuaModel> danhSachNoiDungSuaChua = new List<NoiDungSuaChuaModel>();
             try
@@ -50,7 +54,7 @@ namespace QuanLyGara.DATA.DAO
 
         public void ThemNoiDungSuaChua(NoiDungSuaChuaModel noiDungSuaChua)
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
             try
             {
                 openConnection();
@@ -71,9 +75,10 @@ namespace QuanLyGara.DATA.DAO
             }
         }
 
-        public void XoaNoiDungSuaChua(NoiDungSuaChuaModel noiDungSuaChua)
+        public bool XoaNoiDungSuaChua(NoiDungSuaChuaModel noiDungSuaChua)
         {
-            int maGara = gara.ID;
+            int maGara = Global.Instance.garaHienTai.ID;
+            bool result = true;
             try
             {
                 openConnection();
@@ -85,7 +90,31 @@ namespace QuanLyGara.DATA.DAO
             }
             catch (Exception ex)
             {
-                // Xử lý ngoại lệ
+                result = false;
+            }
+            finally
+            {
+                closeConnection();
+            }
+            return result;
+        }
+
+        public void CapNhatNoiDungSuaChua(NoiDungSuaChuaModel noiDungSuaChua)
+        {
+            int maGara = Global.Instance.garaHienTai.ID;
+            try
+            {
+                openConnection();
+                string query = "UPDATE NOIDUNGSUACHUA SET TENNOIDUNGSUACHUA = @TenNoiDungSuaChua, SOTIEN = @SoTien WHERE MANOIDUNGSUACHUA = @MaNoiDungSuaChua AND MAGARA = @MaGara";
+                SqlCommand cmd = new SqlCommand(query, getConnection);
+                cmd.Parameters.AddWithValue("@MaGara", maGara);
+                cmd.Parameters.AddWithValue("@TenNoiDungSuaChua", noiDungSuaChua.TenNDSC);
+                cmd.Parameters.AddWithValue("@SoTien", noiDungSuaChua.giaTien);
+                cmd.Parameters.AddWithValue("@MaNoiDungSuaChua", noiDungSuaChua.maNDSC);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
             }
             finally
             {
